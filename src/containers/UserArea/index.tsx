@@ -12,7 +12,7 @@ import FilterIcon from '@ant-design/icons/FilterOutlined'
 import FilterModal from './FilterModal'
 
 const UserArea: React.FC = () => {
-  const { data: users } = useFetch<User[]>('/users')
+  const { data: users } = useFetch<User[]>('/users/all')
 
   const [isUserModalOpen, setIsUserModalOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)

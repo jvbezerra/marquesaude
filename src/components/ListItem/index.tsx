@@ -18,12 +18,14 @@ const ListItem: React.FC<Props> = (props) => {
       style={props.style}
       actions={[
         <Button
+          key="view"
           aria-label="Visualizar"
           shape="circle"
           icon={<EyeIcon/>}
           onClick={() => onView()}
         />,
         <Button
+          key="delete"
           aria-label="Deletar"
           shape="circle"
           icon={<DeleteIcon/>}

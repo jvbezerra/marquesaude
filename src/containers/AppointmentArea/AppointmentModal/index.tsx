@@ -31,8 +31,13 @@ const validationSchema = yup.object().shape({
 const AppointmentModal: React.FC<Props> = (props) => {
   const { appointment, isOpen, onClose } = props
 
-  const addAppointment = (values: Appointment) => {}
-  const editAppointment = (values: Appointment) => {}
+  const addAppointment = (values: Appointment) => {
+    // add appointment service function
+  }
+
+  const editAppointment = (values: Appointment) => {
+    // edit appointment service function
+  }
 
   return (
     <FormModal

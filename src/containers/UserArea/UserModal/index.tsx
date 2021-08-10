@@ -33,8 +33,13 @@ const validationSchema = yup.object().shape({
 const UserModal: React.FC<Props> = (props) => {
   const { user, isOpen, onClose } = props
 
-  const addUser = (values: User) => {}
-  const editUser = (values: User) => {}
+  const addUser = (values: User) => {
+    // add user service function
+  }
+
+  const editUser = (values: User) => {
+    // edit user service function
+  }
 
   return (
     <FormModal

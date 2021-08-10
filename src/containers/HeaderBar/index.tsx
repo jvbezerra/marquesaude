@@ -56,6 +56,7 @@ const HeaderBar = () => {
       </div>
 
       <HelpModal isOpen={isHelpModalOpen} onClose={() => setHelpModalOpen(false)}/>
+      
       <UnitModal isOpen={isUnitModalOpen} onClose={() => setUnitModalOpen(false)}/>
     </div>
   )

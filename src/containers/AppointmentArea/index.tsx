@@ -10,7 +10,7 @@ import MedicalIcon from '@ant-design/icons/MedicineBoxOutlined'
 import AddIcon from '@ant-design/icons/PlusCircleOutlined'
 
 const AppointmentArea: React.FC = () => {
-  const { data: appointments } = useFetch<Appointment[]>('/appointments')
+  const { data: appointments } = useFetch<Appointment[]>('/appointments/all')
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null)

@@ -33,7 +33,9 @@ const UnitModal: React.FC<Props> = (props) => {
   const { isOpen, onClose } = props
   const { unit } = useContext(AuthContext)
 
-  const editUser = (values: Unit) => {}
+  const editUser = (values: Unit) => {
+    // edit unit service function
+  }
 
   return (
     <FormModal

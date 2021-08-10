@@ -5,8 +5,8 @@ type APIUrl = {
 };
 
 const urls: APIUrl = {
-  production: '',
-  development: ''
+  production: 'https://marquesaude.herokuapp.com',
+  development: 'http://localhost:3333'
 }
 
 const api = axios.create({
