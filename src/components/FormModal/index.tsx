@@ -1,5 +1,5 @@
 import { Modal } from 'antd'
-import { Formik, FormikProps } from 'formik'
+import { Form, Formik, FormikProps } from 'formik'
 import Button from '../Button'
 import * as yup from 'yup'
 import { useEffect, useState } from 'react'
@@ -40,10 +40,10 @@ const FormModal: React.FC<Props> = (props) => {
     >
       <Formik
         initialValues={props.initialValues}
-        validationSchema={props.validationSchema}
+        validator={() => ({})}
         validateOnChange={false}
         validateOnBlur={false}
-        onSubmit={values => handleSubmit(values)}
+        onSubmit={handleSubmit}
       >
         {formik => (
           <>

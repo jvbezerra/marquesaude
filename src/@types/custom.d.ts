@@ -1,20 +1,20 @@
 declare module "*.png";
 
 declare interface User {
-  id: number,
+  id?: number,
   name: string,
-  phone: string,
+  phonenumber: string,
   address: string,
   cpf: string,
   password?: string,
-  birthdate: string,
+  birthdate: Date,
 }
 
 declare interface Appointment {
   id: number,
   name: string,
-  hour: string,
-  date: string,
+  timetable: Date,
+  date: Date,
   vacancies?: number,
 }
 
@@ -22,11 +22,10 @@ declare interface Unit {
   id: number,
   name: string,
   cnes: string,
-  phone: string,
+  phonenumber: string,
   password?: string,
-  address: {
-    street: string,
-    neighborhood: string,
-    city: string
-  }
+  cep: string,
+  street: string,
+  neighborhood: string,
+  city: string
 }

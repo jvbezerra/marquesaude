@@ -8,6 +8,7 @@ import DateInput from '../../../components/Inputs/DateInput'
 import NumberInput from '../../../components/Inputs/NumberInput'
 import TextInput from '../../../components/Inputs/TextInput'
 import TimeInput from '../../../components/Inputs/TimeInput'
+import { createAppointment } from '../../../services'
 
 interface Props {
   appointment: Appointment | null
@@ -18,10 +19,10 @@ interface Props {
 const validationSchema = yup.object().shape({
   name: yup.string()
     .required("Obrigatório"),
-  hour: yup.string()
+  timetable: yup.date()
     .required()
     .min(5, "Inválido"),
-  date: yup.string()
+  date: yup.date()
     .required()
     .min(10, "Inválido"),
   vacancies: yup.number()
@@ -31,8 +32,9 @@ const validationSchema = yup.object().shape({
 const AppointmentModal: React.FC<Props> = (props) => {
   const { appointment, isOpen, onClose } = props
 
-  const addAppointment = (values: Appointment) => {
-    // add appointment service function
+  const addAppointment = async (values: Appointment) => {
+    await createAppointment(values)
+    onClose()
   }
 
   const editAppointment = (values: Appointment) => {
@@ -50,7 +52,7 @@ const AppointmentModal: React.FC<Props> = (props) => {
       validationSchema={validationSchema}
       initialValues={{
         name: appointment?.name ?? '',
-        hour: appointment?.hour ?? '',
+        hour: appointment?.timetable ?? '',
         date: appointment?.date ?? '',
         vacancies: appointment?.vacancies ?? 0,
       }}
@@ -82,7 +84,7 @@ const AppointmentModal: React.FC<Props> = (props) => {
               <DateInput
                 label="Data da consulta"
                 value={values.date ? moment(values.date) : ''}
-                onChange={value => setFieldValue('date', moment(value).format('DD/MM/YYYY'))}
+                onChange={value => setFieldValue('date', moment(value))}
               />
             </Col>
             <Col span={12}>
@@ -90,7 +92,7 @@ const AppointmentModal: React.FC<Props> = (props) => {
                 label="Hora da consulta"
                 value={values.hour ? moment(values.hour, 'HH:mm') : ''}
                 format="HH:mm"
-                onChange={value => setFieldValue('hour', moment(value).format('HH:mm'))}
+                onChange={value => setFieldValue('hour', moment(value))}
               />
             </Col>
           </Row>

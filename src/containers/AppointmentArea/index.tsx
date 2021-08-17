@@ -1,16 +1,18 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { PageHeader, Spin, Button } from 'antd'
 
 import { useFetch } from '../../hooks/useFetch'
 import List from '../../components/List'
 import ListItem from '../../components/ListItem'
 import AppointmentModal from './AppointmentModal'
+import { AuthContext } from '../../contexts/auth'
 
 import MedicalIcon from '@ant-design/icons/MedicineBoxOutlined'
 import AddIcon from '@ant-design/icons/PlusCircleOutlined'
 
 const AppointmentArea: React.FC = () => {
-  const { data: appointments } = useFetch<Appointment[]>('/appointments/all')
+  const { unit } = useContext(AuthContext)
+  const { data: appointments } = useFetch<Appointment[]>(() => '/appointments/unit/'+unit?.id)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null)

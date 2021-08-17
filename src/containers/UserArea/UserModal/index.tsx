@@ -5,6 +5,7 @@ import * as yup from 'yup'
 import FormModal from '../../../components/FormModal'
 import DateInput from '../../../components/Inputs/DateInput'
 import TextInput from '../../../components/Inputs/TextInput'
+import { createUser } from '../../../services'
 
 interface Props {
   user: User | null
@@ -19,10 +20,10 @@ const validationSchema = yup.object().shape({
   cpf: yup.string()
     .required('Obrigatório')
     .min(14, "Inválido"),
-  phone: yup.string()
+  phonenumber: yup.string()
     .required()
     .min(15, "Inválido"),
-  birthdate: yup.string()
+  birthdate: yup.date()
     .required()
     .min(10, "Inválido"),
   password: yup.string(),
@@ -33,8 +34,9 @@ const validationSchema = yup.object().shape({
 const UserModal: React.FC<Props> = (props) => {
   const { user, isOpen, onClose } = props
 
-  const addUser = (values: User) => {
-    // add user service function
+  const addUser = async (values: User) => {
+    await createUser(values)
+    onClose()
   }
 
   const editUser = (values: User) => {
@@ -53,7 +55,7 @@ const UserModal: React.FC<Props> = (props) => {
       initialValues={{
         name: user?.name ?? '',
         cpf: user?.cpf ?? '',
-        phone: user?.phone ?? '',
+        phonenumber: user?.phonenumber ?? '',
         birthdate: user?.birthdate ?? '',
         password: user?.password ?? '',
         address: user?.address ?? ''
@@ -81,12 +83,12 @@ const UserModal: React.FC<Props> = (props) => {
           <Row gutter={12}>
             <Col span={12}>
               <TextInput
-                name="phone"
+                name="phonenumber"
                 label="Celular"
                 mask="(99) 99999-9999"
                 placeholder="(99) 9999-9999"
-                value={values.phone}
-                error={errors.phone}
+                value={values.phonenumber}
+                error={errors.phonenumber}
                 onChange={handleChange}
               />
             </Col>
@@ -94,7 +96,7 @@ const UserModal: React.FC<Props> = (props) => {
             <DateInput
                 label="Data de nascimento"
                 value={values.birthdate ? moment(values.birthdate) : ''}
-                onChange={value => setFieldValue('date', moment(value).format('DD/MM/YYYY'))}
+                onChange={value => setFieldValue('birthdate', moment(value))}
               />
             </Col>
           </Row>

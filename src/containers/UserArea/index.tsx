@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Spin, Button, PageHeader } from 'antd'
 
 import { useFetch } from '../../hooks/useFetch'
 import List from '../../components/List'
 import ListItem from '../../components/ListItem'
 import UserModal from './UserModal'
+import { AuthContext } from '../../contexts/auth'
 
 import PersonIcon from '@ant-design/icons/UserOutlined'
 import AddIcon from '@ant-design/icons/PlusCircleOutlined'
@@ -12,7 +13,8 @@ import FilterIcon from '@ant-design/icons/FilterOutlined'
 import FilterModal from './FilterModal'
 
 const UserArea: React.FC = () => {
-  const { data: users } = useFetch<User[]>('/users/all')
+  const { unit } = useContext(AuthContext)
+  const { data: users } = useFetch<User[]>(() => '/users/unit/'+unit?.id)
 
   const [isUserModalOpen, setIsUserModalOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)

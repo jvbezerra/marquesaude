@@ -17,7 +17,7 @@ const validationSchema = yup.object().shape({
   cnes: yup.string()
     .required('Obrigatório')
     .min(7, "Inválido"),
-  phone: yup.string()
+  phonenumber: yup.string()
     .required()
     .min(15, "Inválido"),
   password: yup.string(),
@@ -49,11 +49,11 @@ const UnitModal: React.FC<Props> = (props) => {
       initialValues={{
         name: unit?.name ?? '',
         cnes: unit?.cnes ?? '',
-        phone: unit?.phone ?? '',
+        phonenumber: unit?.phonenumber ?? '',
         passoword: unit?.password ?? '',
-        street: unit?.address?.street ?? '',
-        neighborhood: unit?.address?.neighborhood ?? '',
-        city: unit?.address?.neighborhood ?? ''
+        street: unit?.street ?? '',
+        neighborhood: unit?.neighborhood ?? '',
+        city: unit?.city ?? ''
       }}
     >
       {({ values, errors, handleChange }) => (
@@ -78,11 +78,11 @@ const UnitModal: React.FC<Props> = (props) => {
             </Col>
             <Col span={12}>
               <TextInput
-                name="phone"
+                name="phonenumber"
                 label="Celular"
                 mask="(99) 99999-9999"
-                value={values.phone}
-                error={errors.phone}
+                value={values.phonenumber}
+                error={errors.phonenumber}
                 onChange={handleChange}
               />
             </Col>

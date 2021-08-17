@@ -1,6 +1,6 @@
 import { Form, Formik } from 'formik'
 import Image from 'next/image'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import * as yup from 'yup'
 
@@ -10,6 +10,9 @@ import TextInput from '../components/Inputs/TextInput'
 import { AuthContext } from '../contexts/auth'
 import style from '../styles/Login.module.scss'
 import { signIn } from '../services'
+import { Spin } from 'antd'
+import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
+const LoadingIcon = <LoadingOutlined style={{ fontSize: 24, color: 'white' }} spin />;
 
 const validationSchema = yup.object().shape({
   cnes: yup.string()
@@ -22,12 +25,15 @@ const validationSchema = yup.object().shape({
 export default function Login() {
   const router = useRouter()
   const { unit, logIn } = useContext(AuthContext)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    setLoading(false)
     if (unit) router.push('/dashboard')
   }, [unit])
 
   const handleSubmit = async (values: any) => {
+    setLoading(true)
     const signUnit = await signIn(values.cnes, values.password)
     logIn(signUnit)
   }
@@ -65,8 +71,8 @@ export default function Login() {
                 onChange={handleChange}
               />
             </div>
-            <Button onClick={submitForm} style={{ width: '50%' }}>
-              Entrar
+            <Button onClick={submitForm} style={{ width: '50%' }} disabled={loading}>
+              {loading ? <Spin indicator={LoadingIcon}/> : 'Entrar'}
             </Button>
           </Form>
         )}
