@@ -21,7 +21,7 @@ declare interface Appointment {
 declare interface Unit {
   id: number,
   name: string,
-  cnpj: string,
+  cnes: string,
   phone: string,
   password?: string,
   address: {

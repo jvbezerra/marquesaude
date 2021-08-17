@@ -14,9 +14,9 @@ interface Props {
 const validationSchema = yup.object().shape({
   name: yup.string()
     .required("Obrigatório"),
-  cnpj: yup.string()
+  cnes: yup.string()
     .required('Obrigatório')
-    .min(18, "Inválido"),
+    .min(7, "Inválido"),
   phone: yup.string()
     .required()
     .min(15, "Inválido"),
@@ -24,7 +24,7 @@ const validationSchema = yup.object().shape({
   street: yup.string()
     .required("Obrigatório"),
   neighborhood: yup.string()
-  .required("Obrigatório"),
+    .required("Obrigatório"),
   city: yup.string()
     .required("Obrigatório"),
 })
@@ -48,7 +48,7 @@ const UnitModal: React.FC<Props> = (props) => {
       validationSchema={validationSchema}
       initialValues={{
         name: unit?.name ?? '',
-        cnpj: unit?.cnpj ?? '',
+        cnes: unit?.cnes ?? '',
         phone: unit?.phone ?? '',
         passoword: unit?.password ?? '',
         street: unit?.address?.street ?? '',
@@ -56,7 +56,7 @@ const UnitModal: React.FC<Props> = (props) => {
         city: unit?.address?.neighborhood ?? ''
       }}
     >
-      {({ values, errors, handleChange, setFieldValue }) => (
+      {({ values, errors, handleChange }) => (
         <Form>
           <TextInput
             name="name"
@@ -68,11 +68,11 @@ const UnitModal: React.FC<Props> = (props) => {
           <Row gutter={12}>
             <Col span={12}>
               <TextInput
-                name="cnpj"
-                label="CNPJ"
-                value={values.cnpj}
-                mask="99.999.999/9999-99"
-                error={errors.cnpj}
+                name="cnes"
+                label="CNES"
+                value={values.cnes}
+                mask="9999999"
+                error={errors.cnes}
                 onChange={handleChange}
               />
             </Col>

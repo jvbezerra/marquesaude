@@ -1,8 +1,8 @@
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useContext, useEffect } from 'react'
-import { AuthContext } from '../contexts/auth'
 
+import { AuthContext } from '../contexts/auth'
 import style from '../styles/Dashboard.module.scss'
 import HeaderBar from '../containers/HeaderBar'
 const UserArea = dynamic(() => import('../containers/UserArea'), { ssr: false })

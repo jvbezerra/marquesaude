@@ -9,11 +9,12 @@ import Button from '../components/Button'
 import TextInput from '../components/Inputs/TextInput'
 import { AuthContext } from '../contexts/auth'
 import style from '../styles/Login.module.scss'
+import { signIn } from '../services'
 
 const validationSchema = yup.object().shape({
-  cnpj: yup.string()
+  cnes: yup.string()
     .required('Obrigatório')
-    .min(18, "Inválido"),
+    .min(7, "Inválido"),
   password: yup.string()
     .required('Obrigatório'),
 })
@@ -26,20 +27,9 @@ export default function Login() {
     if (unit) router.push('/dashboard')
   }, [unit])
 
-  const handleSubmit = (values: any) => {
-    //encrypt password, send data do api, validate there and if true return unit data
-
-    logIn({
-      id: 14,
-      name: 'UBS Padre Malagrida',
-      cnpj: '42.839.882/0001-23',
-      phone: '83986537368',
-      address: {
-        street: 'Avenida Campina Grande',
-        neighborhood: 'Municípios',
-        city: 'Santa Rita'
-      }
-    })
+  const handleSubmit = async (values: any) => {
+    const signUnit = await signIn(values.cnes, values.password)
+    logIn(signUnit)
   }
 
   return (
@@ -47,7 +37,7 @@ export default function Login() {
       <Formik
         validationSchema={validationSchema}
         initialValues={{
-          cnpj: '',
+          cnes: '',
           password: '',
         }}
         validateOnChange={false}
@@ -58,12 +48,11 @@ export default function Login() {
             <Image src={logo} width={256} height={104} alt="Marque Saúde" placeholder="blur"/>
             <div style={{ width: '85%' }}>
               <TextInput
-                name="cnpj"
-                label="CNPJ"
-                mask="99.999.999/9999-99"
-                placeholder="99.999.999/9999-99"
-                value={values.cnpj}
-                error={errors.cnpj}
+                name="cnes"
+                label="CNES"
+                placeholder="Insira o número do CNES"
+                value={values.cnes}
+                error={errors.cnes}
                 onChange={handleChange}
               />
               <TextInput

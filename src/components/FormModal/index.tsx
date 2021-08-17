@@ -50,6 +50,7 @@ const FormModal: React.FC<Props> = (props) => {
             <fieldset disabled={isEditting}>
               {props.children(formik)}
             </fieldset>
+            
             <Button
               onClick={() => isEditting ? setIsEditting(false) : formik.submitForm()}
               secondary={isEditting}
