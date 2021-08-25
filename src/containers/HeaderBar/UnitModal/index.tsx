@@ -19,7 +19,7 @@ const validationSchema = yup.object().shape({
     .min(7, "Inválido"),
   phonenumber: yup.string()
     .required()
-    .min(15, "Inválido"),
+    .min(14, "Inválido"),
   password: yup.string(),
   street: yup.string()
     .required("Obrigatório"),
@@ -39,7 +39,7 @@ const UnitModal: React.FC<Props> = (props) => {
 
   return (
     <FormModal
-      title="Usuário"
+      title="Unidade"
       isEdit={!!unit}
       isOpen={isOpen}
       onClose={() => onClose()}
@@ -68,6 +68,7 @@ const UnitModal: React.FC<Props> = (props) => {
           <Row gutter={12}>
             <Col span={12}>
               <TextInput
+                disabled
                 name="cnes"
                 label="CNES"
                 value={values.cnes}
@@ -80,7 +81,7 @@ const UnitModal: React.FC<Props> = (props) => {
               <TextInput
                 name="phonenumber"
                 label="Celular"
-                mask="(99) 99999-9999"
+                mask={values.phonenumber.length > 14 ? "(99) 99999-9999" : "(99) 9999-9999"}
                 value={values.phonenumber}
                 error={errors.phonenumber}
                 onChange={handleChange}
