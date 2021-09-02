@@ -1,10 +1,9 @@
 import { Row, Col } from 'antd'
 import { Form } from 'formik'
-import { useContext } from 'react'
+import { useSession } from 'next-auth/client'
 import * as yup from 'yup'
 import FormModal from '../../../components/FormModal'
 import TextInput from '../../../components/Inputs/TextInput'
-import { AuthContext } from '../../../contexts/auth'
 
 interface Props {
   isOpen: boolean
@@ -30,8 +29,10 @@ const validationSchema = yup.object().shape({
 })
 
 const UnitModal: React.FC<Props> = (props) => {
+  const [ session ] = useSession()
+
+  const unit: any = session?.user
   const { isOpen, onClose } = props
-  const { unit } = useContext(AuthContext)
 
   const editUser = (values: Unit) => {
     // edit unit service function

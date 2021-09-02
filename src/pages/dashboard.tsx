@@ -1,6 +1,5 @@
 import dynamic from 'next/dynamic'
-import { useEffect } from 'react'
-import { signIn, useSession } from 'next-auth/client'
+import { useSession } from 'next-auth/client'
 
 import style from '../styles/Dashboard.module.scss'
 import HeaderBar from '../containers/HeaderBar'
@@ -10,11 +9,8 @@ const AppointmentArea = dynamic(() => import('../containers/AppointmentArea'), {
 function App() {
   const [ session ] = useSession()
 
-  useEffect(() => {
-    if (!session) signIn()
-  }, [session])
-
   return (
+    !session ? <></> :
     <div>
       <HeaderBar />
       <div className={style.area}>

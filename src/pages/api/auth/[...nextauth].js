@@ -1,25 +1,19 @@
 import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
-import { toast } from 'react-toastify'
-import { unitSignIn, userSignIn } from '../../../services'
-import { Roles } from './roles'
+import { authenticate } from '../../../services'
 
 export default NextAuth({
   providers: [
     Providers.Credentials({
-      id: "unit-login",
       async authorize(credentials) {
-        try {
-          const unit = await unitSignIn(credentials.cnes, credentials.password)
-
-          if (unit) {
-            return {status: 'success', data: {
-              ...unit,
-              role: Roles.UNIT
-            }}
-          } 
-        } catch (error) {
-          toast.error("Confira as informações!")
+        const data = await authenticate(credentials.cnes, credentials.password)
+        if (data) {
+          return {
+            status: 'success', 
+            data: data.user,
+          }
+        } else {
+          return null
         }
       },
       credentials: {
@@ -27,40 +21,27 @@ export default NextAuth({
         password: {  label: "Senha", type: "password" }
       },
     }),
-    Providers.Credentials({
-      id: "user-login",
-      async authorize(credentials) {
-        try {
-          const user = await userSignIn(credentials.cpf, credentials.password)
-
-          if (user) {
-            return {status: 'success', data: {
-              ...user,
-              role: Roles.USER
-            }}
-          } 
-        } catch (error) {
-          toast.error("Confira as informações!")
-        }
-      },
-      credentials: {
-        cpf: { label: "CPF", type: "text " },
-        password: {  label: "Senha", type: "password" }
-      },
-    }),
   ],
   callbacks: {
     async jwt(token, user) {
       if (user) {
-        token.accessToken = user.token
+        //token.accessToken = user.token
+        token.user = user.data
       }
   
       return token
     },
   
     async session(session, token) {
-      session.accessToken = token.accessToken
+      //session.accessToken = token.accessToken
+      session.user = token.user
       return session
+    },
+
+    async redirect(url, baseUrl = "http://localhost:3000") {
+      return url.startsWith(baseUrl)
+        ? url
+        : baseUrl+url
     }
   },
   pages: {

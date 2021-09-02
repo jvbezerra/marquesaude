@@ -1,28 +1,36 @@
-import { useContext, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Spin, Button, PageHeader } from 'antd'
 import { useSession } from 'next-auth/client'
 
-import { useFetch } from '../../hooks/useFetch'
 import List from '../../components/List'
 import ListItem from '../../components/ListItem'
+import FilterModal from './FilterModal'
+import { deleteUser, getAllUsers } from '../../services'
 import UserModal from './UserModal'
-import { AuthContext } from '../../contexts/auth'
 
 import PersonIcon from '@ant-design/icons/UserOutlined'
 import AddIcon from '@ant-design/icons/PlusCircleOutlined'
 import FilterIcon from '@ant-design/icons/FilterOutlined'
-import FilterModal from './FilterModal'
 
 const UserArea: React.FC = () => {
-  const { unit } = useContext(AuthContext)
-  const { data: users } = useFetch<User[]>(() => '/users/unit/'+unit?.id)
+  const [ session ] = useSession()
 
   const [isUserModalOpen, setIsUserModalOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
+
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
   const [filters, setFilters] = useState<{ name: string }>({ name: '' })
 
-  const renderItem = ({index, style}: any) => {
+  const [users, setUsers] = useState<User[]>()
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getAllUsers(session?.user.id!)
+      .then(res => setUsers(res))
+    setLoading(false)
+  }, [loading])
+
+  const renderItem = ({ index, style }: any) => {
     const filteredUsers = users!.filter(user => user.name.includes(filters.name))
     const item: User = filteredUsers[index]
     
@@ -32,11 +40,14 @@ const UserArea: React.FC = () => {
         title={item.name}
         style={style}
         description={item.address}
+        onDelete={async () => {
+          await deleteUser(item.id)
+          setLoading(true)
+        }}
         onView={async () => {
           setSelectedUser(item)
           setIsUserModalOpen(true)
         }}
-        onDelete={() => {}}
       />
     )
   }
@@ -66,7 +77,7 @@ const UserArea: React.FC = () => {
         ]}
       />
 
-      {!users ? <Spin /> :
+      {!users || loading ? <Spin /> :
         <List
           count={users!.length}
           showing={8}
@@ -75,9 +86,13 @@ const UserArea: React.FC = () => {
       }
 
       <UserModal
+        unitId={session?.user.id!}
         user={selectedUser}
         isOpen={isUserModalOpen}
-        onClose={() => setIsUserModalOpen(false)}
+        onClose={() => {
+          setIsUserModalOpen(false)
+          setLoading(true)
+        }}
       />
       <FilterModal
         setFilters={(value: any) => setFilters(value)}

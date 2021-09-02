@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { Button, Tooltip } from 'antd'
 
 import HelpModal from './HelpModal'
@@ -10,12 +10,9 @@ import SettingsIcon from '@ant-design/icons/SettingOutlined'
 import HelpIcon from '@ant-design/icons/QuestionCircleOutlined'
 import LogoutIcon from '@ant-design/icons/LogoutOutlined'
 import UnitModal from './UnitModal'
-import { AuthContext } from '../../contexts/auth'
-import { useRouter } from 'next/router'
+import { signOut } from 'next-auth/client'
 
 const HeaderBar = () => {
-  const router = useRouter()
-  const { logOut } = useContext(AuthContext)
 
   const [isHelpModalOpen, setHelpModalOpen] = useState(false)
   const [isUnitModalOpen, setUnitModalOpen] = useState(false)
@@ -47,10 +44,7 @@ const HeaderBar = () => {
             shape="circle"
             aria-label="Sair"
             icon={<LogoutIcon/>}
-            onClick={() => {
-              logOut()
-              router.push('/')
-            }}
+            onClick={() => signOut()}
           />
         </Tooltip>
       </div>

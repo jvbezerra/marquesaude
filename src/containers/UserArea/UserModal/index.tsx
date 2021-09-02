@@ -1,13 +1,16 @@
 import { Row, Col } from 'antd'
 import { Form } from 'formik'
 import moment from 'moment'
+import { toast } from 'react-toastify'
 import * as yup from 'yup'
+
 import FormModal from '../../../components/FormModal'
 import DateInput from '../../../components/Inputs/DateInput'
 import TextInput from '../../../components/Inputs/TextInput'
-import { createUser } from '../../../services'
+import { createUser, editUser } from '../../../services'
 
 interface Props {
+  unitId: number
   user: User | null
   isOpen: boolean
   onClose: Function
@@ -32,15 +35,25 @@ const validationSchema = yup.object().shape({
 })
 
 const UserModal: React.FC<Props> = (props) => {
-  const { user, isOpen, onClose } = props
+  const { user, isOpen, onClose, unitId } = props
 
   const addUser = async (values: User) => {
-    await createUser(values)
-    onClose()
+    createUser({
+      ...values,
+      unit_id: unitId
+    })
+      .then(res => {
+        if (!res) toast.error("Algo deu errado :/")
+      })
+      .finally(() => onClose())
   }
 
-  const editUser = (values: User) => {
-    // edit user service function
+  const changeUser = async (values: User | any) => {
+    editUser(user?.id!, values)
+      .then(res => {
+        if (!res) toast.error("Algo deu errado :/")
+      })
+      .finally(() => onClose())
   }
 
   return (
@@ -50,7 +63,7 @@ const UserModal: React.FC<Props> = (props) => {
       isOpen={isOpen}
       onClose={() => onClose()}
       onAdd={(values: User) => addUser(values)}
-      onEdit={(values: User) => editUser(values)}
+      onEdit={(values: User) => changeUser(values)}
       validationSchema={validationSchema}
       initialValues={{
         name: user?.name ?? '',

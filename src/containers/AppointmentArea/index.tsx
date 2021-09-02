@@ -1,23 +1,30 @@
-import { useContext, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { PageHeader, Spin, Button } from 'antd'
+import { useSession } from 'next-auth/client'
 
-import { useFetch } from '../../hooks/useFetch'
 import List from '../../components/List'
 import ListItem from '../../components/ListItem'
 import AppointmentModal from './AppointmentModal'
-import { AuthContext } from '../../contexts/auth'
+import { deleteAppointment, getAllAppointments } from '../../services'
 
 import MedicalIcon from '@ant-design/icons/MedicineBoxOutlined'
 import AddIcon from '@ant-design/icons/PlusCircleOutlined'
 
 const AppointmentArea: React.FC = () => {
-  const { unit } = useContext(AuthContext)
-  const { data: appointments } = useFetch<Appointment[]>(() => '/appointments/unit/'+unit?.id)
-
+  const [ session ] = useSession()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null)
 
-  const renderItem = ({index, style}: any) => {
+  const [appointments, setAppointments] = useState<Appointment[]>()
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getAllAppointments(session?.user.id!)
+      .then(res => setAppointments(res))
+    setLoading(false)
+  }, [loading])
+
+  const renderItem = ({ index, style }: any) => {
     const item: Appointment = appointments![index]
     return (
       <ListItem
@@ -25,11 +32,14 @@ const AppointmentArea: React.FC = () => {
         title={item.name}
         style={style}
         description={item.name}
+        onDelete={async () => {
+          await deleteAppointment(item.id)
+          setLoading(true)
+        }}
         onView={async () => {
           setSelectedAppointment(item)
           setIsModalOpen(true)
         }}
-        onDelete={() => {}}
       />
     )
   }
@@ -52,7 +62,7 @@ const AppointmentArea: React.FC = () => {
         ]}
       />
 
-      {!appointments ? <Spin /> :
+      {!appointments || loading ? <Spin /> :
         <List
           count={appointments!.length}
           showing={8}
@@ -61,9 +71,13 @@ const AppointmentArea: React.FC = () => {
       }
 
       <AppointmentModal
+        unitId={session?.user.id!}
         appointment={selectedAppointment}
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false)
+          setLoading(true)
+        }}
       />
     </>
   )
