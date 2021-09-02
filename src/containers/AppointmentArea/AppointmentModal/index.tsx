@@ -8,7 +8,6 @@ import FormModal from '../../../components/FormModal'
 import DateInput from '../../../components/Inputs/DateInput'
 import NumberInput from '../../../components/Inputs/NumberInput'
 import TextInput from '../../../components/Inputs/TextInput'
-import TimeInput from '../../../components/Inputs/TimeInput'
 import { createAppointment, editAppointment } from '../../../services'
 
 interface Props {

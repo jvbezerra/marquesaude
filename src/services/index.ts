@@ -32,11 +32,6 @@ export const deleteUser = async (id: number) => {
   await api.delete(`/users/${id}`)
 }
 
-export const getAllUsers = async (unitId: number) => {
-  const { data: users } = await api.get(`/users/unit/${unitId}`)
-  return users
-}
-
 // APPOINTMENTS
 export const createAppointment = async (data: Appointment) => {
   const { data: newAppointment } = await api.post('/appointments', data)
@@ -50,9 +45,4 @@ export const editAppointment = async (id: number, data: Appointment | any) => {
 
 export const deleteAppointment = async (id: number) => {
   await api.delete(`/appointments/${id}`)
-}
-
-export const getAllAppointments = async (unitId: number) => {
-  const { data: appointments } = await api.get(`/appointments/unit/${unitId}`)
-  return appointments
 }

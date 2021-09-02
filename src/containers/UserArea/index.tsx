@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Spin, Button, PageHeader } from 'antd'
 import { useSession } from 'next-auth/client'
+import useSWR from 'swr'
 
 import List from '../../components/List'
 import ListItem from '../../components/ListItem'
 import FilterModal from './FilterModal'
-import { deleteUser, getAllUsers } from '../../services'
+import { deleteUser } from '../../services'
 import UserModal from './UserModal'
 
 import PersonIcon from '@ant-design/icons/UserOutlined'
@@ -14,21 +15,13 @@ import FilterIcon from '@ant-design/icons/FilterOutlined'
 
 const UserArea: React.FC = () => {
   const [ session ] = useSession()
+  const { data: users, mutate } = useSWR<User[]>(`/users/unit/${session?.user.id!}`)
 
   const [isUserModalOpen, setIsUserModalOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
   const [filters, setFilters] = useState<{ name: string }>({ name: '' })
-
-  const [users, setUsers] = useState<User[]>()
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    getAllUsers(session?.user.id!)
-      .then(res => setUsers(res))
-    setLoading(false)
-  }, [loading])
 
   const renderItem = ({ index, style }: any) => {
     const filteredUsers = users!.filter(user => user.name.includes(filters.name))
@@ -42,7 +35,7 @@ const UserArea: React.FC = () => {
         description={item.address}
         onDelete={async () => {
           await deleteUser(item.id)
-          setLoading(true)
+          mutate()
         }}
         onView={async () => {
           setSelectedUser(item)
@@ -77,9 +70,9 @@ const UserArea: React.FC = () => {
         ]}
       />
 
-      {!users || loading ? <Spin /> :
+      {!users ? <Spin /> :
         <List
-          count={users!.length}
+          count={users.length}
           showing={8}
           renderItem={renderItem}
         />
@@ -91,7 +84,7 @@ const UserArea: React.FC = () => {
         isOpen={isUserModalOpen}
         onClose={() => {
           setIsUserModalOpen(false)
-          setLoading(true)
+          mutate()
         }}
       />
       <FilterModal

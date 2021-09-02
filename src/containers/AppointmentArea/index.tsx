@@ -1,28 +1,22 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { PageHeader, Spin, Button } from 'antd'
 import { useSession } from 'next-auth/client'
+import useSWR from 'swr'
 
 import List from '../../components/List'
 import ListItem from '../../components/ListItem'
 import AppointmentModal from './AppointmentModal'
-import { deleteAppointment, getAllAppointments } from '../../services'
+import { deleteAppointment } from '../../services'
 
 import MedicalIcon from '@ant-design/icons/MedicineBoxOutlined'
 import AddIcon from '@ant-design/icons/PlusCircleOutlined'
 
 const AppointmentArea: React.FC = () => {
   const [ session ] = useSession()
+  const { data: appointments, mutate } = useSWR(`/appointments/unit/${session?.user.id!}`)
+
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null)
-
-  const [appointments, setAppointments] = useState<Appointment[]>()
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    getAllAppointments(session?.user.id!)
-      .then(res => setAppointments(res))
-    setLoading(false)
-  }, [loading])
 
   const renderItem = ({ index, style }: any) => {
     const item: Appointment = appointments![index]
@@ -34,7 +28,7 @@ const AppointmentArea: React.FC = () => {
         description={item.name}
         onDelete={async () => {
           await deleteAppointment(item.id)
-          setLoading(true)
+          mutate()
         }}
         onView={async () => {
           setSelectedAppointment(item)
@@ -62,9 +56,9 @@ const AppointmentArea: React.FC = () => {
         ]}
       />
 
-      {!appointments || loading ? <Spin /> :
+      {!appointments ? <Spin /> :
         <List
-          count={appointments!.length}
+          count={appointments.length}
           showing={8}
           renderItem={renderItem}
         />
@@ -76,7 +70,7 @@ const AppointmentArea: React.FC = () => {
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false)
-          setLoading(true)
+          mutate()
         }}
       />
     </>
