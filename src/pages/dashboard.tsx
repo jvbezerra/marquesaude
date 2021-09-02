@@ -3,8 +3,8 @@ import { useSession } from 'next-auth/client'
 
 import style from '../styles/Dashboard.module.scss'
 import HeaderBar from '../containers/HeaderBar'
-const UserArea = dynamic(() => import('../containers/UserArea'), { ssr: false })
-const AppointmentArea = dynamic(() => import('../containers/AppointmentArea'), { ssr: false })
+const UserArea = dynamic(() => import('../containers/UserArea'))
+const AppointmentArea = dynamic(() => import('../containers/AppointmentArea'))
 
 function App() {
   const [ session ] = useSession()
