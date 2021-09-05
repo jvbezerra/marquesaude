@@ -86,10 +86,9 @@ const AppointmentModal: React.FC<Props> = (props) => {
             </Col>
           </Row>
           <DateInput
-            label="Data e hora da consulta"
+            label="Data da consulta"
             value={values.date ? moment(values.date) : ''}
             onChange={value => setFieldValue('date', moment(value))}
-            showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
           />
         </Form>
       )}
