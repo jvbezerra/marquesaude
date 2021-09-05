@@ -118,10 +118,10 @@ const UserModal: React.FC<Props> = (props) => {
             </Col>
           </Row>
           <TextInput
-            label="Senha"
+            label="Alterar senha"
             type="password"
             name="password"
-            placeholder="Insira a senha para acesso"
+            placeholder="Insira a senha para mudança"
             value={values.password}
             error={errors.password}
             onChange={handleChange}
