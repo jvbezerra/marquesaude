@@ -15,8 +15,9 @@ declare interface Appointment {
   id: number,
   name: string,
   date: Date,
-  vacancies?: number,
+  vacancies: number,
   unit_id?: number,
+  Bookings?: Booking[],
 }
 
 declare interface Unit {
@@ -29,4 +30,11 @@ declare interface Unit {
   street: string,
   neighborhood: string,
   city: string
+}
+
+declare interface Booking {
+  id: number,
+  hour: string | Date,
+  userId?: number,
+  appointmentId?: number
 }

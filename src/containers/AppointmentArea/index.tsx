@@ -25,7 +25,7 @@ const AppointmentArea: React.FC = () => {
         avatar={<MedicalIcon/>}
         title={item.name}
         style={style}
-        description={item.name}
+        description={`${item.Bookings?.length} / ${item.vacancies}`}
         onDelete={async () => {
           await deleteAppointment(item.id)
           mutate()

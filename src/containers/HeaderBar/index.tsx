@@ -1,19 +1,19 @@
 import Image from 'next/image'
 import { useState } from 'react'
 import { Button, Tooltip } from 'antd'
+import { signOut, useSession } from 'next-auth/client'
 
 import HelpModal from './HelpModal'
 import logo from '../../../public/logo.png'
 import style from '../../styles/Header.module.scss'
+import UnitModal from './UnitModal'
 
 import SettingsIcon from '@ant-design/icons/SettingOutlined'
 import HelpIcon from '@ant-design/icons/QuestionCircleOutlined'
 import LogoutIcon from '@ant-design/icons/LogoutOutlined'
-import UnitModal from './UnitModal'
-import { signOut } from 'next-auth/client'
 
 const HeaderBar = () => {
-
+  const [ session ] = useSession()
   const [isHelpModalOpen, setHelpModalOpen] = useState(false)
   const [isUnitModalOpen, setUnitModalOpen] = useState(false)
   
@@ -22,6 +22,7 @@ const HeaderBar = () => {
       <div className="logo">
         <Image src={logo} width={256} height={104} alt="Marque Saúde" placeholder="blur"/>
       </div>
+      <p>Unidade {session?.user.name}</p>
       <div className={style.options}>
         <Tooltip title="Unidade">
           <Button
@@ -51,7 +52,11 @@ const HeaderBar = () => {
 
       <HelpModal isOpen={isHelpModalOpen} onClose={() => setHelpModalOpen(false)}/>
       
-      <UnitModal isOpen={isUnitModalOpen} onClose={() => setUnitModalOpen(false)}/>
+      <UnitModal
+        isOpen={isUnitModalOpen}
+        onClose={() => setUnitModalOpen(false)}
+        unit={session?.user!}
+      />
     </div>
   )
 }

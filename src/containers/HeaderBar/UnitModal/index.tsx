@@ -6,6 +6,7 @@ import FormModal from '../../../components/FormModal'
 import TextInput from '../../../components/Inputs/TextInput'
 
 interface Props {
+  unit: Unit
   isOpen: boolean
   onClose: Function
 }
@@ -29,10 +30,7 @@ const validationSchema = yup.object().shape({
 })
 
 const UnitModal: React.FC<Props> = (props) => {
-  const [ session ] = useSession()
-
-  const unit: any = session?.user
-  const { isOpen, onClose } = props
+  const { unit, isOpen, onClose } = props
 
   const editUser = (values: Unit) => {
     // edit unit service function
