@@ -17,7 +17,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Provider session={pageProps.session}>
         <Head>
           <title>Marque Saúde</title>
-          <meta name="description" content="Marque Saúde Dashboard app" />
+          <meta name="description" content="Marque Saúde dashboard app" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <Component {...pageProps} />

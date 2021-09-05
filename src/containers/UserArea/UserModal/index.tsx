@@ -38,8 +38,12 @@ const UserModal: React.FC<Props> = (props) => {
   const { user, isOpen, onClose, unitId } = props
 
   const addUser = async (values: User) => {
+    const { phonenumber, cpf } = values
+    
     createUser({
       ...values,
+      phonenumber: phonenumber.replace(/[^0-9]/g, ""),
+      cpf: cpf.replace(/[^0-9]/g, ""),
       unit_id: unitId
     })
       .then(res => {
