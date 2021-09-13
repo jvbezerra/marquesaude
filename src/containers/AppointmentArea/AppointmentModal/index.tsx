@@ -1,5 +1,4 @@
 import { Row, Col } from 'antd'
-import { Form } from 'formik'
 import moment from 'moment'
 import { toast } from 'react-toastify'
 import * as yup from 'yup'
@@ -15,6 +14,7 @@ interface Props {
   appointment: Appointment | null
   isOpen: boolean
   onClose: Function
+  mutate: any
 }
 
 const validationSchema = yup.object().shape({
@@ -27,7 +27,7 @@ const validationSchema = yup.object().shape({
 })
 
 const AppointmentModal: React.FC<Props> = (props) => {
-  const { appointment, isOpen, onClose, unitId } = props
+  const { appointment, isOpen, onClose, unitId, mutate } = props
 
   const addAppointment = async (values: Appointment) => {
     createAppointment({
@@ -37,7 +37,10 @@ const AppointmentModal: React.FC<Props> = (props) => {
       .then(res => {
         if (!res) toast.error("Algo deu errado :/")
       })
-      .finally(() => onClose())
+      .finally(() => {
+        mutate()
+        onClose()
+      })
   }
 
   const changeAppointment = (values: Appointment | any) => {
@@ -45,7 +48,10 @@ const AppointmentModal: React.FC<Props> = (props) => {
       .then(res => {
         if (!res) toast.error("Algo deu errado :/")
       })
-      .finally(() => onClose())
+      .finally(() => {
+        mutate()
+        onClose()
+      })
   }
 
   return (
@@ -63,35 +69,37 @@ const AppointmentModal: React.FC<Props> = (props) => {
         vacancies: appointment?.vacancies ?? 0,
       }}
     >
-      {({ values, errors, handleChange, setFieldValue }) => (
-        <Form>
-          <Row gutter={12}>
-            <Col span={12}>
-              <TextInput
-                name="name"
-                label="Nome"
-                placeholder="Insira o nome/tipo"
-                value={values.name}
-                error={errors.name}
-                onChange={handleChange}
-              />
-            </Col>
-            <Col span={12}>
-              <NumberInput
-                label="Vagas"
-                value={values.vacancies}
-                error={errors.name}
-                onChange={value => setFieldValue('vacancies', value)}
-              />
-            </Col>
-          </Row>
-          <DateInput
-            label="Data da consulta"
-            value={values.date ? moment(values.date) : ''}
-            onChange={value => setFieldValue('date', moment(value))}
-          />
-        </Form>
-      )}
+      {({ setValue, formState: { errors }, watch }) => {
+        const values = watch()
+        return (
+          <>
+            <Row gutter={12}>
+              <Col span={12}>
+                <TextInput
+                  label="Nome"
+                  placeholder="Insira o nome/tipo"
+                  error={errors.name?.message}
+                  value={values?.name}
+                  onChange={({ target }) => setValue('name', target.value)}
+                />
+              </Col>
+              <Col span={12}>
+                <NumberInput
+                  label="Vagas"
+                  error={errors.vacancies?.message}
+                  value={values?.vacancies}
+                  onChange={value => setValue('vacancies', value)}
+                />
+              </Col>
+            </Row>
+            <DateInput
+              label="Data da consulta"
+              value={values.date ? moment(values.date) : ''}
+              onChange={value => setValue('date', value)}
+            />
+          </>
+        )
+      }}
     </FormModal>
   )
 }

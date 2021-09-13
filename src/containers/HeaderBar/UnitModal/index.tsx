@@ -1,6 +1,4 @@
 import { Row, Col } from 'antd'
-import { Form } from 'formik'
-import { useSession } from 'next-auth/client'
 import * as yup from 'yup'
 import FormModal from '../../../components/FormModal'
 import TextInput from '../../../components/Inputs/TextInput'
@@ -55,76 +53,70 @@ const UnitModal: React.FC<Props> = (props) => {
         city: unit?.city ?? ''
       }}
     >
-      {({ values, errors, handleChange }) => (
-        <Form>
-          <TextInput
-            name="name"
-            label="Nome"
-            value={values.name}
-            error={errors.name}
-            onChange={handleChange}
-          />
-          <Row gutter={12}>
-            <Col span={12}>
-              <TextInput
-                disabled
-                name="cnes"
-                label="CNES"
-                value={values.cnes}
-                mask="9999999"
-                error={errors.cnes}
-                onChange={handleChange}
-              />
-            </Col>
-            <Col span={12}>
-              <TextInput
-                name="phonenumber"
-                label="Celular"
-                mask={values.phonenumber.length > 14 ? "(99) 99999-9999" : "(99) 9999-9999"}
-                value={values.phonenumber}
-                error={errors.phonenumber}
-                onChange={handleChange}
-              />
-            </Col>
-          </Row>
-          <TextInput
-            label="Alterar senha"
-            type="password"
-            name="password"
-            placeholder="Insira a senha para mudança"
-            value={values.password}
-            error={errors.password}
-            onChange={handleChange}
-          />
-          <TextInput
-            name="street"
-            label="Endereço"
-            value={values.street}
-            error={errors.street}
-            onChange={handleChange}
-          />
-          <Row gutter={12}>
-            <Col span={12}>
-              <TextInput
-                name="neighborhood"
-                label="Bairro"
-                value={values.neighborhood}
-                error={errors.neighborhood}
-                onChange={handleChange}
-              />
-            </Col>
-            <Col span={12}>
-              <TextInput
-                name="city"
-                label="Cidade"
-                value={values.city}
-                error={errors.city}
-                onChange={handleChange}
-              />
-            </Col>
-          </Row>
-        </Form>
-      )}
+      {({ setValue, formState: { errors }, watch }) => {
+        const values = watch()
+        return (
+          <>
+            <TextInput
+              label="Nome"
+              error={errors.name?.message}
+              value={values?.name}
+              onChange={({ target }) => setValue('name', target.value)}
+            />
+            <Row gutter={12}>
+              <Col span={12}>
+                <TextInput
+                  label="CNES"
+                  disabled
+                  mask="9999999"
+                  error={errors.cnes?.message}
+                  value={values?.cnes}
+                  onChange={({ target }) => setValue('cnes', target.value)}
+                />
+              </Col>
+              <Col span={12}>
+                <TextInput
+                  label="Celular"
+                  mask={values.phonenumber.length > 14 ? "(99) 99999-9999" : "(99) 9999-9999"}
+                  error={errors.phonenumber?.message}
+                  onChange={({ target }) => setValue('phonenumber', target.value)}
+                />
+              </Col>
+            </Row>
+            <TextInput
+              label="Alterar senha"
+              type="password"
+              placeholder="Insira a senha para mudança"
+              error={errors.password?.message}
+              onChange={({ target }) => setValue('password', target.value)}
+            />
+            <TextInput
+              label="Endereço"
+              error={errors.street?.message}
+              value={values?.street}
+              onChange={({ target }) => setValue('street', target.value)}
+            />
+            <Row gutter={12}>
+              <Col span={12}>
+                <TextInput
+                  label="Bairro"
+                  error={errors.neighborhood?.message}
+                  value={values?.neighborhood}
+                  onChange={({ target }) => setValue('neighborhood', target.value)}
+                />
+              </Col>
+              <Col span={12}>
+                <TextInput
+                  label="Cidade"
+                  error={errors.city?.message}
+                  value={values?.city}
+                  onChange={({ target }) => setValue('city', target.value)}
+                />
+              </Col>
+            </Row>
+          </>
+        )
+      }}
     </FormModal>
   )
 }

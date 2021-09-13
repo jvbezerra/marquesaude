@@ -1,12 +1,13 @@
 import Image from 'next/image'
 import { useState } from 'react'
 import { Button, Tooltip } from 'antd'
+import dynamic from 'next/dynamic'
 import { signOut, useSession } from 'next-auth/client'
 
-import HelpModal from './HelpModal'
 import logo from '../../../public/logo.png'
 import style from '../../styles/Header.module.scss'
-import UnitModal from './UnitModal'
+const UnitModal = dynamic(() => import('./UnitModal'), { ssr: false })
+const HelpModal = dynamic(() => import('./HelpModal'), { ssr: false })
 
 import SettingsIcon from '@ant-design/icons/SettingOutlined'
 import HelpIcon from '@ant-design/icons/QuestionCircleOutlined'
@@ -50,13 +51,14 @@ const HeaderBar = () => {
         </Tooltip>
       </div>
 
-      <HelpModal isOpen={isHelpModalOpen} onClose={() => setHelpModalOpen(false)}/>
+      {isHelpModalOpen && <HelpModal isOpen={isHelpModalOpen} onClose={() => setHelpModalOpen(false)}/>}
       
+      {isUnitModalOpen &&
       <UnitModal
         isOpen={isUnitModalOpen}
         onClose={() => setUnitModalOpen(false)}
         unit={session?.user!}
-      />
+      />}
     </div>
   )
 }

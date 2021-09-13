@@ -2,12 +2,13 @@ import { useState } from 'react'
 import { Spin, Button, PageHeader } from 'antd'
 import { useSession } from 'next-auth/client'
 import useSWR from 'swr'
+import dynamic from 'next/dynamic'
 
 import List from '../../components/List'
 import ListItem from '../../components/ListItem'
-import FilterModal from './FilterModal'
 import { deleteUser } from '../../services'
-import UserModal from './UserModal'
+const UserModal = dynamic(() => import('./UserModal'), { ssr: false })
+const FilterModal = dynamic(() => import('./FilterModal'), { ssr: false })
 
 import PersonIcon from '@ant-design/icons/UserOutlined'
 import AddIcon from '@ant-design/icons/PlusCircleOutlined'
@@ -78,20 +79,20 @@ const UserArea: React.FC = () => {
         />
       }
 
+      {isUserModalOpen &&
       <UserModal
         unitId={session?.user.id!}
         user={selectedUser}
         isOpen={isUserModalOpen}
-        onClose={() => {
-          setIsUserModalOpen(false)
-          mutate()
-        }}
-      />
+        onClose={() => setIsUserModalOpen(false)}
+        mutate={mutate}
+      />}
+      {isFilterModalOpen &&
       <FilterModal
         setFilters={(value: any) => setFilters(value)}
         isOpen={isFilterModalOpen}
         onClose={() => setIsFilterModalOpen(false)}
-      />
+      />}
     </>
   )
 }

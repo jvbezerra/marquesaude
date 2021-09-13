@@ -9,6 +9,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement>{
   mask?: string
   label?: string
   error?: string[] | any
+  ref?: any
 }
 
 export const inputStyle = `
@@ -16,8 +17,13 @@ export const inputStyle = `
   border-radius: 8px;
   width: 100%;
   height: 5.5vh;
+  min-height: 20px;
   padding: 2% 4% 2% 4%;
   color: #142032;
+
+  @media (max-height: 500px) {
+    box-sizing: content-box;
+  }
 `
 
 const Container = styled.div`

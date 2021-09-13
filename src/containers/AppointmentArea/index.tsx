@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { PageHeader, Spin, Button } from 'antd'
 import { useSession } from 'next-auth/client'
 import useSWR from 'swr'
+import dynamic from 'next/dynamic'
 
 import List from '../../components/List'
 import ListItem from '../../components/ListItem'
-import AppointmentModal from './AppointmentModal'
+const AppointmentModal = dynamic(() => import('./AppointmentModal'), { ssr: false })
 import { deleteAppointment } from '../../services'
 
 import MedicalIcon from '@ant-design/icons/MedicineBoxOutlined'
@@ -64,15 +65,14 @@ const AppointmentArea: React.FC = () => {
         />
       }
 
+      {isModalOpen &&
       <AppointmentModal
         unitId={session?.user.id!}
         appointment={selectedAppointment}
         isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false)
-          mutate()
-        }}
-      />
+        onClose={() => setIsModalOpen(false)}
+        mutate={mutate}
+      />}
     </>
   )
 }

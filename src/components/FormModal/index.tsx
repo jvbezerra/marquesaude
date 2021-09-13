@@ -1,8 +1,9 @@
 import { Modal } from 'antd'
-import { Form, Formik, FormikProps } from 'formik'
 import Button from '../Button'
 import * as yup from 'yup'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
+import { useForm, UseFormReturn } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 interface Props {
   title: string
@@ -13,16 +14,21 @@ interface Props {
   onEdit: Function
   initialValues: any
   validationSchema?: yup.ObjectSchema<any>
-  children: (formik: FormikProps<any>) => JSX.Element
+  children: (form: UseFormReturn<any, object>) => JSX.Element
 }
 
 const FormModal: React.FC<Props> = (props) => {
-  const { isEdit, isOpen, onClose, onAdd, onEdit } = props
+  const { isEdit, isOpen, onClose, onAdd, onEdit, validationSchema, initialValues} = props
   const [isEditting, setIsEditting] = useState<boolean>()
+  const form: any = useRef()
+  const formProps = useForm({
+    defaultValues: initialValues,
+    resolver: yupResolver(validationSchema!)
+  })
 
   useEffect(() => setIsEditting(isEdit), [isEdit])
 
-  const handleSubmit = (values: typeof props.initialValues) => {
+  const onSubmit = (values: typeof props.initialValues) => {
     if (isEdit) {
       onEdit(values)
     } else {
@@ -38,29 +44,19 @@ const FormModal: React.FC<Props> = (props) => {
       destroyOnClose
       footer={null}
     >
-      <Formik
-        initialValues={props.initialValues}
-        validator={() => ({})}
-        validateOnChange={false}
-        validateOnBlur={false}
-        onSubmit={handleSubmit}
-      >
-        {formik => (
-          <>
-            <fieldset disabled={isEditting}>
-              {props.children(formik)}
-            </fieldset>
-            
-            <Button
-              onClick={() => isEditting ? setIsEditting(false) : formik.submitForm()}
-              secondary={isEditting}
-              style={{ width: '50%', marginTop: 15 }}
-            >
-              {isEditting ? 'Editar' : 'Confirmar'}
-            </Button>
-          </>
-        )}
-      </Formik>
+      <form onSubmit={formProps.handleSubmit(onSubmit)} ref={form}>
+        <fieldset disabled={isEditting}>
+          {props.children(formProps)}
+        </fieldset>
+        
+        <Button
+          onClick={() => isEditting ? setIsEditting(false) : form.submit()}
+          secondary={isEditting}
+          style={{ width: '50%', marginTop: 15 }}
+        >
+          {isEditting ? 'Editar' : 'Confirmar'}
+        </Button>
+      </form>
     </Modal>
   )
 }

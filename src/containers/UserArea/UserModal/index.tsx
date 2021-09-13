@@ -1,5 +1,4 @@
 import { Row, Col } from 'antd'
-import { Form } from 'formik'
 import moment from 'moment'
 import { toast } from 'react-toastify'
 import * as yup from 'yup'
@@ -14,6 +13,7 @@ interface Props {
   user: User | null
   isOpen: boolean
   onClose: Function
+  mutate: any
 }
 
 
@@ -35,7 +35,7 @@ const validationSchema = yup.object().shape({
 })
 
 const UserModal: React.FC<Props> = (props) => {
-  const { user, isOpen, onClose, unitId } = props
+  const { user, isOpen, onClose, unitId, mutate } = props
 
   const addUser = async (values: User) => {
     const { phonenumber, cpf } = values
@@ -49,7 +49,10 @@ const UserModal: React.FC<Props> = (props) => {
       .then(res => {
         if (!res) toast.error("Algo deu errado :/")
       })
-      .finally(() => onClose())
+      .finally(() => {
+        mutate()
+        onClose()
+      })
   }
 
   const changeUser = async (values: User | any) => {
@@ -57,7 +60,10 @@ const UserModal: React.FC<Props> = (props) => {
       .then(res => {
         if (!res) toast.error("Algo deu errado :/")
       })
-      .finally(() => onClose())
+      .finally(() => {
+        mutate()
+        onClose()
+      })
   }
 
   return (
@@ -78,64 +84,62 @@ const UserModal: React.FC<Props> = (props) => {
         address: user?.address ?? ''
       }}
     >
-      {({ values, errors, handleChange, setFieldValue }) => (
-        <Form>
-          <TextInput
-            name="name"
-            label="Nome"
-            placeholder="Insira o nome completo"
-            value={values.name}
-            error={errors.name}
-            onChange={handleChange}
-          />
-          <TextInput
-            name="cpf"
-            label="CPF"
-            value={values.cpf}
-            mask="999.999.999-99"
-            placeholder="123.456.789-10"
-            error={errors.cpf}
-            onChange={handleChange}
-          />
-          <Row gutter={12}>
-            <Col span={12}>
-              <TextInput
-                name="phonenumber"
-                label="Celular"
-                mask="(99) 99999-9999"
-                placeholder="(99) 9999-9999"
-                value={values.phonenumber}
-                error={errors.phonenumber}
-                onChange={handleChange}
-              />
-            </Col>
-            <Col span={12}>
-            <DateInput
-                label="Data de nascimento"
-                value={values.birthdate ? moment(values.birthdate) : ''}
-                onChange={value => setFieldValue('birthdate', moment(value))}
-              />
-            </Col>
-          </Row>
-          <TextInput
-            label="Alterar senha"
-            type="password"
-            name="password"
-            placeholder="Insira a senha para mudança"
-            value={values.password}
-            error={errors.password}
-            onChange={handleChange}
-          />
-          <TextInput
-            label="Endereço"
-            name="address"
-            placeholder="Rua dos Bobos, 10"
-            value={values.address}
-            error={errors.address}
-            onChange={handleChange}
-          />
-        </Form>
-      )}
+       {({ setValue, formState: { errors }, watch }) => {
+        const values = watch()
+        return (
+          <>
+            <TextInput
+              label="Nome"
+              placeholder="Insira o nome completo"
+              value={values?.name}
+              error={errors.name?.message}
+              onChange={({ target }) => setValue('name', target.value)}
+            />
+            <TextInput
+              label="CPF"
+              mask="999.999.999-99"
+              placeholder="123.456.789-10"
+              value={values?.cpf}
+              error={errors.cpf?.message}
+              onChange={({ target }) => setValue('cpf', target.value)}
+            />
+            <Row gutter={12}>
+              <Col span={12}>
+                <TextInput
+                  label="Celular"
+                  mask="(99) 99999-9999"
+                  placeholder="(99) 9999-9999"
+                  value={values?.phonenumber}
+                  error={errors.phonenumber?.message}
+                  onChange={({ target }) => setValue('phonenumber', target.value)}
+                />
+              </Col>
+              <Col span={12}>
+              <DateInput
+                  label="Data de nascimento"
+                  value={values?.birthdate ? moment(values?.birthdate) : ''}
+                  onChange={value => setValue('birthdate', moment(value))}
+                />
+              </Col>
+            </Row>
+            <TextInput
+              value={values?.password}
+              label="Alterar senha"
+              type="password"
+              placeholder="Insira a senha para mudança"
+              error={errors.password?.message}
+              onChange={({ target }) => setValue('password', target.value)}
+            />
+            <TextInput
+              value={values?.address}
+              label="Endereço"
+              placeholder="Rua dos Bobos, 10"
+              error={errors.address?.message}
+              onChange={({ target }) => setValue('address', target.value)}
+            />
+          </>
+        )
+      }}
     </FormModal>
   )
 }
