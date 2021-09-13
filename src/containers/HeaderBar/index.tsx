@@ -46,7 +46,7 @@ const HeaderBar = () => {
             shape="circle"
             aria-label="Sair"
             icon={<LogoutIcon/>}
-            onClick={() => signOut()}
+            onClick={() => signOut({ callbackUrl: '/' })}
           />
         </Tooltip>
       </div>
