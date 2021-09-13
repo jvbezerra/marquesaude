@@ -26,6 +26,7 @@ const ListItem: React.FC<Props> = (props) => {
           onClick={() => onView()}
         />,
         <Popconfirm
+          key="tooltip"
           title="Tem certeza?"
           onConfirm={() => onDelete()}
           okText="Sim"
