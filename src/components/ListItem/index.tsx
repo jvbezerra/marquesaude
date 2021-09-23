@@ -2,46 +2,15 @@ import React from 'react'
 import { Button, List, Popconfirm } from 'antd'
 import { ListItemMetaProps, ListItemProps } from 'antd/lib/list'
 
-import EyeIcon from '@ant-design/icons/EyeOutlined'
-import DeleteIcon from '@ant-design/icons/DeleteOutlined'
-
 interface Props extends ListItemProps, ListItemMetaProps {
-  title: string,
-  onView: Function,
-  onDelete: Function,
+  title: string
 }
 
 const ListItem: React.FC<Props> = (props) => {
-  const { avatar, title, description, onView, onDelete } = props
+  const { avatar, title, description, ...itemProps } = props
 
   return (
-    <List.Item
-      style={props.style}
-      actions={[
-        <Button
-          key="view"
-          aria-label="Visualizar"
-          shape="circle"
-          icon={<EyeIcon/>}
-          onClick={() => onView()}
-        />,
-        <Popconfirm
-          key="tooltip"
-          title="Tem certeza?"
-          onConfirm={() => onDelete()}
-          okText="Sim"
-          cancelText="Não"
-        >
-          <Button
-            key="delete"
-            aria-label="Deletar"
-            shape="circle"
-            icon={<DeleteIcon/>}
-            onClick={() => {}}
-          />
-        </Popconfirm>
-      ]}
-    >
+    <List.Item {...itemProps}>
       <List.Item.Meta
         avatar={avatar}
         title={title}

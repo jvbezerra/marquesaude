@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/client'
 import style from '../styles/Dashboard.module.scss'
 import HeaderBar from '../containers/HeaderBar'
 const UserArea = dynamic(() => import('../containers/UserArea'))
-const AppointmentArea = dynamic(() => import('../containers/AppointmentArea'))
+const EmployeeArea = dynamic(() => import('../containers/EmployeeArea'))
 
 function App() {
   const [ session ] = useSession()
@@ -18,7 +18,7 @@ function App() {
           <UserArea />
         </div>
         <div className={style.container}>
-          <AppointmentArea />
+          <EmployeeArea />
         </div>
       </div>
     </div>

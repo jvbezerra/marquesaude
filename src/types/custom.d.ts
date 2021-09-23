@@ -1,40 +1,48 @@
 declare module "*.png";
 
-declare interface User {
-  id: number,
-  name: string,
-  phonenumber: string,
-  address: string,
-  cpf: string,
-  password?: string,
-  unit_id?: number,
-  birthdate: Date,
-}
-
-declare interface Appointment {
-  id: number,
-  name: string,
-  date: Date,
-  vacancies: number,
-  unit_id?: number,
-  Bookings?: Booking[],
-}
-
 declare interface Unit {
   id: number,
   name: string,
   cnes: string,
-  phonenumber: string,
   password?: string,
   cep: string,
   street: string,
   neighborhood: string,
   city: string
+  phonenumber: string,
 }
 
-declare interface Booking {
+declare interface User {
   id: number,
-  hour: string | Date,
-  userId?: number,
-  appointmentId?: number
+  susCard: string,
+  cpf?: string,
+  phonenumber: string,
+  password?: string,
+  name: string,
+  birthdate: Date | string,
+  city: string,
+  street: string,
+  neighborhood: string,
+  unitId?: number,
+}
+
+declare interface Employee {
+  id: number,
+  cpf: string,
+  role: string,
+  professional_record?: string,
+  vacancies: number,
+  name: string,
+  available: boolean,
+  unitId?: number,
+  appointments?: Appointment[]
+}
+
+declare interface Appointment {
+  id: number,
+  userId: number,
+  employeeId: number,
+  date?: Date | string,
+  hour?: Date | string,
+  status?: string,
 }

@@ -54,11 +54,12 @@ const HeaderBar = () => {
       {isHelpModalOpen && <HelpModal isOpen={isHelpModalOpen} onClose={() => setHelpModalOpen(false)}/>}
       
       {isUnitModalOpen &&
-      <UnitModal
-        isOpen={isUnitModalOpen}
-        onClose={() => setUnitModalOpen(false)}
-        unit={session?.user!}
-      />}
+        <UnitModal
+          isOpen={isUnitModalOpen}
+          onClose={() => setUnitModalOpen(false)}
+          unit={session?.user!}
+        />
+      }
     </div>
   )
 }

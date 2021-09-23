@@ -32,17 +32,17 @@ export const deleteUser = async (id: number) => {
   await api.delete(`/users/${id}`)
 }
 
-// APPOINTMENTS
-export const createAppointment = async (data: Appointment) => {
-  const { data: newAppointment } = await api.post('/appointments', data)
-  return newAppointment
+// EMPLOYEES
+export const createEmployee = async (data: Employee) => {
+  const { data: newEmployee } = await api.post('/employees', data)
+  return newEmployee
 }
 
-export const editAppointment = async (id: number, data: Appointment | any) => {
-  const { data: updatedAppointment } = await api.put(`/appointments/${id}`, data)
-  return updatedAppointment
+export const editEmployee = async (id: number, data: Employee | any) => {
+  const { data: updatedEmployee } = await api.put(`/employees/${id}`, data)
+  return updatedEmployee
 }
 
-export const deleteAppointment = async (id: number) => {
-  await api.delete(`/appointments/${id}`)
+export const deleteEmployee = async (id: number) => {
+  await api.delete(`/employees/${id}`)
 }

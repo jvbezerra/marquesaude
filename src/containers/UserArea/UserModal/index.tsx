@@ -20,8 +20,10 @@ interface Props {
 const validationSchema = yup.object().shape({
   name: yup.string()
     .required("Obrigatório"),
+  susCard: yup.string()
+    .required("Obrigatório")
+    .min(15, "Inválido"),
   cpf: yup.string()
-    .required('Obrigatório')
     .min(14, "Inválido"),
   phonenumber: yup.string()
     .required()
@@ -30,7 +32,11 @@ const validationSchema = yup.object().shape({
     .required()
     .min(10, "Inválido"),
   password: yup.string(),
-  address: yup.string()
+  street: yup.string()
+    .required("Obrigatório"),
+  neighborhood: yup.string()
+    .required("Obrigatório"),
+  city: yup.string()
     .required("Obrigatório"),
 })
 
@@ -38,13 +44,14 @@ const UserModal: React.FC<Props> = (props) => {
   const { user, isOpen, onClose, unitId, mutate } = props
 
   const addUser = async (values: User) => {
-    const { phonenumber, cpf } = values
+    const { phonenumber, cpf, susCard } = values
     
     createUser({
       ...values,
+      unitId,
       phonenumber: phonenumber.replace(/[^0-9]/g, ""),
-      cpf: cpf.replace(/[^0-9]/g, ""),
-      unit_id: unitId
+      cpf: cpf?.replace(/[^0-9]/g, ""),
+      susCard: susCard.replace(/( )+/g, ""),
     })
       .then(res => {
         if (!res) toast.error("Algo deu errado :/")
@@ -78,10 +85,13 @@ const UserModal: React.FC<Props> = (props) => {
       initialValues={{
         name: user?.name ?? '',
         cpf: user?.cpf ?? '',
+        susCard: user?.susCard ?? '',
         phonenumber: user?.phonenumber ?? '',
         birthdate: user?.birthdate ?? '',
         password: user?.password ?? '',
-        address: user?.address ?? ''
+        street: user?.street ?? '',
+        city: user?.city ?? '',
+        neighborhood: user?.neighborhood ?? '',
       }}
     >
        {({ setValue, formState: { errors }, watch }) => {
@@ -94,6 +104,14 @@ const UserModal: React.FC<Props> = (props) => {
               value={values?.name}
               error={errors.name?.message}
               onChange={({ target }) => setValue('name', target.value)}
+            />
+            <TextInput
+              label="Cartão do SUS"
+              mask="999 9999 9999 9999"
+              placeholder="999 9999 9999 9999"
+              value={values?.susCard}
+              error={errors.susCard?.message}
+              onChange={({ target }) => setValue('susCard', target.value)}
             />
             <TextInput
               label="CPF"
@@ -123,19 +141,39 @@ const UserModal: React.FC<Props> = (props) => {
               </Col>
             </Row>
             <TextInput
+              value={values?.street}
+              label="Endereço"
+              placeholder="Rua dos Bobos, 0"
+              error={errors.street?.message}
+              onChange={({ target }) => setValue('street', target.value)}
+            />
+            <Row gutter={12}>
+              <Col span={12}>
+                <TextInput
+                  value={values?.neighborhood}
+                  label="Bairro"
+                  placeholder="Bairro do Esmero"
+                  error={errors.neighborhood?.message}
+                  onChange={({ target }) => setValue('neighborhood', target.value)}
+                />
+              </Col>
+              <Col span={12}>
+                <TextInput
+                  value={values?.city}
+                  label="Cidade"
+                  placeholder="Santa Rita"
+                  error={errors.neighborhood?.message}
+                  onChange={({ target }) => setValue('city', target.value)}
+                />
+              </Col>
+            </Row>
+            <TextInput
               value={values?.password}
               label="Alterar senha"
               type="password"
               placeholder="Insira a senha para mudança"
               error={errors.password?.message}
               onChange={({ target }) => setValue('password', target.value)}
-            />
-            <TextInput
-              value={values?.address}
-              label="Endereço"
-              placeholder="Rua dos Bobos, 10"
-              error={errors.address?.message}
-              onChange={({ target }) => setValue('address', target.value)}
             />
           </>
         )
