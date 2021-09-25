@@ -1,8 +1,9 @@
-import { Button, Card, Skeleton, Switch, Popconfirm } from 'antd'
-
-import MedicalIcon from '@ant-design/icons/MedicineBoxOutlined'
-import EyeIcon from '@ant-design/icons/EyeOutlined'
-import DeleteIcon from '@ant-design/icons/DeleteOutlined'
+import Card from '@mui/material/Card'
+import CardHeader from '@mui/material/CardHeader'
+import CardActions from '@mui/material/CardActions'
+import Icon from '@mui/material/Icon'
+import IconButton from '@mui/material/IconButton'
+import Switch from '@mui/material/Switch'
 
 interface Props {
   employee: Employee,
@@ -11,48 +12,42 @@ interface Props {
   onChangeStatus: Function,
 }
 
-const EmployeeCard: React.FC<Props> = ({ employee, onView, onDelete, onChangeStatus }) => {
-  return (
-    <Card
-      style={{ marginLeft: '5%', marginRight: '5%', marginTop: 15 }}
-      actions={[
-        <Button
-          key="view"
-          aria-label="Visualizar"
-          shape="circle"
-          icon={<EyeIcon/>}
-          onClick={() => onView()}
-        />,
-        <Popconfirm
-          key="tooltip"
-          title="Tem certeza?"
-          onConfirm={() => onDelete()}
-          okText="Sim"
-          cancelText="Não"
+const EmployeeCard: React.FC<Props> = ({ employee, onView, onDelete, onChangeStatus }) => (
+  <Card style={{ marginTop: 15 }}>
+    <CardHeader
+      avatar={
+        <Icon
+          className="material-icons-outlined"
+          color="action"
         >
-          <Button
-            key="delete"
-            aria-label="Deletar"
-            shape="circle"
-            icon={<DeleteIcon/>}
-            onClick={() => {}}
-          />
-        </Popconfirm>,
-        <Switch
-          checked={employee.available}
-          onChange={checked => onChangeStatus(checked)}
-        />
-      ]}
-    >
-      <Skeleton loading={!employee} avatar active>
-        <Card.Meta
-          avatar={<MedicalIcon/>}
-          title={employee.name}
-          description={`${employee.appointments?.length ?? 0} / ${employee.vacancies}`}
-        />
-      </Skeleton>
-    </Card>
-  )
-}
+          local_hospital
+        </Icon>
+      }
+      title={employee.name}
+      subheader={`${employee.appointments?.length ?? 0} / ${employee.vacancies}`}
+    />
+    <CardActions>
+      <IconButton
+        key="view"
+        aria-label="Visualizar"
+        onClick={() => onView()}
+      >
+        <Icon>visibility</Icon>
+      </IconButton>
+      <IconButton
+        key="delete"
+        aria-label="Apagar"
+        onClick={() => onDelete()}
+      >
+        <Icon>delete_outline</Icon>
+      </IconButton>
+      <Switch
+        checked={employee.available}
+        onChange={e => onChangeStatus(e.target.checked)}
+        inputProps={{ 'aria-label': 'controlled' }}
+      />
+    </CardActions>
+  </Card>
+)
 
 export default EmployeeCard

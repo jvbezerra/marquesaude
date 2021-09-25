@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import { useState } from 'react'
-import { Button, Tooltip } from 'antd'
+import Icon from '@mui/material/Icon'
+import IconButton from '@mui/material/IconButton'
+import Typography from '@mui/material/Typography'
 import dynamic from 'next/dynamic'
 import { signOut, useSession } from 'next-auth/client'
 
@@ -8,10 +10,6 @@ import logo from '../../../public/logo.png'
 import style from '../../styles/Header.module.scss'
 const UnitModal = dynamic(() => import('./UnitModal'), { ssr: false })
 const HelpModal = dynamic(() => import('./HelpModal'), { ssr: false })
-
-import SettingsIcon from '@ant-design/icons/SettingOutlined'
-import HelpIcon from '@ant-design/icons/QuestionCircleOutlined'
-import LogoutIcon from '@ant-design/icons/LogoutOutlined'
 
 const HeaderBar = () => {
   const [ session ] = useSession()
@@ -23,32 +21,26 @@ const HeaderBar = () => {
       <div className="logo">
         <Image src={logo} width={256} height={104} alt="Marque Saúde" placeholder="blur"/>
       </div>
-      <p>Unidade {session?.user.name}</p>
+      <Typography>Unidade {session?.user.name}</Typography>
       <div className={style.options}>
-        <Tooltip title="Unidade">
-          <Button
-            shape="circle"
-            aria-label="Configurações"
-            icon={<SettingsIcon/>}
-            onClick={() => setUnitModalOpen(true)}
-          />
-        </Tooltip>
-        <Tooltip title="Ajuda">
-          <Button
-            shape="circle"
-            aria-label="Ajuda"
-            icon={<HelpIcon/>}
-            onClick={() => setHelpModalOpen(true)}
-          />
-        </Tooltip>
-        <Tooltip title="Sair">
-          <Button
-            shape="circle"
-            aria-label="Sair"
-            icon={<LogoutIcon/>}
-            onClick={() => signOut({ callbackUrl: '/' })}
-          />
-        </Tooltip>
+        <IconButton
+          aria-label="Configurações"
+          onClick={() => setUnitModalOpen(true)}
+        >
+          <Icon>settings</Icon>
+        </IconButton>
+        <IconButton
+          aria-label="Ajuda"
+          onClick={() => setHelpModalOpen(true)}
+        >
+          <Icon>help_outline</Icon>
+        </IconButton>
+        <IconButton
+          aria-label="Sair"
+          onClick={() => signOut({ callbackUrl: '/' })}
+        >
+          <Icon>logout</Icon>
+        </IconButton>
       </div>
 
       {isHelpModalOpen && <HelpModal isOpen={isHelpModalOpen} onClose={() => setHelpModalOpen(false)}/>}

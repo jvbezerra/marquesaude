@@ -1,22 +1,19 @@
-import React from 'react'
-import { Button, List, Popconfirm } from 'antd'
-import { ListItemMetaProps, ListItemProps } from 'antd/lib/list'
+import MuiListItem, { ListItemProps } from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 
-interface Props extends ListItemProps, ListItemMetaProps {
-  title: string
+interface Props extends ListItemProps {
+  title: string,
+  description?: string,
+  actions: React.ReactNode[]
 }
 
 const ListItem: React.FC<Props> = (props) => {
-  const { avatar, title, description, ...itemProps } = props
+  const { title, description, actions } = props
 
   return (
-    <List.Item {...itemProps}>
-      <List.Item.Meta
-        avatar={avatar}
-        title={title}
-        description={description}
-      />
-    </List.Item>
+    <MuiListItem key={title} secondaryAction={actions}>
+      <ListItemText primary={title} secondary={description} />
+    </MuiListItem>
   )
 }
 

@@ -1,4 +1,4 @@
-import { Row, Col } from 'antd'
+import Grid from '@mui/material/Grid'
 import * as yup from 'yup'
 import FormModal from '../../../components/FormModal'
 import TextInput from '../../../components/Inputs/TextInput'
@@ -63,8 +63,8 @@ const UnitModal: React.FC<Props> = (props) => {
               value={values?.name}
               onChange={({ target }) => setValue('name', target.value)}
             />
-            <Row gutter={12}>
-              <Col span={12}>
+            <Grid container spacing={1}>
+              <Grid item xs={6}>
                 <TextInput
                   label="CNES"
                   disabled
@@ -73,16 +73,16 @@ const UnitModal: React.FC<Props> = (props) => {
                   value={values?.cnes}
                   onChange={({ target }) => setValue('cnes', target.value)}
                 />
-              </Col>
-              <Col span={12}>
+              </Grid>
+              <Grid item xs={6}>
                 <TextInput
                   label="Celular"
                   mask={values.phonenumber.length > 14 ? "(99) 99999-9999" : "(99) 9999-9999"}
                   error={errors.phonenumber?.message}
                   onChange={({ target }) => setValue('phonenumber', target.value)}
                 />
-              </Col>
-            </Row>
+              </Grid>
+            </Grid>
             <TextInput
               label="Alterar senha"
               type="password"
@@ -96,24 +96,24 @@ const UnitModal: React.FC<Props> = (props) => {
               value={values?.street}
               onChange={({ target }) => setValue('street', target.value)}
             />
-            <Row gutter={12}>
-              <Col span={12}>
+            <Grid container spacing={1}>
+              <Grid item xs={6}>
                 <TextInput
                   label="Bairro"
                   error={errors.neighborhood?.message}
                   value={values?.neighborhood}
                   onChange={({ target }) => setValue('neighborhood', target.value)}
                 />
-              </Col>
-              <Col span={12}>
+              </Grid>
+              <Grid item xs={6}>
                 <TextInput
                   label="Cidade"
                   error={errors.city?.message}
                   value={values?.city}
                   onChange={({ target }) => setValue('city', target.value)}
                 />
-              </Col>
-            </Row>
+              </Grid>
+            </Grid>
           </>
         )
       }}

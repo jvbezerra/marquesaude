@@ -1,4 +1,4 @@
-import { Modal } from 'antd'
+import Dialog from '@mui/material/Dialog'
 import Image from 'next/image'
 import HelpImage from '../../../../public/ms-help.jpg'
 
@@ -8,14 +8,9 @@ interface Props {
 }
 
 const HelpModal = (props: Props) => (
-  <Modal
-    title=""
-    visible={props.isOpen}
-    onCancel={() => props.onClose()}
-    footer={null}
-  >
+  <Dialog open={props.isOpen} onClose={() => props.onClose()}>
     <Image src={HelpImage} alt="Instruções da plataforma" placeholder="blur"/>
-  </Modal>
+  </Dialog>
 )
 
 export default HelpModal

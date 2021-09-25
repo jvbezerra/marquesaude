@@ -1,14 +1,15 @@
 import { useState } from 'react'
-import { PageHeader, Spin, Button } from 'antd'
+import Icon from '@mui/material/Icon'
+import IconButton from '@mui/material/IconButton'
+import Spin from '@mui/material/CircularProgress'
 import { useSession } from 'next-auth/client'
 import useSWR from 'swr'
 import dynamic from 'next/dynamic'
 
 import List from '../../components/List'
+import Header from '../../components/PageHeader'
 const EmployeeModal = dynamic(() => import('./EmployeeModal'), { ssr: false })
 import { deleteEmployee, editEmployee } from '../../services'
-
-import AddIcon from '@ant-design/icons/PlusCircleOutlined'
 import EmployeeCard from './EmployeeCard'
 
 const EmployeeArea: React.FC = () => {
@@ -41,19 +42,19 @@ const EmployeeArea: React.FC = () => {
 
   return (
     <>
-      <PageHeader
+      <Header
         title="Profissionais"
-        extra={[
-          <Button
+        actions={[
+          <IconButton
             key="add"
             aria-label="Adicionar"
-            shape="circle"
-            icon={<AddIcon/>}
             onClick={async () => {
               setSelectedEmployee(null)
               setIsModalOpen(true)
             }}
-          />
+          >
+            <Icon>add_circle_outline</Icon>
+          </IconButton>
         ]}
       />
 

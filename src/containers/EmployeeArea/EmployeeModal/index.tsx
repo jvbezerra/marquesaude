@@ -1,16 +1,14 @@
-import { Row, Col } from 'antd'
 import { toast } from 'react-toastify'
 import * as yup from 'yup'
-import FormModal from '../../../components/FormModal'
 
-import NumberInput from '../../../components/Inputs/NumberInput'
+import FormModal from '../../../components/FormModal'
 import TextInput from '../../../components/Inputs/TextInput'
 import { createEmployee, editEmployee } from '../../../services'
-
-import SelectInput from '../../../components/Inputs/SelectInput'
-import { Select as AntSelect } from 'antd'
 import RequestList from '../RequestList'
-const { Option } = AntSelect
+
+import Grid from '@mui/material/Grid'
+import SelectInput from '../../../components/Inputs/SelectInput'
+import SelectItem from '@mui/material/MenuItem'
 
 interface Props {
   unitId: number
@@ -84,8 +82,8 @@ const EmployeeModal: React.FC<Props> = (props) => {
         const values = watch()
         return (
           <>
-            <Row gutter={12}>
-              <Col span={12}>
+            <Grid container spacing={1}>
+              <Grid item xs={6}>
                 <TextInput
                   label="Nome"
                   placeholder="Insira o nome do profissional"
@@ -93,19 +91,19 @@ const EmployeeModal: React.FC<Props> = (props) => {
                   value={values?.name}
                   onChange={({ target }) => setValue('name', target.value)}
                 />
-              </Col>
-              <Col span={12}>
+              </Grid>
+              <Grid item xs={6}>
                 <SelectInput
                   label="Tipo"
                   defaultValue={values?.role}
                   onChange={value => setValue("role", value)}
                 >
                   {doctorTypes.map(type => (
-                    <Option value={type}>{type}</Option>
+                    <SelectItem value={type}>{type}</SelectItem>
                   ))}
                 </SelectInput>
-              </Col>
-            </Row>
+              </Grid>
+            </Grid>
             <TextInput
               label="CPF"
               mask="999.999.999-99"
@@ -114,28 +112,29 @@ const EmployeeModal: React.FC<Props> = (props) => {
               error={errors.cpf?.message}
               onChange={({ target }) => setValue('cpf', target.value)}
             />
-            <Row gutter={12}>
-              <Col span={16}>
+            <Grid container spacing={1}>
+              <Grid item xs={6}>
                 <TextInput
-                  label="CR"
-                  placeholder="Insira o número no conselho regional do profissional"
+                  label="Registro em CR"
+                  placeholder="Insira o número de registro"
                   error={errors.professional_record?.message}
                   value={values?.professional_record}
                   onChange={({ target }) => setValue('professional_record', target.value)}
                 />
-              </Col>
-              <Col span={8}>
-                <NumberInput
+              </Grid>
+              <Grid item xs={6}>
+                <TextInput
                   label="Vagas/dia"
+                  type="number"
                   error={errors.vacancies?.message}
                   value={values?.vacancies}
-                  onChange={value => setValue('vacancies', value)}
+                  onChange={({ target }) => setValue('vacancies', target.value)}
                 />
-              </Col>
-            </Row>
+              </Grid>
+            </Grid>
 
-            {employee && employee.appointments!.length > 0
-              ? <RequestList appointments={employee!.appointments!}/>
+            {employee?.appointments && employee?.appointments.length > 0
+              ? <RequestList appointments={employee?.appointments}/>
               : <></>
             }
           </>

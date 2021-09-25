@@ -1,7 +1,7 @@
-import { Row, Col } from 'antd'
-import moment from 'moment'
+import Grid from '@mui/material/Grid'
 import { toast } from 'react-toastify'
 import * as yup from 'yup'
+import dayjs from 'dayjs'
 
 import FormModal from '../../../components/FormModal'
 import DateInput from '../../../components/Inputs/DateInput'
@@ -45,7 +45,7 @@ const UserModal: React.FC<Props> = (props) => {
 
   const addUser = async (values: User) => {
     const { phonenumber, cpf, susCard } = values
-    
+     console.log('test')
     createUser({
       ...values,
       unitId,
@@ -121,8 +121,8 @@ const UserModal: React.FC<Props> = (props) => {
               error={errors.cpf?.message}
               onChange={({ target }) => setValue('cpf', target.value)}
             />
-            <Row gutter={12}>
-              <Col span={12}>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
                 <TextInput
                   label="Celular"
                   mask="(99) 99999-9999"
@@ -131,15 +131,15 @@ const UserModal: React.FC<Props> = (props) => {
                   error={errors.phonenumber?.message}
                   onChange={({ target }) => setValue('phonenumber', target.value)}
                 />
-              </Col>
-              <Col span={12}>
-              <DateInput
+              </Grid>
+              <Grid item xs={6}>
+                <DateInput
                   label="Data de nascimento"
-                  value={values?.birthdate ? moment(values?.birthdate) : ''}
-                  onChange={value => setValue('birthdate', moment(value))}
+                  value={values?.birthdate ? dayjs(values?.birthdate) : ''}
+                  onChange={value => setValue('birthdate', value)}
                 />
-              </Col>
-            </Row>
+              </Grid>
+            </Grid>
             <TextInput
               value={values?.street}
               label="Endereço"
@@ -147,8 +147,8 @@ const UserModal: React.FC<Props> = (props) => {
               error={errors.street?.message}
               onChange={({ target }) => setValue('street', target.value)}
             />
-            <Row gutter={12}>
-              <Col span={12}>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
                 <TextInput
                   value={values?.neighborhood}
                   label="Bairro"
@@ -156,8 +156,8 @@ const UserModal: React.FC<Props> = (props) => {
                   error={errors.neighborhood?.message}
                   onChange={({ target }) => setValue('neighborhood', target.value)}
                 />
-              </Col>
-              <Col span={12}>
+              </Grid>
+              <Grid item xs={6}>
                 <TextInput
                   value={values?.city}
                   label="Cidade"
@@ -165,8 +165,8 @@ const UserModal: React.FC<Props> = (props) => {
                   error={errors.neighborhood?.message}
                   onChange={({ target }) => setValue('city', target.value)}
                 />
-              </Col>
-            </Row>
+              </Grid>
+            </Grid>
             <TextInput
               value={values?.password}
               label="Alterar senha"

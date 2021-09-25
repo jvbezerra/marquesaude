@@ -1,18 +1,17 @@
 import { useState } from 'react'
-import { Spin, Button, PageHeader, Popconfirm } from 'antd'
+import IconButton from '@mui/material/IconButton'
+import Spin from '@mui/material/CircularProgress'
 import { useSession } from 'next-auth/client'
 import useSWR from 'swr'
 import dynamic from 'next/dynamic'
 
 import List from '../../components/List'
 import ListItem from '../../components/ListItem'
+import Header from '../../components/PageHeader'
 import { deleteUser } from '../../services'
 const UserModal = dynamic(() => import('./UserModal'), { ssr: false })
 
-import PersonIcon from '@ant-design/icons/UserOutlined'
-import AddIcon from '@ant-design/icons/PlusCircleOutlined'
-import EyeIcon from '@ant-design/icons/EyeOutlined'
-import DeleteIcon from '@ant-design/icons/DeleteOutlined'
+import Icon from '@mui/material/Icon'
 
 const UserArea: React.FC = () => {
   const [ session ] = useSession()
@@ -26,38 +25,30 @@ const UserArea: React.FC = () => {
     
     return (
       <ListItem
-        avatar={<PersonIcon/>}
         title={item.name}
         style={style}
         description={item.street}
         actions={[
-          <Button
+          <IconButton
             key="view"
             aria-label="Visualizar"
-            shape="circle"
-            icon={<EyeIcon/>}
             onClick={async () => {
               setSelectedUser(item)
               setIsUserModalOpen(true)
             }}
-          />,
-          <Popconfirm
-            key="tooltip"
-            title="Tem certeza?"
-            onConfirm={async () => {
+          >
+            <Icon>visibility</Icon>
+          </IconButton>,
+          <IconButton
+            key="view"
+            aria-label="Visualizar"
+            onClick={async () => {
               await deleteUser(item.id)
               mutate()
             }}
-            okText="Sim"
-            cancelText="Não"
           >
-            <Button
-              key="delete"
-              aria-label="Deletar"
-              shape="circle"
-              icon={<DeleteIcon/>}
-            />
-          </Popconfirm>
+            <Icon>delete_outline</Icon>
+          </IconButton>,
         ]}
       />
     )
@@ -65,19 +56,19 @@ const UserArea: React.FC = () => {
 
   return (
     <>
-      <PageHeader
+      <Header
         title="Usuários"
-        extra={[
-          <Button
+        actions={[
+          <IconButton
             key="add"
             aria-label="Adicionar"
-            shape="circle"
-            icon={<AddIcon/>}
             onClick={async () => {
               setSelectedUser(null)
               setIsUserModalOpen(true)
             }}
-          />,
+          >
+            <Icon>add_circle_outline</Icon>
+          </IconButton>,
         ]}
       />
 

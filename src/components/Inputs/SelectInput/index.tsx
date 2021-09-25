@@ -1,17 +1,19 @@
 import styled from 'styled-components'
-import Field, { inputStyle, InputProps } from '../Field'
-import { Select as AntSelect } from 'antd'
-import { SelectProps } from 'antd/lib/select'
+import Field, { inputStyle } from '../Field'
+import MuiSelect, { SelectProps } from '@mui/material/Select'
 
-interface Props extends SelectProps<any>, Pick<InputProps, 'label' | 'error'>{}
+interface Props extends SelectProps<any> {
+  label: string,
+  error?: string | any
+}
 
-const Select = styled(AntSelect)<Props>`
+const Select = styled(MuiSelect)<Omit<Props, 'error' | 'label'>>`
   ${inputStyle}
   border: ${props => props.error ? '1px solid red' : '1px solid #C1C3CF'};
 `
 const SelectInput = (props: Props) => (
   <Field label={props.label ?? ''} error={props.error ?? ''}>
-    <Select {...props} />
+    <Select {...props} style={{ border: 'none'}} />
   </Field>
 )
 

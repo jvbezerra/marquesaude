@@ -9,9 +9,7 @@ import logo from '../../public/logo.png'
 import Button from '../components/Button'
 import TextInput from '../components/Inputs/TextInput'
 import style from '../styles/Login.module.scss'
-import { Spin } from 'antd'
-import LoadingOutlined from '@ant-design/icons/LoadingOutlined'
-const LoadingIcon = <LoadingOutlined style={{ fontSize: 24, color: 'white' }} spin />
+import Spin from '@mui/material/CircularProgress'
 
 const validationSchema = yup.object().shape({
   cnes: yup.string()
@@ -23,7 +21,7 @@ const validationSchema = yup.object().shape({
 
 export default function Login() {
   const [loading, setLoading] = useState(false)
-  const { handleSubmit, setValue, formState: { errors } } = useForm({
+  const { handleSubmit, setValue, formState: { errors } } = useForm<any>({
     resolver: yupResolver(validationSchema)
   });
 
@@ -59,7 +57,7 @@ export default function Login() {
           />
         </div>
         <Button type="submit" style={{ width: '50%' }} disabled={loading}>
-          {loading ? <Spin indicator={LoadingIcon}/> : 'Entrar'}
+          {loading ? <Spin/> : 'Entrar'}
         </Button>
       </form>
     </div>
