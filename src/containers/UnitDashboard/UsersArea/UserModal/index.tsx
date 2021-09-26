@@ -1,19 +1,18 @@
 import Grid from '@mui/material/Grid'
-import { toast } from 'react-toastify'
 import * as yup from 'yup'
 import dayjs from 'dayjs'
+import { useSWRConfig } from 'swr'
+import { useSession } from 'next-auth/client'
 
-import FormModal from '../../../components/FormModal'
-import DateInput from '../../../components/Inputs/DateInput'
-import TextInput from '../../../components/Inputs/TextInput'
-import { createUser, editUser } from '../../../services'
+import FormModal from '../../../../components/FormModal'
+import DateInput from '../../../../components/Inputs/DateInput'
+import TextInput from '../../../../components/Inputs/TextInput'
+import { createUser, editUser } from '../../../../services'
 
 interface Props {
-  unitId: number
-  user: User | null
+  user: MSUser | null
   isOpen: boolean
   onClose: Function
-  mutate: any
 }
 
 
@@ -41,36 +40,32 @@ const validationSchema = yup.object().shape({
 })
 
 const UserModal: React.FC<Props> = (props) => {
-  const { user, isOpen, onClose, unitId, mutate } = props
+  const { user, isOpen, onClose } = props
+  const { mutate } = useSWRConfig()
+  const [ session ] = useSession()
 
-  const addUser = async (values: User) => {
+  const addUser = async (values: MSUser) => {
     const { phonenumber, cpf, susCard } = values
-     console.log('test')
-    createUser({
-      ...values,
-      unitId,
-      phonenumber: phonenumber.replace(/[^0-9]/g, ""),
-      cpf: cpf?.replace(/[^0-9]/g, ""),
-      susCard: susCard.replace(/( )+/g, ""),
-    })
-      .then(res => {
-        if (!res) toast.error("Algo deu errado :/")
-      })
-      .finally(() => {
-        mutate()
-        onClose()
-      })
+      mutate(`/users/unit/${session!.unit!.id}`, async (users: MSUser[]) => {
+        const newUser = await createUser({
+          ...values,
+          unitId: session!.unit!.id,
+          phonenumber: phonenumber.replace(/[^0-9]/g, ""),
+          cpf: cpf?.replace(/[^0-9]/g, ""),
+          susCard: susCard.replace(/( )+/g, ""),
+        })
+      
+        return [...users, newUser]
+      }).then(() => onClose())
   }
 
-  const changeUser = async (values: User | any) => {
-    editUser(user?.id!, values)
-      .then(res => {
-        if (!res) toast.error("Algo deu errado :/")
-      })
-      .finally(() => {
-        mutate()
-        onClose()
-      })
+  const changeUser = async (values: MSUser | any) => {
+    mutate(`/users/unit/${session!.unit!.id}`, async (users: MSUser[]) => {
+      const updatedUser = await editUser(user?.id!, values)
+
+      const filteredUsers = users.filter(item => item.id !== user?.id!)
+      return [...filteredUsers, updatedUser]
+    }).then(() => onClose())
   }
 
   return (
@@ -79,8 +74,8 @@ const UserModal: React.FC<Props> = (props) => {
       isEdit={!!user}
       isOpen={isOpen}
       onClose={() => onClose()}
-      onAdd={(values: User) => addUser(values)}
-      onEdit={(values: User) => changeUser(values)}
+      onAdd={(values: MSUser) => addUser(values)}
+      onEdit={(values: MSUser) => changeUser(values)}
       validationSchema={validationSchema}
       initialValues={{
         name: user?.name ?? '',

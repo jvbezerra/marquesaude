@@ -12,18 +12,18 @@ export const authenticate = async (key: string, password: string) => {
 }
 
 // UNIT
-export const editUnit = async (id: number, data: Unit | any) => {
+export const editUnit = async (id: number, data: Unit | any): Promise<Unit> => {
   const { data: updatedUnit } = await api.put(`/units/${id}`, data)
   return updatedUnit
 }
 
 // USER
-export const createUser = async (data: User) => {
+export const createUser = async (data: MSUser): Promise<MSUser> => {
   const { data: newUser } = await api.post('/users', data)
   return newUser
 }
 
-export const editUser = async (id: number, data: User | any) => {
+export const editUser = async (id: number, data: MSUser | any): Promise<MSUser> => {
   const { data: updatedUser } = await api.put(`/users/${id}`, data)
   return updatedUser
 }
@@ -33,12 +33,12 @@ export const deleteUser = async (id: number) => {
 }
 
 // EMPLOYEES
-export const createEmployee = async (data: Employee) => {
+export const createEmployee = async (data: Employee): Promise<Employee> => {
   const { data: newEmployee } = await api.post('/employees', data)
   return newEmployee
 }
 
-export const editEmployee = async (id: number, data: Employee | any) => {
+export const editEmployee = async (id: number, data: Employee | any): Promise<Employee> => {
   const { data: updatedEmployee } = await api.put(`/employees/${id}`, data)
   return updatedEmployee
 }

@@ -10,20 +10,45 @@ import Button from '../components/Button'
 import TextInput from '../components/Inputs/TextInput'
 import style from '../styles/Login.module.scss'
 import Spin from '@mui/material/CircularProgress'
+import { Tab, Tabs } from '../components/Tabs'
 
-const validationSchema = yup.object().shape({
-  cnes: yup.string()
-    .required('Obrigatório')
-    .min(7, "Inválido"),
-  password: yup.string()
-    .required('Obrigatório'),
-})
+const userTypes = [
+  {
+    label: 'Cidadão',
+    key: 'Cartão do SUS',
+    placeholder: 'Insira o número do cartão do SUS',
+    validationSchema: yup.object().shape({
+      key: yup.string()
+        .required('Obrigatório')
+        .min(15, "Inválido"),
+      password: yup.string()
+        .required('Obrigatório'),
+    }),
+  },
+  {
+    label: 'Unidade',
+    key: 'CNES',
+    placeholder: 'Insira o número do CNES',
+    validationSchema: yup.object().shape({
+      key: yup.string()
+        .required('Obrigatório')
+        .min(7, "Inválido"),
+      password: yup.string()
+        .required('Obrigatório'),
+    }),
+  },
+]
 
 export default function Login() {
+  const [tab, setTab] = useState(0);
   const [loading, setLoading] = useState(false)
   const { handleSubmit, setValue, formState: { errors } } = useForm<any>({
-    resolver: yupResolver(validationSchema)
+    resolver: yupResolver(userTypes[tab].validationSchema)
   });
+
+  const handleChange = (e: React.SyntheticEvent, newValue: number) => {
+    setTab(newValue);
+  };
 
   const onSubmit = async (values: any) => {
     setLoading(true)
@@ -40,15 +65,18 @@ export default function Login() {
       <form className={style.login} onSubmit={handleSubmit(onSubmit)}>
         <Image src={logo} width={256} height={104} alt="Marque Saúde" placeholder="blur"/>
         <div style={{ width: '85%' }}>
+          <Tabs value={tab} onChange={handleChange}>
+            {userTypes.map(type => (
+              <Tab label={type.label} />
+            ))}
+          </Tabs>
           <TextInput
-            name="cnes"
-            label="CNES"
-            placeholder="Insira o número do CNES"
-            onChange={({ target }) => setValue('cnes', target.value)}
-            error={errors.cnes?.message}
+            label={userTypes[tab].key}
+            placeholder={userTypes[tab].placeholder}
+            onChange={({ target }) => setValue('key', target.value)}
+            error={errors.key?.message}
           />
           <TextInput
-            name="passoword"
             label="Senha"
             type="password"
             placeholder="Insira a senha para acesso"

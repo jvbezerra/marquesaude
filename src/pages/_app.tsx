@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
 import { Provider } from 'next-auth/client'
+import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { SWRConfig } from 'swr'
 import api from '../services/api'
 
@@ -16,11 +17,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Provider session={pageProps.session}>
         <Head>
           <title>Marque Saúde</title>
-          <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
-          <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
-          <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"/>
         </Head>
-        <Component {...pageProps} />
+        <ThemeProvider theme={createTheme({})}>
+          <Component {...pageProps} />
+        </ThemeProvider>
       </Provider>
     </SWRConfig>
   )

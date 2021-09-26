@@ -1,10 +1,13 @@
 import dynamic from 'next/dynamic'
 import { useSession } from 'next-auth/client'
-
-import style from '../styles/Dashboard.module.scss'
 import HeaderBar from '../containers/HeaderBar'
-const UserArea = dynamic(() => import('../containers/UserArea'))
-const EmployeeArea = dynamic(() => import('../containers/EmployeeArea'))
+const UnitDashboard = dynamic(() => import('../containers/UnitDashboard'))
+const UserDashboard = dynamic(() => import('../containers/UserDashboard'))
+
+const dashboardSchema = {
+  "unit": <UnitDashboard />,
+  "user": <UserDashboard />,
+}
 
 function App() {
   const [ session ] = useSession()
@@ -13,14 +16,7 @@ function App() {
     !session ? <></> :
     <div>
       <HeaderBar />
-      <div className={style.area}>
-        <div className={style.container}>
-          <UserArea />
-        </div>
-        <div className={style.container}>
-          <EmployeeArea />
-        </div>
-      </div>
+      {dashboardSchema[session!.type]}
     </div>
   );
 }

@@ -6,35 +6,51 @@ export default NextAuth({
   providers: [
     Providers.Credentials({
       async authorize(credentials) {
-        const data = await authenticate(credentials.cnes, credentials.password)
+        const { user: data } = await authenticate(credentials.key, credentials.password)
         if (data) {
-          return {
-            status: 'success', 
-            data: data.user,
+          if (data.type == 'unit') {
+            const { type, ... unit} = data
+            return {
+              status: 'success', 
+              unit,
+              type,
+            }
+          }
+
+          if (data.type == 'user') {
+            const { type, Unit: unit, ...user} = data
+            return {
+              status: 'success', 
+              user,
+              unit,
+              type,
+            }
           }
         } else {
           return null
         }
       },
       credentials: {
-        cnes: { label: "CNES", type: "text " },
+        key: { label: "Key", type: "text " },
         password: {  label: "Senha", type: "password" }
       },
     }),
   ],
   callbacks: {
-    async jwt(token, user) {
-      if (user) {
+    async jwt(token, data) {
+      if (data) {
         //token.accessToken = user.token
-        token.user = user.data
+        token.data = data
       }
   
       return token
     },
   
     async session(session, token) {
-      //session.accessToken = token.accessToken
-      session.user = token.user
+      session[token.data.type] = token.data[token.data.type]
+      session.type = token.data.type
+      if (session.type == 'user') session.unit = token.data.unit
+      
       return session
     },
 

@@ -6,15 +6,15 @@ import { useSession } from 'next-auth/client'
 import useSWR from 'swr'
 import dynamic from 'next/dynamic'
 
-import List from '../../components/List'
-import Header from '../../components/PageHeader'
+import List from '../../../components/List'
+import Header from '../../../components/PageHeader'
 const EmployeeModal = dynamic(() => import('./EmployeeModal'), { ssr: false })
-import { deleteEmployee, editEmployee } from '../../services'
+import { deleteEmployee, editEmployee } from '../../../services'
 import EmployeeCard from './EmployeeCard'
 
 const EmployeeArea: React.FC = () => {
   const [ session ] = useSession()
-  const { data: employees, mutate } = useSWR(`/employees/unit/${session?.user.id!}`)
+  const { data: employees, mutate } = useSWR(`/employees/unit/${session!.unit!.id}`)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null)
@@ -68,11 +68,9 @@ const EmployeeArea: React.FC = () => {
 
       {isModalOpen &&
         <EmployeeModal
-          unitId={session?.user.id!}
           employee={selectedEmployee}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          mutate={mutate}
         />
       }
     </>

@@ -12,7 +12,7 @@ declare interface Unit {
   phonenumber: string,
 }
 
-declare interface User {
+declare interface MSUser {
   id: number,
   susCard: string,
   cpf?: string,
@@ -24,18 +24,24 @@ declare interface User {
   street: string,
   neighborhood: string,
   unitId?: number,
+  Unit?: Unit,
 }
 
 declare interface Employee {
   id: number,
   cpf: string,
-  role: string,
+  roleId?: number,
   professional_record?: string,
   vacancies: number,
   name: string,
   available: boolean,
   unitId?: number,
   appointments?: Appointment[]
+}
+
+declare interface EmployeeRole {
+  id: number,
+  name: string,
 }
 
 declare interface Appointment {

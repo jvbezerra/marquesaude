@@ -1,27 +1,26 @@
-import { toast } from 'react-toastify'
+import useSWR, { useSWRConfig } from 'swr'
+import { useSession } from 'next-auth/client'
 import * as yup from 'yup'
 
-import FormModal from '../../../components/FormModal'
-import TextInput from '../../../components/Inputs/TextInput'
-import { createEmployee, editEmployee } from '../../../services'
+import FormModal from '../../../../components/FormModal'
+import TextInput from '../../../../components/Inputs/TextInput'
+import { createEmployee, editEmployee } from '../../../../services'
 import RequestList from '../RequestList'
 
 import Grid from '@mui/material/Grid'
-import SelectInput from '../../../components/Inputs/SelectInput'
+import SelectInput from '../../../../components/Inputs/SelectInput'
 import SelectItem from '@mui/material/MenuItem'
 
 interface Props {
-  unitId: number
   employee: Employee | null
   isOpen: boolean
   onClose: Function
-  mutate: any
 }
 
 const validationSchema = yup.object().shape({
   name: yup.string()
     .required("Obrigatório"),
-  role: yup.string()
+  roleId: yup.number()
     .required("Obrigatório"),
   professional_record: yup.string(),
   cpf: yup.string()
@@ -30,35 +29,31 @@ const validationSchema = yup.object().shape({
     .required(),
 })
 
-const doctorTypes = ["Psicólogo(a)", "Dentista", "Clínico(a) Geral"]
-
 const EmployeeModal: React.FC<Props> = (props) => {
-  const { employee, isOpen, onClose, unitId, mutate } = props
+  const { employee, isOpen, onClose } = props
+  const { mutate } = useSWRConfig()
+  const [ session ] = useSession()
+  const { data: rolesOptions } = useSWR<EmployeeRole[]>(`/employees/roles`)
 
   const addEmployee = async (values: Employee) => {
-    createEmployee({
-      ...values,
-      available: false,
-      unitId
-    })
-      .then(res => {
-        if (!res) toast.error("Algo deu errado :/")
+    mutate(`/employees/unit/${session!.unit!.id}`, async (employees: Employee[]) => {
+      const newEmployee = await createEmployee({
+        ...values,
+        available: false,
+        unitId: session!.unit!.id
       })
-      .finally(() => {
-        mutate()
-        onClose()
-      })
+    
+      return [...employees, newEmployee]
+    }).then(() => onClose())
   }
 
   const changeEmployee = (values: Employee | any) => {
-    editEmployee(employee?.id!, values)
-      .then(res => {
-        if (!res) toast.error("Algo deu errado :/")
-      })
-      .finally(() => {
-        mutate()
-        onClose()
-      })
+    mutate(`/employees/unit/${session!.unit!.id}`, async (employees: Employee[]) => {
+      const updatedEmployee = editEmployee(employee?.id!, values)
+
+      const filteredEmployees = employees.filter(item => item.id !== employee?.id!)
+      return [...filteredEmployees, updatedEmployee]
+    }).then(() => onClose())
   }
 
   return (
@@ -72,7 +67,7 @@ const EmployeeModal: React.FC<Props> = (props) => {
       validationSchema={validationSchema}
       initialValues={{
         name: employee?.name ?? '',
-        role: employee?.role ?? '',
+        roleId: employee?.roleId ?? 0,
         cpf: employee?.cpf ?? '',
         professional_record: employee?.professional_record ?? '',
         vacancies: employee?.vacancies ?? 0,
@@ -95,11 +90,11 @@ const EmployeeModal: React.FC<Props> = (props) => {
               <Grid item xs={6}>
                 <SelectInput
                   label="Tipo"
-                  defaultValue={values?.role}
-                  onChange={value => setValue("role", value)}
+                  defaultValue={values?.roleId}
+                  onChange={value => setValue("roleId", value)}
                 >
-                  {doctorTypes.map(type => (
-                    <SelectItem value={type}>{type}</SelectItem>
+                  {rolesOptions?.map(role => (
+                    <SelectItem value={role.id}>{role.name}</SelectItem>
                   ))}
                 </SelectInput>
               </Grid>
