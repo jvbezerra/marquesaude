@@ -1,6 +1,6 @@
 import Button from '../Button'
 import * as yup from 'yup'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useForm, UseFormReturn } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Dialog from '@mui/material/Dialog'
@@ -28,34 +28,29 @@ const FormModal: React.FC<Props> = (props) => {
   })
 
   useEffect(() => setIsEditting(isEdit), [isEdit])
+  const onSubmit = (values: any) => {
+    if (isEdit) {
+      onEdit(values)
+    } else {
+      onAdd(values)
+    }
+  }
 
   return (
     <Dialog keepMounted open={isOpen} onClose={() => onClose()}>
       <DialogTitle>{props.title}</DialogTitle>
       <DialogContent>
-        <form onSubmit={formProps.handleSubmit(isEdit ? onEdit : onAdd)}>
-          <fieldset disabled={isEditting} style={{ border: 'none', padding: 'unset' }}>
-            {props.children(formProps)}
-          </fieldset>
-          {isEditting
-            ? (
-              <Button
-                type="submit"
-                style={{ width: '50%', marginTop: 15 }}
-              >
-                Confirmar
-              </Button>
-            ) : (
-              <Button
-                onClick={() => setIsEditting(true)}
-                secondary
-                style={{ width: '50%', marginTop: 15 }}
-              >
-                Editar
-              </Button>
-            )
-          }
-        </form>
+        <fieldset disabled={isEditting} style={{ border: 'none', padding: 'unset' }}>
+          {props.children(formProps)}
+        </fieldset>
+        <Button
+          onClick={() => isEditting ? setIsEditting(false) : onSubmit(formProps.getValues())}
+          secondary={isEditting}
+          type="button"
+          style={{ width: '50%', marginTop: 15 }}
+        >
+          {isEditting ? 'Editar' : 'Confirmar'}
+        </Button>
       </DialogContent>
     </Dialog>
   )

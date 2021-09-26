@@ -12,7 +12,7 @@ class MyDocument extends Document {
           <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
           <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"/>
         </Head>
-        <body>
+        <body style={{ margin: 'unset' }}>
           <Main />
           <NextScript />
         </body>
