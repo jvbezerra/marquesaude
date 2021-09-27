@@ -10,10 +10,10 @@ interface Props extends ListProps<any> {
 }
 
 const List: React.FC<Props> = (props) => {
-  const { count, showing, renderItem } = props
+  const { count, showing, renderItem, ...listProps } = props
 
   return (
-    <MuiList {...props}>
+    <MuiList {...listProps}>
       <AutoSizer disableHeight style={{ width: '100%' }}>
         {(width: any) => (
           <VirtualList

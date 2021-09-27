@@ -67,7 +67,7 @@ export default function Login() {
         <div style={{ width: '85%' }}>
           <Tabs value={tab} onChange={handleChange}>
             {userTypes.map(type => (
-              <Tab label={type.label} />
+              <Tab key={type.label} label={type.label} />
             ))}
           </Tabs>
           <TextInput
