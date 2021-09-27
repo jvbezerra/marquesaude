@@ -2,6 +2,8 @@ import { useState } from 'react'
 import Icon from '@mui/material/Icon'
 import IconButton from '@mui/material/IconButton'
 import Spin from '@mui/material/CircularProgress'
+import CardActions from '@mui/material/CardActions'
+import Switch from '@mui/material/Switch'
 import { useSession } from 'next-auth/client'
 import useSWR from 'swr'
 import dynamic from 'next/dynamic'
@@ -22,21 +24,38 @@ const EmployeeArea: React.FC = () => {
   const renderItem = ({ index, style }: any) => {
     const item: Employee = employees![index]
     return (
-      <EmployeeCard
-        employee={item}
-        onView={async () => {
-          setSelectedEmployee(item)
-          setIsModalOpen(true)
-        }}
-        onDelete={async () => {
-          await deleteEmployee(item.id)
-          mutate()
-        }}
-        onChangeStatus={async (available: boolean) => {
-          await editEmployee(item.id, { available })
-          mutate()
-        }}
-      />
+      <EmployeeCard employee={item}>
+        <CardActions>
+          <IconButton
+            key="view"
+            aria-label="Visualizar"
+            onClick={async () => {
+              setSelectedEmployee(item)
+              setIsModalOpen(true)
+            }}
+          >
+            <Icon>visibility</Icon>
+          </IconButton>
+          <IconButton
+            key="delete"
+            aria-label="Apagar"
+            onClick={async () => {
+              await deleteEmployee(item.id)
+              mutate()
+            }}
+          >
+            <Icon>delete_outline</Icon>
+          </IconButton>
+          <Switch
+            checked={item.available}
+            onChange={async ({ target }) => {
+              await editEmployee(item.id, { available: target.checked })
+              mutate()
+            }}
+            inputProps={{ 'aria-label': 'controlled' }}
+          />
+        </CardActions>
+      </EmployeeCard>
     )
   }
 

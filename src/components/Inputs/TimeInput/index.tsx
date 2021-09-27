@@ -1,26 +1,24 @@
 import styled from 'styled-components'
 import Field, { inputStyle } from '../Field'
-import MuiDatePicker, { MobileDatePickerProps as DatePickerProps } from '@mui/lab/MobileDatePicker'
+import MuiTimePicker, { MobileTimePickerProps as TimePickerProps } from '@mui/lab/MobileTimePicker'
 import brLocale from 'dayjs/locale/pt-br'
 import TextInput from '../TextInput'
-import DateAdapter from '@mui/lab/AdapterDayjs'
+import TimeAdapter from '@mui/lab/AdapterDayjs'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 
-interface Props extends DatePickerProps {
+interface Props extends TimePickerProps {
   label: string,
   error?: string | any,
 }
 
-const DatePicker = styled(MuiDatePicker)<Props>`
+const TimePicker = styled(MuiTimePicker)<Props>`
   ${inputStyle}
   border: ${props => props.error ? '1px solid red' : '1px solid #C1C3CF'};
 `
-const DateInput = (props: Omit<Props, 'renderInput'>) => (
+const TimeInput = (props: Omit<Props, 'renderInput'>) => (
   <Field label={props.label ?? ''} error={props.error ?? ''}>
-    <LocalizationProvider dateAdapter={DateAdapter} locale={brLocale}>
-      <DatePicker
-        disableFuture
-        openTo="year"
+    <LocalizationProvider dateAdapter={TimeAdapter} locale={brLocale}>
+      <TimePicker
         {...props}
         renderInput={
           ({ inputRef, inputProps }) => <TextInput ref={inputRef} {...inputProps} />
@@ -30,4 +28,4 @@ const DateInput = (props: Omit<Props, 'renderInput'>) => (
   </Field>
 )
 
-export default DateInput
+export default TimeInput

@@ -46,3 +46,18 @@ export const editEmployee = async (id: number, data: Employee | any): Promise<Em
 export const deleteEmployee = async (id: number) => {
   await api.delete(`/employees/${id}`)
 }
+
+// APPOINTMENTS
+export const createAppointment = async (data: Appointment | any): Promise<Appointment> => {
+  const { data: newAppointment } = await api.post('/appointments', data)
+  return newAppointment
+}
+
+export const editAppointment = async (id: number, data: Appointment | any): Promise<Appointment> => {
+  const { data: updatedAppointment} = await api.put(`/appointments/${id}`, data)
+  return updatedAppointment
+}
+
+export const deleteAppointment = async (id: number) => {
+  await api.delete(`/appointments/${id}`)
+}

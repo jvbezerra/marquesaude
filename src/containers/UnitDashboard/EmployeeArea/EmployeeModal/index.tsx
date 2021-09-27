@@ -128,8 +128,8 @@ const EmployeeModal: React.FC<Props> = (props) => {
               </Grid>
             </Grid>
 
-            {employee?.appointments && employee?.appointments.length > 0
-              ? <RequestList appointments={employee?.appointments}/>
+            {employee?.Appointments && employee?.Appointments.length > 0
+              ? <RequestList appointments={employee?.Appointments}/>
               : <></>
             }
           </>
