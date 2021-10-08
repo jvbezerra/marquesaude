@@ -2,7 +2,7 @@ import NextAuth from "next-auth"
 
 declare module "next-auth" {
   interface Session {
-    user?: MSUser,
+    user?: Citizen,
     unit?: Unit,
     type: "user" | "unit",
     accessToken: string,

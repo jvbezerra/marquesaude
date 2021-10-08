@@ -12,7 +12,7 @@ declare interface Unit {
   phonenumber: string,
 }
 
-declare interface MSUser {
+declare interface Citizen {
   id: number,
   susCard: string,
   cpf?: string,

@@ -9,7 +9,7 @@ import TextInput from '../../../../components/Inputs/TextInput'
 import { createUser, editUser } from '../../../../services'
 
 interface Props {
-  user: MSUser | null
+  user: Citizen | null
   isOpen: boolean
   onClose: Function
 }
@@ -42,9 +42,9 @@ const UserModal: React.FC<Props> = (props) => {
   const { mutate } = useSWRConfig()
   const [ session ] = useSession()
 
-  const addUser = async (values: MSUser) => {
+  const addUser = async (values: Citizen) => {
     const { phonenumber, cpf, susCard } = values
-    mutate(`/users/unit/${session!.unit!.id}`, async (users: MSUser[]) => {
+    mutate(`/users/unit/${session!.unit!.id}`, async (users: Citizen[]) => {
       const newUser = await createUser({
         ...values,
         unitId: session!.unit!.id,
@@ -57,8 +57,8 @@ const UserModal: React.FC<Props> = (props) => {
     }).then(() => onClose())
   }
 
-  const updateUser = async (values: Partial<MSUser>) => {
-    mutate(`/users/unit/${session!.unit!.id}`, async (users: MSUser[]) => {
+  const updateUser = async (values: Partial<Citizen>) => {
+    mutate(`/users/unit/${session!.unit!.id}`, async (users: Citizen[]) => {
       const updatedUser = await editUser(user?.id!, values)
 
       const filteredUsers = users.filter(item => item.id !== user?.id!)
@@ -71,8 +71,8 @@ const UserModal: React.FC<Props> = (props) => {
       title="Usuário"
       isOpen={isOpen}
       onClose={onClose}
-      onAdd={(values: MSUser) => addUser(values)}
-      onEdit={(values: MSUser) => updateUser(values)}
+      onAdd={(values: Citizen) => addUser(values)}
+      onEdit={(values: Citizen) => updateUser(values)}
       validationSchema={validationSchema}
       defaultValues={user}
     >

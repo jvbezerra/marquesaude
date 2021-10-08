@@ -14,13 +14,13 @@ const UserModal = dynamic(() => import('./UserModal'), { ssr: false })
 
 const UserArea: React.FC = () => {
   const [ session ] = useSession()
-  const { data: users, mutate } = useSWR<MSUser[]>(`/users/unit/${session!.unit!.id}`)
+  const { data: users, mutate } = useSWR<Citizen[]>(`/users/unit/${session!.unit!.id}`)
 
   const [isUserModalOpen, setIsUserModalOpen] = useState(false)
-  const [selectedUser, setSelectedUser] = useState<MSUser | null>(null)
+  const [selectedUser, setSelectedUser] = useState<Citizen | null>(null)
 
   const renderItem = ({ index, style }: any) => {
-    const item: MSUser = users![index]
+    const item: Citizen = users![index]
     
     return (
       <ListItem

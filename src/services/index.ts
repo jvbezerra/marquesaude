@@ -18,12 +18,12 @@ export const editUnit = async (id: number, data: Unit | any): Promise<Unit> => {
 }
 
 // USER
-export const createUser = async (data: MSUser): Promise<MSUser> => {
+export const createUser = async (data: Citizen): Promise<Citizen> => {
   const { data: newUser } = await api.post('/users', data)
   return newUser
 }
 
-export const editUser = async (id: number, data: MSUser | any): Promise<MSUser> => {
+export const editUser = async (id: number, data: Citizen | any): Promise<Citizen> => {
   const { data: updatedUser } = await api.put(`/users/${id}`, data)
   return updatedUser
 }
