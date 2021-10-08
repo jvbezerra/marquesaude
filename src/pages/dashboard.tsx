@@ -18,7 +18,7 @@ function App() {
       <HeaderBar />
       {dashboardSchema[session!.type]}
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

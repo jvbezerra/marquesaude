@@ -11,6 +11,7 @@ import TextInput from '../components/Inputs/TextInput'
 import style from '../styles/Login.module.scss'
 import { Tab, Tabs } from '../components/Tabs'
 import Loading from '../components/Loading'
+import { toast } from 'react-toastify'
 
 const userTypes = [
   {
@@ -46,11 +47,18 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const { handleSubmit, control, formState: { errors } } = useForm<any>({
     resolver: yupResolver(userTypes[tab].validationSchema)
-  });
+  })
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const error = urlParams.get('error')
+    
+    if (error) toast.error(error)
+  }, [])
 
   const handleChange = (e: React.SyntheticEvent, newValue: number) => {
-    setTab(newValue);
-  };
+    setTab(newValue)
+  }
 
   const onSubmit = async (values: any) => {
     setLoading(true)

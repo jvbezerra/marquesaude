@@ -4,6 +4,8 @@ import { Provider } from 'next-auth/client'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { SWRConfig } from 'swr'
 import api from '../services/api'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.min.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -21,6 +23,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         </Head>
         <ThemeProvider theme={createTheme({})}>
           <Component {...pageProps} />
+          <ToastContainer/>
         </ThemeProvider>
       </Provider>
     </SWRConfig>

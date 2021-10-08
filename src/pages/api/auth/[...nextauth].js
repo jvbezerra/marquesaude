@@ -62,6 +62,7 @@ export default NextAuth({
   },
   pages: {
     signIn: "/",
+    error: "/"
   },
   json: "true",
   site: process.env.NEXTAUTH_URL || "http://localhost:3000",
