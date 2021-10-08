@@ -5,7 +5,7 @@ import { ServerStyleSheet } from 'styled-components'
 export default class MyDocument extends Document {
   render() {
     return (
-      <Html lang="pt-br">
+      <Html lang="pt-br" style={{ overflow: 'overlay' }}>
         <Head>
           <meta name="description" content="Marque Saúde app"/>
           <link rel="icon" href="/favicon.ico" />
