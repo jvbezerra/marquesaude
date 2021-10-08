@@ -30,93 +30,83 @@ const validationSchema = yup.object().shape({
 const UnitModal: React.FC<Props> = (props) => {
   const { unit, isOpen, onClose } = props
 
-  const editUser = (values: Unit) => {
+  const editUser = (values: Partial<Unit>) => {
     // edit unit service function
   }
 
   return (
     <FormModal
       title="Unidade"
-      isEdit={!!unit}
       isOpen={isOpen}
-      onClose={() => onClose()}
+      onClose={onClose}
       onAdd={() => {}}
       onEdit={(values: Unit) => editUser(values)}
       validationSchema={validationSchema}
-      initialValues={{
-        name: unit?.name ?? '',
-        cnes: unit?.cnes ?? '',
-        phonenumber: unit?.phonenumber ?? '',
-        passoword: unit?.password ?? '',
-        street: unit?.street ?? '',
-        neighborhood: unit?.neighborhood ?? '',
-        city: unit?.city ?? ''
-      }}
+      defaultValues={unit}
     >
-      {({ setValue, formState: { errors }, watch }) => {
-        const values = watch()
-        return (
-          <>
-            <TextInput
-              label="Nome"
-              error={errors.name?.message}
-              value={values?.name}
-              onChange={({ target }) => setValue('name', target.value)}
-            />
-            <Grid container spacing={1}>
-              <Grid item xs={6}>
-                <TextInput
-                  label="CNES"
-                  disabled
-                  mask="9999999"
-                  error={errors.cnes?.message}
-                  value={values?.cnes}
-                  onChange={({ target }) => setValue('cnes', target.value)}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextInput
-                  label="Celular"
-                  mask={values.phonenumber.length > 14 ? "(99) 99999-9999" : "(99) 9999-9999"}
-                  error={errors.phonenumber?.message}
-                  onChange={({ target }) => setValue('phonenumber', target.value)}
-                />
-              </Grid>
+      {({ formState: { errors }, control }) => (
+        <>
+          <TextInput
+            label="Nome"
+            name="name"
+            error={errors.name?.message}
+            control={control}
+          />
+          <Grid container spacing={1}>
+            <Grid item xs={6}>
+              <TextInput
+                label="CNES"
+                name="cnes"
+                disabled
+                mask="9999999"
+                error={errors.cnes?.message}
+                control={control}
+              />
             </Grid>
-            <TextInput
-              label="Alterar senha"
-              type="password"
-              placeholder="Insira a senha para mudança"
-              error={errors.password?.message}
-              onChange={({ target }) => setValue('password', target.value)}
-            />
-            <TextInput
-              label="Endereço"
-              error={errors.street?.message}
-              value={values?.street}
-              onChange={({ target }) => setValue('street', target.value)}
-            />
-            <Grid container spacing={1}>
-              <Grid item xs={6}>
-                <TextInput
-                  label="Bairro"
-                  error={errors.neighborhood?.message}
-                  value={values?.neighborhood}
-                  onChange={({ target }) => setValue('neighborhood', target.value)}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextInput
-                  label="Cidade"
-                  error={errors.city?.message}
-                  value={values?.city}
-                  onChange={({ target }) => setValue('city', target.value)}
-                />
-              </Grid>
+            <Grid item xs={6}>
+              <TextInput
+                label="Celular"
+                name="phonenumber"
+                mask={"(99) 99999-9999"}
+                error={errors.phonenumber?.message}
+                control={control}
+              />
             </Grid>
-          </>
-        )
-      }}
+          </Grid>
+          <TextInput
+            label="Alterar senha"
+            name="passoword"
+            type="password"
+            placeholder="Insira a senha para mudança"
+            error={errors.password?.message}
+            control={control}
+          />
+          <TextInput
+            label="Endereço"
+            name="street"
+            error={errors.street?.message}
+            control={control}
+          />
+          <Grid container spacing={1}>
+            <Grid item xs={6}>
+              <TextInput
+                label="Bairro"
+                name="neighborhood"
+                error={errors.neighborhood?.message}
+                control={control}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextInput
+                label="Cidade"
+                name="city"
+                error={errors.city?.message}
+                control={control}
+              />
+            </Grid>
+          </Grid>
+        </>
+      )}
     </FormModal>
   )
 }

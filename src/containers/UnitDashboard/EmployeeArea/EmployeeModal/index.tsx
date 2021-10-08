@@ -47,7 +47,7 @@ const EmployeeModal: React.FC<Props> = (props) => {
     }).then(() => onClose())
   }
 
-  const changeEmployee = (values: Employee | any) => {
+  const updateEmployee = (values: Partial<Employee>) => {
     mutate(`/employees/unit/${session!.unit!.id}`, async (employees: Employee[]) => {
       const updatedEmployee = editEmployee(employee?.id!, values)
 
@@ -59,82 +59,72 @@ const EmployeeModal: React.FC<Props> = (props) => {
   return (
     <FormModal
       title="Profissional"
-      isEdit={!!employee}
       isOpen={isOpen}
-      onClose={() => onClose()}
+      onClose={onClose}
       onAdd={(values: Employee) => addEmployee(values)}
-      onEdit={(values: Employee) => changeEmployee(values)}
+      onEdit={(values: Employee) => updateEmployee(values)}
       validationSchema={validationSchema}
-      initialValues={{
-        name: employee?.name ?? '',
-        roleId: employee?.roleId ?? 0,
-        cpf: employee?.cpf ?? '',
-        professional_record: employee?.professional_record ?? '',
-        vacancies: employee?.vacancies ?? 0,
-      }}
+      defaultValues={employee}
     >
-      {({ setValue, formState: { errors }, watch }) => {
-        const values = watch()
-        return (
-          <>
-            <Grid container spacing={1}>
-              <Grid item xs={6}>
-                <TextInput
-                  label="Nome"
-                  placeholder="Insira o nome do profissional"
-                  error={errors.name?.message}
-                  value={values?.name}
-                  onChange={({ target }) => setValue('name', target.value)}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <SelectInput
-                  label="Tipo"
-                  defaultValue={values?.roleId}
-                  onChange={value => setValue("roleId", value)}
-                >
-                  {rolesOptions?.map(role => (
-                    <SelectItem value={role.id}>{role.name}</SelectItem>
-                  ))}
-                </SelectInput>
-              </Grid>
+      {({ formState: { errors }, control }) => (
+        <>
+          <Grid container spacing={1}>
+            <Grid item xs={6}>
+              <TextInput
+                label="Nome"
+                name="name"
+                placeholder="Insira o nome do profissional"
+                error={errors.name?.message}
+                control={control}
+              />
             </Grid>
-            <TextInput
-              label="CPF"
-              mask="999.999.999-99"
-              placeholder="123.456.789-10"
-              value={values?.cpf}
-              error={errors.cpf?.message}
-              onChange={({ target }) => setValue('cpf', target.value)}
-            />
-            <Grid container spacing={1}>
-              <Grid item xs={6}>
-                <TextInput
-                  label="Registro em CR"
-                  placeholder="Insira o número de registro"
-                  error={errors.professional_record?.message}
-                  value={values?.professional_record}
-                  onChange={({ target }) => setValue('professional_record', target.value)}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextInput
-                  label="Vagas/dia"
-                  type="number"
-                  error={errors.vacancies?.message}
-                  value={values?.vacancies}
-                  onChange={({ target }) => setValue('vacancies', target.value)}
-                />
-              </Grid>
+            <Grid item xs={6}>
+              <SelectInput
+                label="Tipo"
+                name="roleId"
+                control={control}
+              >
+                {rolesOptions?.map(role => (
+                  <SelectItem value={role.id}>{role.name}</SelectItem>
+                ))}
+              </SelectInput>
             </Grid>
+          </Grid>
+          <TextInput
+            label="CPF"
+            name="cpf"
+            mask="999.999.999-99"
+            placeholder="123.456.789-10"
+            error={errors.cpf?.message}
+            control={control}
+          />
+          <Grid container spacing={1}>
+            <Grid item xs={6}>
+              <TextInput
+                label="Registro em CR"
+                name="professional_record"
+                placeholder="Insira o número de registro"
+                error={errors.professional_record?.message}
+                control={control}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextInput
+                label="Vagas/dia"
+                name="vacancies"
+                type="number"
+                error={errors.vacancies?.message}
+                control={control}
+              />
+            </Grid>
+          </Grid>
 
-            {employee?.Appointments && employee?.Appointments.length > 0
-              ? <RequestList appointments={employee?.Appointments}/>
-              : <></>
-            }
-          </>
-        )
-      }}
+          {employee?.Appointments && employee?.Appointments.length > 0
+            ? <RequestList appointments={employee?.Appointments}/>
+            : <></>
+          }
+        </>
+      )}
     </FormModal>
   )
 }

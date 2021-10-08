@@ -17,6 +17,7 @@ const userTypes = [
     label: 'Cidadão',
     key: 'Cartão do SUS',
     placeholder: 'Insira o número do cartão do SUS',
+    mask: '999 9999 9999 9999',
     validationSchema: yup.object().shape({
       key: yup.string()
         .required('Obrigatório')
@@ -29,6 +30,7 @@ const userTypes = [
     label: 'Unidade',
     key: 'CNES',
     placeholder: 'Insira o número do CNES',
+    mask: '9999999',
     validationSchema: yup.object().shape({
       key: yup.string()
         .required('Obrigatório')
@@ -42,7 +44,7 @@ const userTypes = [
 export default function Login() {
   const [tab, setTab] = useState(0);
   const [loading, setLoading] = useState(false)
-  const { handleSubmit, setValue, formState: { errors } } = useForm<any>({
+  const { handleSubmit, control, formState: { errors } } = useForm<any>({
     resolver: yupResolver(userTypes[tab].validationSchema)
   });
 
@@ -54,7 +56,9 @@ export default function Login() {
     setLoading(true)
     signIn(
       'credentials',
-      { ...values, 
+      {
+        key: values.key.replace(/( )+/g, ""),
+        password: values.password,
         callbackUrl: '/dashboard'
       }
     )
@@ -71,16 +75,19 @@ export default function Login() {
             ))}
           </Tabs>
           <TextInput
+            name="key"
             label={userTypes[tab].key}
             placeholder={userTypes[tab].placeholder}
-            onChange={({ target }) => setValue('key', target.value)}
+            mask={userTypes[tab].mask}
+            control={control}
             error={errors.key?.message}
           />
           <TextInput
+            name="password"
             label="Senha"
-            type="password"
             placeholder="Insira a senha para acesso"
-            onChange={({ target }) => setValue('password', target.value)}
+            type="password"
+            control={control}
             error={errors.password?.message}
           />
         </div>

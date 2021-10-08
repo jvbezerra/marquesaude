@@ -1,12 +1,15 @@
 import Typography from '@mui/material/Typography'
+import { Control } from 'react-hook-form'
 import styled from 'styled-components'
 
 interface FieldProps {
-  label: string
-  error: string
+  label?: string
+  error?: string
 }
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement>{
+  name?: string
+  control?: Control<any>
   mask?: string
   label?: string
   error?: string[] | any
@@ -35,17 +38,18 @@ const Container = styled.div`
   margin-bottom: 15px;
 `
 
-const ErrorLabel = styled.label`
-  align-self: end;
-  font-size: 12px;
-  color: red;
-`
-
 const Field: React.FC<FieldProps> = (props) => (
   <Container>
     <Typography variant="subtitle2" style={{ whiteSpace: 'nowrap' }}>{props.label}</Typography>
     {props.children}
-    <ErrorLabel>{props.error}</ErrorLabel>
+    <Typography
+      variant="subtitle2"
+      alignSelf="end"
+      color="red"
+      fontSize={10}
+    >
+      {props.error}
+    </Typography>
   </Container>
 )
 
