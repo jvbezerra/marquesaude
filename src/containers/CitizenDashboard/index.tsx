@@ -13,7 +13,7 @@ import EmployeeCard from '../UnitDashboard/EmployeeArea/EmployeeCard'
 import { appointmentSchema } from './schema'
 import dayjs from 'dayjs'
 
-const UserDashboard: React.FC = () => {
+const CitizenDashboard: React.FC = () => {
   const [ session ] = useSession()
   const [filterRole, setFilterRole] = useState(0)
   const { data: employees, mutate } = useSWR<Employee[]>(`/employees/unit/${session!.unit!.id}`)
@@ -84,4 +84,4 @@ const UserDashboard: React.FC = () => {
   )
 }
 
-export default UserDashboard
+export default CitizenDashboard

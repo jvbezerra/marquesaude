@@ -2,11 +2,11 @@ import dynamic from 'next/dynamic'
 import { useSession } from 'next-auth/client'
 import HeaderBar from '../containers/HeaderBar'
 const UnitDashboard = dynamic(() => import('../containers/UnitDashboard'))
-const UserDashboard = dynamic(() => import('../containers/UserDashboard'))
+const CitizenDashboard = dynamic(() => import('../containers/CitizenDashboard'))
 
 const dashboardSchema = {
   "unit": <UnitDashboard />,
-  "user": <UserDashboard />,
+  "user": <CitizenDashboard />,
 }
 
 function App() {
