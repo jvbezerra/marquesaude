@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import Icon from '@mui/material/Icon'
 import IconButton from '@mui/material/IconButton'
-import Spin from '@mui/material/CircularProgress'
 import CardActions from '@mui/material/CardActions'
 import Switch from '@mui/material/Switch'
 import { useSession } from 'next-auth/client'
@@ -13,6 +12,7 @@ import Header from '../../../components/PageHeader'
 const EmployeeModal = dynamic(() => import('./EmployeeModal'), { ssr: false })
 import { EmployeeService } from '../../../services'
 import EmployeeCard from './EmployeeCard'
+import Loading from '../../../components/Loading'
 
 const EmployeeArea: React.FC = () => {
   const [ session ] = useSession()
@@ -77,7 +77,7 @@ const EmployeeArea: React.FC = () => {
         ]}
       />
 
-      {!employees ? <Spin /> :
+      {!employees ? <Loading /> :
         <List
           count={employees.length}
           showing={8}

@@ -2,7 +2,6 @@ import useSWR from 'swr'
 import { useState } from 'react'
 import { useSession } from 'next-auth/client'
 import CardActions from '@mui/material/CardActions'
-import Spin from '@mui/material/CircularProgress'
 
 import SelectItem from '@mui/material/MenuItem'
 import SelectInput from '../../components/Inputs/SelectInput'
@@ -12,6 +11,7 @@ import styles from '../../styles/Dashboard.module.scss'
 import EmployeeCard from '../UnitDashboard/EmployeeArea/EmployeeCard'
 import { appointmentSchema } from './schema'
 import dayjs from 'dayjs'
+import Loading from '../../components/Loading'
 
 const CitizenDashboard: React.FC = () => {
   const [ session ] = useSession()
@@ -72,7 +72,7 @@ const CitizenDashboard: React.FC = () => {
       </div>
 
       <div style={{ width: '90vw' }}>
-        {!employees ? <Spin /> :
+        {!employees ? <Loading /> :
           <List
             count={employees.length}
             showing={4}

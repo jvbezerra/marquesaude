@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import * as yup from 'yup'
 import { signIn } from 'next-auth/client'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -9,8 +9,8 @@ import logo from '../../public/logo.png'
 import Button from '../components/Button'
 import TextInput from '../components/Inputs/TextInput'
 import style from '../styles/Login.module.scss'
-import Spin from '@mui/material/CircularProgress'
 import { Tab, Tabs } from '../components/Tabs'
+import Loading from '../components/Loading'
 
 const userTypes = [
   {
@@ -92,7 +92,7 @@ export default function Login() {
           />
         </div>
         <Button type="submit" style={{ width: '50%' }} disabled={loading}>
-          {loading ? <Spin/> : 'Entrar'}
+          {loading ? <Loading color="inherit" size={25}/> : 'Entrar'}
         </Button>
       </form>
     </div>

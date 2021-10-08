@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import Icon from '@mui/material/Icon'
 import IconButton from '@mui/material/IconButton'
-import Spin from '@mui/material/CircularProgress'
 import { useSession } from 'next-auth/client'
 import useSWR from 'swr'
 import dynamic from 'next/dynamic'
@@ -10,6 +9,7 @@ import List from '../../../components/List'
 import ListItem from '../../../components/ListItem'
 import Header from '../../../components/PageHeader'
 import { UserService } from '../../../services'
+import Loading from '../../../components/Loading'
 const UserModal = dynamic(() => import('./UserModal'), { ssr: false })
 
 const UserArea: React.FC = () => {
@@ -71,7 +71,7 @@ const UserArea: React.FC = () => {
         ]}
       />
 
-      {!users ? <Spin /> :
+      {!users ? <Loading /> :
         <List
           count={users.length}
           showing={8}

@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
+import Loading from '../Loading'
 
 interface Props {
   title: string
@@ -20,6 +21,7 @@ interface Props {
 
 const FormModal: React.FC<Props> = (props) => {
   const { isOpen, onClose, onAdd, onEdit, validationSchema, defaultValues } = props
+  const [loading, setLoading] = useState(false)
   const [isViewing, setIsViewing] = useState<boolean>(!!defaultValues)
   const formProps = useForm({
     defaultValues,
@@ -29,6 +31,7 @@ const FormModal: React.FC<Props> = (props) => {
   })
 
   const switchSubmission = (values: any) => {
+    setLoading(true)
     if (!!defaultValues) {
       onEdit(values)
     } else {
@@ -41,7 +44,10 @@ const FormModal: React.FC<Props> = (props) => {
       <DialogTitle>{props.title}</DialogTitle>
       <DialogContent>
         <form onSubmit={formProps.handleSubmit(switchSubmission)}>
-          <fieldset disabled={isViewing} style={{ border: 'none', padding: 'unset' }}>
+          <fieldset
+            disabled={isViewing || loading}
+            style={{ border: 'none', padding: 'unset' }}
+          >
             {props.children(formProps)}
           </fieldset>
 
@@ -52,7 +58,7 @@ const FormModal: React.FC<Props> = (props) => {
               type="button"
               style={{ width: '50%', marginTop: 15 }}
             >
-              Editar
+              {loading ? <Loading size={25}/> : 'Editar'}
             </Button>
           }
           {!isViewing &&
@@ -60,7 +66,7 @@ const FormModal: React.FC<Props> = (props) => {
               type="submit"
               style={{ width: '50%', marginTop: 15 }}
             >
-              Confirmar
+              {loading ? <Loading color="inherit" size={25}/> : 'Confirmar'}
             </Button>
           }
         </form>
