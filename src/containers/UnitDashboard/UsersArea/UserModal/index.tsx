@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/client'
 import FormModal from '../../../../components/FormModal'
 import DateInput from '../../../../components/Inputs/DateInput'
 import TextInput from '../../../../components/Inputs/TextInput'
-import { createUser, editUser } from '../../../../services'
+import { UserService } from '../../../../services'
 
 interface Props {
   user: Citizen | null
@@ -45,7 +45,7 @@ const UserModal: React.FC<Props> = (props) => {
   const addUser = async (values: Citizen) => {
     const { phonenumber, cpf, susCard } = values
     mutate(`/users/unit/${session!.unit!.id}`, async (users: Citizen[]) => {
-      const newUser = await createUser({
+      const newUser = await UserService.create({
         ...values,
         unitId: session!.unit!.id,
         phonenumber: phonenumber.replace(/[^0-9]/g, ""),
@@ -59,7 +59,7 @@ const UserModal: React.FC<Props> = (props) => {
 
   const updateUser = async (values: Partial<Citizen>) => {
     mutate(`/users/unit/${session!.unit!.id}`, async (users: Citizen[]) => {
-      const updatedUser = await editUser(user?.id!, values)
+      const updatedUser = await UserService.edit(user?.id!, values)
 
       const filteredUsers = users.filter(item => item.id !== user?.id!)
       return [...filteredUsers, updatedUser]

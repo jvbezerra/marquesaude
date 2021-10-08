@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import TimeInput from '../../../../components/Inputs/TimeInput'
 import List from '../../../../components/List'
 import ListItem from '../../../../components/ListItem'
-import { editAppointment } from '../../../../services'
+import { AppointmentService } from '../../../../services'
 
 interface ListProps {
   appointments: Appointment[]
@@ -34,7 +34,7 @@ const RequestItem: React.FC<ItemProps> = ({ appointment }) => {
               setScheduledHour(newValue);
             }}
             onAccept={async () => {
-              await editAppointment(appointment.id, {
+              await AppointmentService.edit(appointment.id!, {
                 ...appointment,
                 hour: scheduledHour,
                 status: 'defined'

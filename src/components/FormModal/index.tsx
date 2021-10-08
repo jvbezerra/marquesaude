@@ -1,7 +1,7 @@
 import Button from '../Button'
 import * as yup from 'yup'
-import { useEffect, useState } from 'react'
-import { useForm, UseFormReturn, FormProvider } from 'react-hook-form'
+import { useState } from 'react'
+import { useForm, UseFormReturn } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
@@ -20,7 +20,7 @@ interface Props {
 
 const FormModal: React.FC<Props> = (props) => {
   const { isOpen, onClose, onAdd, onEdit, validationSchema, defaultValues } = props
-  const [isEditting, setIsEditting] = useState<boolean>()
+  const [isViewing, setIsViewing] = useState<boolean>(!!defaultValues)
   const formProps = useForm({
     defaultValues,
     resolver: yupResolver(validationSchema!),
@@ -28,9 +28,8 @@ const FormModal: React.FC<Props> = (props) => {
     reValidateMode: "onSubmit",
   })
 
-  useEffect(() => setIsEditting(!!defaultValues), [defaultValues])
   const switchSubmission = (values: any) => {
-    if (isEditting) {
+    if (!!defaultValues) {
       onEdit(values)
     } else {
       onAdd(values)
@@ -42,13 +41,13 @@ const FormModal: React.FC<Props> = (props) => {
       <DialogTitle>{props.title}</DialogTitle>
       <DialogContent>
         <form onSubmit={formProps.handleSubmit(switchSubmission)}>
-          <fieldset disabled={isEditting} style={{ border: 'none', padding: 'unset' }}>
+          <fieldset disabled={isViewing} style={{ border: 'none', padding: 'unset' }}>
             {props.children(formProps)}
           </fieldset>
 
-          {isEditting &&
+          {isViewing &&
             <Button
-              onClick={() => setIsEditting(false)}
+              onClick={() => setIsViewing(false)}
               secondary
               type="button"
               style={{ width: '50%', marginTop: 15 }}
@@ -56,7 +55,7 @@ const FormModal: React.FC<Props> = (props) => {
               Editar
             </Button>
           }
-          {!isEditting &&
+          {!isViewing &&
             <Button
               type="submit"
               style={{ width: '50%', marginTop: 15 }}

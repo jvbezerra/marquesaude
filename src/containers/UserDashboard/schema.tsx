@@ -2,7 +2,7 @@ import Icon from '@mui/material/Icon'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import dayjs from 'dayjs'
-import { createAppointment } from '../../services'
+import { AppointmentService } from '../../services'
 
 interface ButtonProps {
   employeeId: number
@@ -18,7 +18,7 @@ export const appointmentSchema: AppointmentOption = {
     <IconButton
       aria-label="Solicitar"
       onClick={async () => {
-        await createAppointment({
+        await AppointmentService.create({
           employeeId,
           userId,
           status: 'requested',

@@ -4,7 +4,7 @@ import * as yup from 'yup'
 
 import FormModal from '../../../../components/FormModal'
 import TextInput from '../../../../components/Inputs/TextInput'
-import { createEmployee, editEmployee } from '../../../../services'
+import { EmployeeService } from '../../../../services'
 import RequestList from '../RequestList'
 
 import Grid from '@mui/material/Grid'
@@ -37,7 +37,7 @@ const EmployeeModal: React.FC<Props> = (props) => {
 
   const addEmployee = async (values: Employee) => {
     mutate(`/employees/unit/${session!.unit!.id}`, async (employees: Employee[]) => {
-      const newEmployee = await createEmployee({
+      const newEmployee = await EmployeeService.create({
         ...values,
         available: false,
         unitId: session!.unit!.id
@@ -49,7 +49,7 @@ const EmployeeModal: React.FC<Props> = (props) => {
 
   const updateEmployee = (values: Partial<Employee>) => {
     mutate(`/employees/unit/${session!.unit!.id}`, async (employees: Employee[]) => {
-      const updatedEmployee = editEmployee(employee?.id!, values)
+      const updatedEmployee = EmployeeService.edit(employee?.id!, values)
 
       const filteredEmployees = employees.filter(item => item.id !== employee?.id!)
       return [...filteredEmployees, updatedEmployee]

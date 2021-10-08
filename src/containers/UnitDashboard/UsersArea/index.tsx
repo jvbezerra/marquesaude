@@ -9,7 +9,7 @@ import dynamic from 'next/dynamic'
 import List from '../../../components/List'
 import ListItem from '../../../components/ListItem'
 import Header from '../../../components/PageHeader'
-import { deleteUser } from '../../../services'
+import { UserService } from '../../../services'
 const UserModal = dynamic(() => import('./UserModal'), { ssr: false })
 
 const UserArea: React.FC = () => {
@@ -42,7 +42,7 @@ const UserArea: React.FC = () => {
             key="delete"
             aria-label="Apagar"
             onClick={async () => {
-              await deleteUser(item.id)
+              await UserService.exclude(item.id)
               mutate()
             }}
           >

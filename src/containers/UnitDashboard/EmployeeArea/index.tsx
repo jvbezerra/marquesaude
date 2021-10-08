@@ -11,7 +11,7 @@ import dynamic from 'next/dynamic'
 import List from '../../../components/List'
 import Header from '../../../components/PageHeader'
 const EmployeeModal = dynamic(() => import('./EmployeeModal'), { ssr: false })
-import { deleteEmployee, editEmployee } from '../../../services'
+import { EmployeeService } from '../../../services'
 import EmployeeCard from './EmployeeCard'
 
 const EmployeeArea: React.FC = () => {
@@ -40,7 +40,7 @@ const EmployeeArea: React.FC = () => {
             key="delete"
             aria-label="Apagar"
             onClick={async () => {
-              await deleteEmployee(item.id)
+              await EmployeeService.exclude(item.id)
               mutate()
             }}
           >
@@ -49,7 +49,7 @@ const EmployeeArea: React.FC = () => {
           <Switch
             checked={item.available}
             onChange={async ({ target }) => {
-              await editEmployee(item.id, { available: target.checked })
+              await EmployeeService.edit(item.id, { available: target.checked })
               mutate()
             }}
             inputProps={{ 'aria-label': 'controlled' }}

@@ -45,7 +45,7 @@ declare interface EmployeeRole {
 }
 
 declare interface Appointment {
-  id: number,
+  id?: number,
   userId: number,
   employeeId: number,
   date?: string,
