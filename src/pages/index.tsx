@@ -1,7 +1,8 @@
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { signIn } from 'next-auth/client'
-import { yupResolver } from '@hookform/resolvers/yup'
+// @ts-ignore
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup.umd'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
