@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import { useState, useEffect } from 'react'
 
 import TimeInput from '../../../Inputs/TimeInput'
-import List from '../../../List'
+import { Virtuoso as List } from 'react-virtuoso'
 import ListItem from '../../../ListItem'
 import { AppointmentService } from '../../../../services'
 
@@ -50,12 +50,8 @@ const RequestItem: React.FC<ItemProps> = ({ appointment }) => {
 const RequestList: React.FC<ListProps> = ({ appointments }) => {
   return (
     <List
-      count={appointments.length}
-      showing={4}
-      renderItem={({ index, style }: any) => {
-        const item: Appointment = appointments[index]
-        return <RequestItem appointment={item}/>
-      }}
+      data={appointments}
+      itemContent={(_, appointment) => <RequestItem appointment={appointment}/>}
     />
   )
 }

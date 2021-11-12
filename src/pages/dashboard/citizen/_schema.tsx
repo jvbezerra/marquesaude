@@ -47,3 +47,6 @@ export const appointmentSchema: AppointmentOption = {
     </IconButton>
   ),
 }
+
+const shallowExport = () => <></>
+export default shallowExport

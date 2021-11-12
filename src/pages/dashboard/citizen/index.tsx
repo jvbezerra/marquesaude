@@ -17,7 +17,7 @@ import Loading from '../../../components/Loading'
 const CitizenDashboard: React.FC = () => {
   const [ session ] = useSession()
   const [filterRole, setFilterRole] = useState(0)
-  const { data: employees, mutate } = useSWR<Employee[]>(`/employees/unit/${session!.unit!.id}`)
+  const { data: employees, mutate } = useSWR<Employee[]>(`/employees/unit/${session?.unit?.id}`)
   const { data: rolesOptions } = useSWR<EmployeeRole[]>(`/employees/roles`)
 
   const sameDay = (dateA: Date, dateB: Date): boolean => {

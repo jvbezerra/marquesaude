@@ -30,3 +30,6 @@ export const userTypes = [
     }),
   },
 ]
+
+const shallowExport = () => <></>
+export default shallowExport

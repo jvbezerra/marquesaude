@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import styled from '@emotion/styled'
 
-import List from '../../../List'
+import { Virtuoso as List } from 'react-virtuoso'
 import ListItem from '../../../ListItem'
 import Icon from '@mui/material/Icon'
 import IconButton from '@mui/material/IconButton'
@@ -31,12 +31,10 @@ const HoursList: React.FC<Props> = ({ employeeHours }) => {
   return (
     <>
       <List
-        count={hours.length}
-        showing={4}
-        renderItem={({ index, style }: any) => (
+        data={hours}
+        itemContent={(_, hour) => (
           <ListItem
-            title={hours[index]}
-            style={style}
+            title={hour}
             actions={[
               <IconButton
                 key="delete"

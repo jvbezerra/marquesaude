@@ -5,7 +5,7 @@ import * as yup from 'yup'
 import FormModal from '../../FormModal'
 import TextInput from '../../Inputs/TextInput'
 import { EmployeeService } from '../../../services'
-//import RequestList from './RequestList'
+import RequestList from './RequestList'
 
 import Grid from '@mui/material/Grid'
 import SelectInput from '../../Inputs/SelectInput'
@@ -114,11 +114,11 @@ const EmployeeModal: React.FC<Props> = (props) => {
           <Accordion title="Horários disponíveis">
           </Accordion>
           
-          {/*employee?.Appointments && employee?.Appointments.length > 0 &&
+          {employee?.Appointments && employee?.Appointments.length > 0 &&
             <Accordion title="Solicitações">
               <RequestList appointments={employee?.Appointments}/>
             </Accordion>
-          */}
+          }
         </>
       )}
     </FormModal>
