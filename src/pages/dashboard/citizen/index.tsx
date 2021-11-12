@@ -4,14 +4,15 @@ import { useSession } from 'next-auth/client'
 import CardActions from '@mui/material/CardActions'
 
 import SelectItem from '@mui/material/MenuItem'
-import SelectInput from '../../components/Inputs/SelectInput'
-import Header from '../../components/PageHeader'
-import List from '../../components/List'
+import HeaderBar from '../../../containers/HeaderBar'
+import SelectInput from '../../../components/Inputs/SelectInput'
+import Header from '../../../components/PageHeader'
+import List from '../../../components/List'
 import styles from '../../styles/Dashboard.module.scss'
-import EmployeeCard from '../UnitDashboard/EmployeeArea/EmployeeCard'
-import { appointmentSchema } from './schema'
+import EmployeeCard from '../../../containers/UnitDashboard/EmployeeArea/EmployeeCard'
+import { appointmentSchema } from './_schema'
 import dayjs from 'dayjs'
-import Loading from '../../components/Loading'
+import Loading from '../../../components/Loading'
 
 const CitizenDashboard: React.FC = () => {
   const [ session ] = useSession()
@@ -50,37 +51,41 @@ const CitizenDashboard: React.FC = () => {
   }
 
   return (
-    <div className={styles.userContainer}>
-      <div style={{ width: '90%' }}>
-        <Header
-          title="Consultas disponíveis"
-          actions={[
-            <div style={{ width: '30vw' }} key="options">
-              <SelectInput
-                label="Filtrar"
-                defaultValue={0}
-                onChange={e => setFilterRole(e.target.value)}
-              >
-                {rolesOptions && [...rolesOptions, { id: 0, name: 'Todos' }]
-                  .map(role => (
-                    <SelectItem key={role.id} value={role.id}>{role.name}</SelectItem>
-                  ))}
-              </SelectInput>
-            </div>
-          ]}
-        />
-      </div>
-
-      <div style={{ width: '90vw' }}>
-        {!employees ? <Loading /> :
-          <List
-            count={employees.length}
-            showing={4}
-            renderItem={renderItem}
+    !session ? <></> :
+    <>
+      <HeaderBar/>
+      <div className={styles.userContainer}>
+        <div style={{ width: '90%' }}>
+          <Header
+            title="Consultas disponíveis"
+            actions={[
+              <div style={{ width: '30vw' }} key="options">
+                <SelectInput
+                  label="Filtrar"
+                  defaultValue={0}
+                  onChange={e => setFilterRole(e.target.value)}
+                >
+                  {rolesOptions && [...rolesOptions, { id: 0, name: 'Todos' }]
+                    .map(role => (
+                      <SelectItem key={role.id} value={role.id}>{role.name}</SelectItem>
+                    ))}
+                </SelectInput>
+              </div>
+            ]}
           />
-        }
+        </div>
+
+        <div style={{ width: '90vw' }}>
+          {!employees ? <Loading /> :
+            <List
+              count={employees.length}
+              showing={4}
+              renderItem={renderItem}
+            />
+          }
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

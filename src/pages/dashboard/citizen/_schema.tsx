@@ -2,7 +2,7 @@ import Icon from '@mui/material/Icon'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import dayjs from 'dayjs'
-import { AppointmentService } from '../../services'
+import { AppointmentService } from '../../../services'
 
 interface ButtonProps {
   employeeId: number

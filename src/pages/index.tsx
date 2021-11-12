@@ -1,49 +1,20 @@
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
-import * as yup from 'yup'
 import { signIn } from 'next-auth/client'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
+import { userTypes } from './_schema'
 import logo from '../../public/logo.png'
 import Button from '../components/Button'
 import TextInput from '../components/Inputs/TextInput'
 import style from '../styles/Login.module.scss'
 import { Tab, Tabs } from '../components/Tabs'
 import Loading from '../components/Loading'
-import { toast } from 'react-toastify'
-
-const userTypes = [
-  {
-    label: 'Cidadão',
-    key: 'Cartão do SUS',
-    placeholder: 'Insira o número do cartão do SUS',
-    mask: '999 9999 9999 9999',
-    validationSchema: yup.object().shape({
-      key: yup.string()
-        .required('Obrigatório')
-        .min(15, "Inválido"),
-      password: yup.string()
-        .required('Obrigatório'),
-    }),
-  },
-  {
-    label: 'Unidade',
-    key: 'CNES',
-    placeholder: 'Insira o número do CNES',
-    mask: '9999999',
-    validationSchema: yup.object().shape({
-      key: yup.string()
-        .required('Obrigatório')
-        .min(7, "Inválido"),
-      password: yup.string()
-        .required('Obrigatório'),
-    }),
-  },
-]
 
 export default function Login() {
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState(0)
   const [loading, setLoading] = useState(false)
   const { handleSubmit, control, formState: { errors } } = useForm<any>({
     resolver: yupResolver(userTypes[tab].validationSchema)
@@ -67,7 +38,7 @@ export default function Login() {
       {
         key: values.key.replace(/( )+/g, ""),
         password: values.password,
-        callbackUrl: '/dashboard'
+        callbackUrl: `/dashboard/${userTypes[tab].type}`
       }
     )
   }
