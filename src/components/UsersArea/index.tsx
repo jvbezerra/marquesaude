@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/client'
 import useSWR from 'swr'
 import dynamic from 'next/dynamic'
 
-import List from '../List'
+import { Virtuoso as List } from 'react-virtuoso'
 import ListItem from '../ListItem'
 import Header from '../PageHeader'
 import { UserService } from '../../services'
@@ -19,63 +19,60 @@ const UserArea: React.FC = () => {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<Citizen | null>(null)
 
-  const renderItem = ({ index, style }: any) => {
-    const item: Citizen = users![index]
-    
-    return (
-      <ListItem
-        title={item.name}
-        style={style}
-        description={item.street}
-        actions={[
-          <IconButton
-            key="view"
-            aria-label="Visualizar"
-            onClick={async () => {
-              setSelectedUser(item)
-              setIsUserModalOpen(true)
-            }}
-          >
-            <Icon>visibility</Icon>
-          </IconButton>,
-          <IconButton
-            key="delete"
-            aria-label="Apagar"
-            onClick={async () => {
-              await UserService.exclude(item.id)
-              mutate()
-            }}
-          >
-            <Icon>delete_outline</Icon>
-          </IconButton>,
-        ]}
-      />
-    )
-  }
+  const UserItem: React.FC<{ item: Citizen }> = ({ item }) => (
+    <ListItem
+      title={item.name}
+      description={item.street}
+      actions={[
+        <IconButton
+          key="view"
+          aria-label="Visualizar"
+          onClick={async () => {
+            setSelectedUser(item)
+            setIsUserModalOpen(true)
+          }}
+        >
+          <Icon>visibility</Icon>
+        </IconButton>,
+        <IconButton
+          key="delete"
+          aria-label="Apagar"
+          onClick={async () => {
+            await UserService.exclude(item.id)
+            mutate()
+          }}
+        >
+          <Icon>delete_outline</Icon>
+        </IconButton>,
+      ]}
+    />
+  )
 
   return (
     <>
-      <Header
-        title="Usuários"
-        actions={[
-          <IconButton
-            key="add"
-            aria-label="Adicionar"
-            onClick={async () => {
-              setSelectedUser(null)
-              setIsUserModalOpen(true)
-            }}
-          >
-            <Icon>add_circle_outline</Icon>
-          </IconButton>,
-        ]}
-      />
-
       {!users ? <Loading /> :
         <List
-          count={users.length}
-          showing={8}
-          renderItem={renderItem}
+          data={users}
+          itemContent={(_, user) => <UserItem item={user}/>}
+          components={{
+            Header: () => (
+              <Header
+                title="Usuários"
+                actions={[
+                  <IconButton
+                    key="add"
+                    aria-label="Adicionar"
+                    onClick={async () => {
+                      setSelectedUser(null)
+                      setIsUserModalOpen(true)
+                    }}
+                  >
+                    <Icon>add_circle_outline</Icon>
+                  </IconButton>,
+                ]}
+              />
+            )
+          }}
         />
       }
 

@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/client'
 import useSWR from 'swr'
 import dynamic from 'next/dynamic'
 
-import List from '../List'
+import { Virtuoso as List } from 'react-virtuoso'
 import Header from '../PageHeader'
 const EmployeeModal = dynamic(() => import('../Modals/EmployeeModal'), { ssr: false })
 import { EmployeeService } from '../../services'
@@ -21,67 +21,66 @@ const EmployeeArea: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null)
 
-  const renderItem = ({ index, style }: any) => {
-    const item: Employee = employees![index]
-    return (
-      <EmployeeCard employee={item}>
-        <CardActions>
-          <IconButton
-            key="view"
-            aria-label="Visualizar"
-            onClick={async () => {
-              setSelectedEmployee(item)
-              setIsModalOpen(true)
-            }}
-          >
-            <Icon>visibility</Icon>
-          </IconButton>
-          <IconButton
-            key="delete"
-            aria-label="Apagar"
-            onClick={async () => {
-              await EmployeeService.exclude(item.id)
-              mutate()
-            }}
-          >
-            <Icon>delete_outline</Icon>
-          </IconButton>
-          <Switch
-            checked={item.available}
-            onChange={async ({ target }) => {
-              await EmployeeService.edit(item.id, { available: target.checked })
-              mutate()
-            }}
-            inputProps={{ 'aria-label': 'controlled' }}
-          />
-        </CardActions>
-      </EmployeeCard>
-    )
-  }
+  const EmployeeItem: React.FC<{ item: Employee }> = ({ item }) => (
+    <EmployeeCard employee={item}>
+      <CardActions>
+        <IconButton
+          key="view"
+          aria-label="Visualizar"
+          onClick={async () => {
+            setSelectedEmployee(item)
+            setIsModalOpen(true)
+          }}
+        >
+          <Icon>visibility</Icon>
+        </IconButton>
+        <IconButton
+          key="delete"
+          aria-label="Apagar"
+          onClick={async () => {
+            await EmployeeService.exclude(item.id)
+            mutate()
+          }}
+        >
+          <Icon>delete_outline</Icon>
+        </IconButton>
+        <Switch
+          checked={item.available}
+          onChange={async ({ target }) => {
+            await EmployeeService.edit(item.id, { available: target.checked })
+            mutate()
+          }}
+          inputProps={{ 'aria-label': 'controlled' }}
+        />
+      </CardActions>
+    </EmployeeCard>
+  )
 
   return (
     <>
-      <Header
-        title="Profissionais"
-        actions={[
-          <IconButton
-            key="add"
-            aria-label="Adicionar"
-            onClick={async () => {
-              setSelectedEmployee(null)
-              setIsModalOpen(true)
-            }}
-          >
-            <Icon>add_circle_outline</Icon>
-          </IconButton>
-        ]}
-      />
-
       {!employees ? <Loading /> :
         <List
-          count={employees.length}
-          showing={8}
-          renderItem={renderItem}
+          data={employees}
+          itemContent={(_, employee) => <EmployeeItem item={employee}/>}
+          components={{
+            Header: () => (
+              <Header
+                title="Profissionais"
+                actions={[
+                  <IconButton
+                    key="add"
+                    aria-label="Adicionar"
+                    onClick={async () => {
+                      setSelectedEmployee(null)
+                      setIsModalOpen(true)
+                    }}
+                  >
+                    <Icon>add_circle_outline</Icon>
+                  </IconButton>
+                ]}
+              />
+            )
+          }}
         />
       }
 
