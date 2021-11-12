@@ -1,5 +1,5 @@
 import CircularProgress, { CircularProgressProps } from "@mui/material/CircularProgress"
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const LoaderContainer = styled.div`
   display: flex;

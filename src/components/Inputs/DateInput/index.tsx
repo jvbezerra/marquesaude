@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import Field, { InputProps, inputStyle } from '../Field'
 import MuiDatePicker, { MobileDatePickerProps as DatePickerProps } from '@mui/lab/MobileDatePicker'
 import brLocale from 'dayjs/locale/pt-br'

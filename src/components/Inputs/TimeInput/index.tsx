@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import Field, { inputStyle } from '../Field'
 import MuiTimePicker, { MobileTimePickerProps as TimePickerProps } from '@mui/lab/MobileTimePicker'
 import brLocale from 'dayjs/locale/pt-br'

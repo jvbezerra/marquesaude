@@ -1,6 +1,6 @@
 import { Controller } from "react-hook-form"
 import InputMask, { Props as MaskProps } from "react-input-mask"
-import styled from "styled-components"
+import styled from "@emotion/styled"
 import Field, {InputProps, inputStyle} from "../Field"
 
 const StyledInput = styled(InputMask)<InputProps>`

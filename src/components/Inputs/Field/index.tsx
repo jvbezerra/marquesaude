@@ -1,6 +1,6 @@
 import Typography from '@mui/material/Typography'
 import { Control } from 'react-hook-form'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 interface FieldProps {
   label?: string

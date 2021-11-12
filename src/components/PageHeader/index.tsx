@@ -1,6 +1,6 @@
 import { Divider } from '@mui/material'
 import Typography from '@mui/material/Typography'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 interface Props {
   title: string,

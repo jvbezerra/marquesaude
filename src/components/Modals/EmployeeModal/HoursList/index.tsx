@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import List from '../../../List'
 import ListItem from '../../../ListItem'

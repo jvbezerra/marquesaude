@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.5.0",
+    "@emotion/styled": "^11.3.0",
     "@hookform/resolvers": "^2.8.0",
-    "@mui/lab": "^5.0.0-alpha.48",
-    "@mui/material": "^5.0.1",
+    "@mui/lab": "^5.0.0-alpha.54",
+    "@mui/material": "^5.1.0",
     "axios": "^0.21.1",
     "dayjs": "^1.10.7",
     "next": "^11.1.1",
@@ -24,18 +26,12 @@
     "react-toastify": "^7.0.4",
     "react-virtuoso": "^2.2.7",
     "sharp": "^0.29.1",
-    "styled-components": "^5.3.0",
     "swr": "^1.0.0",
     "yup": "^0.32.9"
-  },
-  "resolutions": {
-    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
   },
   "devDependencies": {
     "@types/react": "17.0.14",
     "@types/react-input-mask": "^3.0.1",
-    "@types/styled-components": "^5.1.12",
-    "babel-plugin-styled-components": "^1.13.2",
     "eslint": "7.31.0",
     "eslint-config-next": "11.0.1",
     "sass": "^1.42.1",
