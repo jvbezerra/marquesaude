@@ -7,7 +7,7 @@ import SelectItem from '@mui/material/MenuItem'
 import HeaderBar from '../../../components/HeaderBar'
 import SelectInput from '../../../components/Inputs/SelectInput'
 import Header from '../../../components/PageHeader'
-import List from '../../../components/List'
+import { Virtuoso as List } from 'react-virtuoso'
 import styles from '../../../styles/Dashboard.module.scss'
 import EmployeeCard from '../../../components/EmployeeArea/EmployeeCard'
 import { appointmentSchema } from './_schema'
@@ -26,7 +26,7 @@ const CitizenDashboard: React.FC = () => {
            dateA.getDate() === dateB.getDate()
   }
 
-  const renderItem = ({ index, style }: any) => {
+  const EmployeeItem: React.FC<{ index: number }> = ({ index }) => {
     const item: Employee = employees![index]
 
     const employeeAppointment: any = item.Appointments?.filter(appointment => (
@@ -75,15 +75,12 @@ const CitizenDashboard: React.FC = () => {
           />
         </div>
 
-        <div style={{ width: '90vw' }}>
-          {!employees ? <Loading /> :
-            <List
-              count={employees.length}
-              showing={4}
-              renderItem={renderItem}
-            />
-          }
-        </div>
+        {!employees ? <Loading /> :
+          <List
+            data={employees}
+            itemContent={idx => <EmployeeItem index={idx}/>}
+          />
+        }
       </div>
     </>
   )
