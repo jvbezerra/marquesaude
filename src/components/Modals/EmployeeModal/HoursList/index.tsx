@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 
-import List from '../../../../../components/List'
-import ListItem from '../../../../../components/ListItem'
+import List from '../../../List'
+import ListItem from '../../../ListItem'
 import Icon from '@mui/material/Icon'
 import IconButton from '@mui/material/IconButton'
-import TimeInput from '../../../../../components/Inputs/TimeInput'
+import TimeInput from '../../../Inputs/TimeInput'
 import dayjs from 'dayjs'
 
 interface Props {

@@ -7,12 +7,12 @@ import { useSession } from 'next-auth/client'
 import useSWR from 'swr'
 import dynamic from 'next/dynamic'
 
-import List from '../../../components/List'
-import Header from '../../../components/PageHeader'
-const EmployeeModal = dynamic(() => import('./EmployeeModal'), { ssr: false })
-import { EmployeeService } from '../../../services'
+import List from '../List'
+import Header from '../PageHeader'
+const EmployeeModal = dynamic(() => import('../Modals/EmployeeModal'), { ssr: false })
+import { EmployeeService } from '../../services'
 import EmployeeCard from './EmployeeCard'
-import Loading from '../../../components/Loading'
+import Loading from '../Loading'
 
 const EmployeeArea: React.FC = () => {
   const [ session ] = useSession()

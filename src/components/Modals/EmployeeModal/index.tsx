@@ -2,15 +2,15 @@ import useSWR, { useSWRConfig } from 'swr'
 import { useSession } from 'next-auth/client'
 import * as yup from 'yup'
 
-import FormModal from '../../../../components/FormModal'
-import TextInput from '../../../../components/Inputs/TextInput'
-import { EmployeeService } from '../../../../services'
+import FormModal from '../../FormModal'
+import TextInput from '../../Inputs/TextInput'
+import { EmployeeService } from '../../../services'
 import RequestList from './RequestList'
 
 import Grid from '@mui/material/Grid'
-import SelectInput from '../../../../components/Inputs/SelectInput'
+import SelectInput from '../../Inputs/SelectInput'
 import SelectItem from '@mui/material/MenuItem'
-import Accordion from '../../../../components/Accordion'
+import Accordion from '../../Accordion'
 
 interface Props {
   employee: Employee | null

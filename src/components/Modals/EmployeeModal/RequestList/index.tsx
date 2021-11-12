@@ -2,10 +2,10 @@ import { Divider, Icon, IconButton, Typography } from '@mui/material'
 import dayjs from 'dayjs'
 import { useState, useEffect } from 'react'
 
-import TimeInput from '../../../../../components/Inputs/TimeInput'
-import List from '../../../../../components/List'
-import ListItem from '../../../../../components/ListItem'
-import { AppointmentService } from '../../../../../services'
+import TimeInput from '../../../Inputs/TimeInput'
+import List from '../../../List'
+import ListItem from '../../../ListItem'
+import { AppointmentService } from '../../../../services'
 
 interface ListProps {
   appointments: Appointment[]

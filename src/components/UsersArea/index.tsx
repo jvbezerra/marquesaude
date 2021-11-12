@@ -5,12 +5,12 @@ import { useSession } from 'next-auth/client'
 import useSWR from 'swr'
 import dynamic from 'next/dynamic'
 
-import List from '../../../components/List'
-import ListItem from '../../../components/ListItem'
-import Header from '../../../components/PageHeader'
-import { UserService } from '../../../services'
-import Loading from '../../../components/Loading'
-const UserModal = dynamic(() => import('./UserModal'), { ssr: false })
+import List from '../List'
+import ListItem from '../ListItem'
+import Header from '../PageHeader'
+import { UserService } from '../../services'
+import Loading from '../Loading'
+const UserModal = dynamic(() => import('../Modals/UserModal'), { ssr: false })
 
 const UserArea: React.FC = () => {
   const [ session ] = useSession()

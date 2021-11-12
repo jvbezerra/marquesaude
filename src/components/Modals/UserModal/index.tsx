@@ -3,17 +3,16 @@ import * as yup from 'yup'
 import { useSWRConfig } from 'swr'
 import { useSession } from 'next-auth/client'
 
-import FormModal from '../../../../components/FormModal'
-import DateInput from '../../../../components/Inputs/DateInput'
-import TextInput from '../../../../components/Inputs/TextInput'
-import { UserService } from '../../../../services'
+import FormModal from '../../FormModal'
+import DateInput from '../../Inputs/DateInput'
+import TextInput from '../../Inputs/TextInput'
+import { UserService } from '../../../services'
 
 interface Props {
   user: Citizen | null
   isOpen: boolean
   onClose: Function
 }
-
 
 const validationSchema = yup.object().shape({
   name: yup.string()
