@@ -1,4 +1,3 @@
-import { Divider, Icon, IconButton, Typography } from '@mui/material'
 import dayjs from 'dayjs'
 import { useState, useEffect } from 'react'
 
@@ -28,6 +27,7 @@ const RequestItem: React.FC<ItemProps> = ({ appointment }) => {
         title={`Consulta N°${appointment.id}`}
         actions={[
           <TimeInput
+            key={scheduledHour}
             label="Marcar horário"
             value={scheduledHour}
             onChange={(newValue: any) => {

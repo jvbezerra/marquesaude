@@ -84,7 +84,7 @@ const EmployeeModal: React.FC<Props> = (props) => {
                 control={control}
               >
                 {rolesOptions?.map(role => (
-                  <SelectItem value={role.id}>{role.name}</SelectItem>
+                  <SelectItem key={role.id} value={role.id}>{role.name}</SelectItem>
                 ))}
               </SelectInput>
             </Grid>

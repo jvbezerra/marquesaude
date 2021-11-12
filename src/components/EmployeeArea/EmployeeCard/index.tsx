@@ -18,7 +18,7 @@ const EmployeeCard: React.FC<Props> = ({ employee, children }) => (
         </Icon>
       }
       title={employee.name}
-      subheader={`${employee.Appointments?.length ?? 0} / ${employee.vacancies}`}
+      subheader={`${employee.Appointments?.length ?? 0} / `}
     />
     {children}
   </Card>
