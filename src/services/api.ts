@@ -1,8 +1,9 @@
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 type APIUrl = {
   [key: string]: string
-};
+}
 
 const urls: APIUrl = {
   production: 'https://marquesaude.herokuapp.com',
@@ -12,6 +13,9 @@ const urls: APIUrl = {
 const api = axios.create({
   baseURL: urls[process.env.NODE_ENV]
 })
+
+api.interceptors.request.use(() => {}, error => toast.error(error))
+api.interceptors.response.use(() => {}, error => toast.error(error))
 
 export const GeneralService = <T>(url: string) => {
   const create = async (data: T): Promise<T> => {
