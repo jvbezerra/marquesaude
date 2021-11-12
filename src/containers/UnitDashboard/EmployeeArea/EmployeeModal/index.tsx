@@ -5,11 +5,12 @@ import * as yup from 'yup'
 import FormModal from '../../../../components/FormModal'
 import TextInput from '../../../../components/Inputs/TextInput'
 import { EmployeeService } from '../../../../services'
-import RequestList from '../RequestList'
+import RequestList from './RequestList'
 
 import Grid from '@mui/material/Grid'
 import SelectInput from '../../../../components/Inputs/SelectInput'
 import SelectItem from '@mui/material/MenuItem'
+import Accordion from '../../../../components/Accordion'
 
 interface Props {
   employee: Employee | null
@@ -25,8 +26,6 @@ const validationSchema = yup.object().shape({
   professional_record: yup.string(),
   cpf: yup.string()
     .min(14, "Inválido"),
-  vacancies: yup.number()
-    .required(),
 })
 
 const EmployeeModal: React.FC<Props> = (props) => {
@@ -90,14 +89,6 @@ const EmployeeModal: React.FC<Props> = (props) => {
               </SelectInput>
             </Grid>
           </Grid>
-          <TextInput
-            label="CPF"
-            name="cpf"
-            mask="999.999.999-99"
-            placeholder="123.456.789-10"
-            error={errors.cpf?.message}
-            control={control}
-          />
           <Grid container spacing={1}>
             <Grid item xs={6}>
               <TextInput
@@ -110,18 +101,23 @@ const EmployeeModal: React.FC<Props> = (props) => {
             </Grid>
             <Grid item xs={6}>
               <TextInput
-                label="Vagas/dia"
-                name="vacancies"
-                type="number"
-                error={errors.vacancies?.message}
+                label="CPF"
+                name="cpf"
+                mask="999.999.999-99"
+                placeholder="123.456.789-10"
+                error={errors.cpf?.message}
                 control={control}
               />
             </Grid>
           </Grid>
 
-          {employee?.Appointments && employee?.Appointments.length > 0
-            ? <RequestList appointments={employee?.Appointments}/>
-            : <></>
+          <Accordion title="Horários disponíveis">
+          </Accordion>
+          
+          {employee?.Appointments && employee?.Appointments.length > 0 &&
+            <Accordion title="Solicitações">
+              <RequestList appointments={employee?.Appointments}/>
+            </Accordion>
           }
         </>
       )}

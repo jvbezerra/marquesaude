@@ -2,10 +2,10 @@ import { Divider, Icon, IconButton, Typography } from '@mui/material'
 import dayjs from 'dayjs'
 import { useState, useEffect } from 'react'
 
-import TimeInput from '../../../../components/Inputs/TimeInput'
-import List from '../../../../components/List'
-import ListItem from '../../../../components/ListItem'
-import { AppointmentService } from '../../../../services'
+import TimeInput from '../../../../../components/Inputs/TimeInput'
+import List from '../../../../../components/List'
+import ListItem from '../../../../../components/ListItem'
+import { AppointmentService } from '../../../../../services'
 
 interface ListProps {
   appointments: Appointment[]
@@ -31,7 +31,7 @@ const RequestItem: React.FC<ItemProps> = ({ appointment }) => {
             label="Marcar horário"
             value={scheduledHour}
             onChange={(newValue: any) => {
-              setScheduledHour(newValue);
+              setScheduledHour(newValue)
             }}
             onAccept={async () => {
               await AppointmentService.edit(appointment.id!, {
@@ -49,17 +49,14 @@ const RequestItem: React.FC<ItemProps> = ({ appointment }) => {
 
 const RequestList: React.FC<ListProps> = ({ appointments }) => {
   return (
-    <>
-      <Typography>Solicitações</Typography>
-      <List
-        count={appointments.length}
-        showing={4}
-        renderItem={({ index, style }: any) => {
-          const item: Appointment = appointments[index]
-          return <RequestItem appointment={item}/>
-        }}
-      />
-    </>
+    <List
+      count={appointments.length}
+      showing={4}
+      renderItem={({ index, style }: any) => {
+        const item: Appointment = appointments[index]
+        return <RequestItem appointment={item}/>
+      }}
+    />
   )
 }
 

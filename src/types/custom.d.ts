@@ -32,7 +32,6 @@ declare interface Employee {
   cpf: string,
   roleId?: number,
   professional_record?: string,
-  vacancies: number,
   name: string,
   available: boolean,
   unitId?: number,

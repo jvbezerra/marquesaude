@@ -7,8 +7,9 @@ import TimeAdapter from '@mui/lab/AdapterDayjs'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 
 interface Props extends TimePickerProps {
-  label: string,
+  label?: string,
   error?: string | any,
+  onChange: any,
 }
 
 const TimePicker = styled(MuiTimePicker)<Props>`
