@@ -1,31 +1,40 @@
 import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
-import { authenticate } from '../../../services'
+import api from '../../../services/api'
+
+const credentialHandlers = {
+  'unit': data => {
+    const { type, ...unit} = data
+    return {
+      status: 'success', 
+      unit,
+      type,
+    }
+  },
+  'user': data => {
+    const { type, Unit: unit, ...user} = data
+    return {
+      status: 'success', 
+      user,
+      unit,
+      type,
+    }
+  },
+}
 
 export default NextAuth({
   providers: [
     Providers.Credentials({
       async authorize(credentials) {
-        const { user: data } = await authenticate(credentials.key, credentials.password)
-        if (data) {
-          if (data.type == 'unit') {
-            const { type, ... unit} = data
-            return {
-              status: 'success', 
-              unit,
-              type,
-            }
+        const { data } = await api.get('/auth/signin', {
+          auth: {
+            username: credentials.key,
+            password: credentials.password,
           }
+        })
 
-          if (data.type == 'user') {
-            const { type, Unit: unit, ...user} = data
-            return {
-              status: 'success', 
-              user,
-              unit,
-              type,
-            }
-          }
+        if (data) {
+          return credentialHandlers[data.user.type](data.user)
         } else {
           return null
         }
@@ -48,8 +57,8 @@ export default NextAuth({
   
     async session(session, token) {
       session[token.data.type] = token.data[token.data.type]
-      session.type = token.data.type
       if (session.type == 'user') session.unit = token.data.unit
+      session.type = token.data.type
       
       return session
     },
