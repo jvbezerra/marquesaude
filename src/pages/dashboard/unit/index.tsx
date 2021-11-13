@@ -1,8 +1,8 @@
 import { useSession } from 'next-auth/client'
 
 import styles from '../../../styles/Dashboard.module.scss'
-import EmployeeArea from './_EmployeeArea'
-import UserArea from './_UsersArea'
+import EmployeeArea from '../../../components/EmployeeArea'
+import UserArea from '../../../components/UsersArea'
 import HeaderBar from '../../../components/HeaderBar'
 
 const UnitDashboard: React.FC = () => {

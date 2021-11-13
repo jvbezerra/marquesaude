@@ -6,11 +6,11 @@ import useSWR from 'swr'
 import dynamic from 'next/dynamic'
 
 import { Virtuoso as List } from 'react-virtuoso'
-import ListItem from '../../../../components/ListItem'
-import Header from '../../../../components/PageHeader'
-import { UserService } from '../../../../services'
-import Loading from '../../../../components/Loading'
-const UserModal = dynamic(() => import('../../../../components/Modals/UserModal'), { ssr: false })
+import ListItem from '../ListItem'
+import Header from '../PageHeader'
+import { UserService } from '../../services'
+import Loading from '../Loading'
+const UserModal = dynamic(() => import('../Modals/UserModal'), { ssr: false })
 
 const UserArea: React.FC = () => {
   const [ session ] = useSession()
