@@ -35,7 +35,8 @@ declare interface Employee {
   name: string,
   available: boolean,
   unitId?: number,
-  Appointments?: Appointment[]
+  appointments?: Appointment[],
+  hours?: Hour[]
 }
 
 declare interface EmployeeRole {
@@ -50,4 +51,10 @@ declare interface Appointment {
   date?: string,
   hour?: string,
   status?: string,
+}
+
+declare interface Hour {
+  id?: number,
+  employeeId?: number,
+  hour: string,
 }

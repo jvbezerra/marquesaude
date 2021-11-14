@@ -1,40 +1,51 @@
 import { useState } from 'react'
-import styled from '@emotion/styled'
-
 import { Virtuoso as List } from 'react-virtuoso'
-import ListItem from '../../../ListItem'
+
 import Icon from '@mui/material/Icon'
 import IconButton from '@mui/material/IconButton'
-import TimeInput from '../../../Inputs/TimeInput'
-import dayjs from 'dayjs'
+import Grid from '@mui/material/Grid'
+import Input from '../../../Inputs/BaseField'
+import ListItem from '../../../ListItem'
+import Button from '../../../Button'
 
 interface Props {
-  employeeHours: string[]
+  employeeHours: Hour[],
+  handleSubmit: (hours: Hour[]) => void,
 }
 
-const HourInput = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-`
-
-const HoursList: React.FC<Props> = ({ employeeHours }) => {
-  const [hours, setHours] = useState<string[]>(employeeHours)
-  const [newHour, setNewHour] = useState<string>()
-
-  const handleHourChange = (newValue: Date | null) => {
-    setNewHour(dayjs(newValue).format('HH:mm'))
-  }
+const HoursList: React.FC<Props> = ({ employeeHours = [], handleSubmit }) => {
+  const [newHour, setNewHour] = useState<string>('')
 
   return (
     <>
       <List
-        data={hours}
-        itemContent={(_, hour) => (
+        data={employeeHours}
+        components={{
+          Header: () => (
+            <Grid container spacing={2} alignItems="center">
+              <Grid item xs={6}>
+                <Input
+                  label="Novo horário"
+                  mask="99:99"
+                  value={newHour}
+                  onChange={e => setNewHour(e.currentTarget.value)}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <Button
+                  type="button"
+                  style={{ height: 'unset' }}
+                  onClick={() => handleSubmit([{ hour: newHour }, ...employeeHours])}
+                >
+                  Adicionar
+                </Button>
+              </Grid>
+            </Grid>
+          )
+        }}
+        itemContent={(_, item) => (
           <ListItem
-            title={hour}
+            title={item.hour}
             actions={[
               <IconButton
                 key="delete"
@@ -47,13 +58,6 @@ const HoursList: React.FC<Props> = ({ employeeHours }) => {
           />
         )}
       />
-
-      <HourInput>
-        <TimeInput
-          value={newHour}
-          onChange={handleHourChange}
-        />
-      </HourInput>
     </>
   )
 }

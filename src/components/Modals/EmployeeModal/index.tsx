@@ -5,12 +5,12 @@ import * as yup from 'yup'
 import FormModal from '../../FormModal'
 import TextInput from '../../Inputs/TextInput'
 import { EmployeeService } from '../../../services'
-import RequestList from './RequestList'
 
 import Grid from '@mui/material/Grid'
 import SelectInput from '../../Inputs/SelectInput'
 import SelectItem from '@mui/material/MenuItem'
 import Accordion from '../../Accordion'
+import HoursList from './HoursList'
 
 interface Props {
   employee: Employee | null
@@ -65,7 +65,7 @@ const EmployeeModal: React.FC<Props> = (props) => {
       validationSchema={validationSchema}
       defaultValues={employee}
     >
-      {({ formState: { errors }, control }) => (
+      {({ formState: { errors }, control, setValue, watch }) => (
         <>
           <Grid container spacing={1}>
             <Grid item xs={6}>
@@ -112,13 +112,11 @@ const EmployeeModal: React.FC<Props> = (props) => {
           </Grid>
 
           <Accordion title="Horários disponíveis">
+            <HoursList
+              employeeHours={watch('hours')}
+              handleSubmit={hours => setValue('hours', hours)}
+            />
           </Accordion>
-          
-          {employee?.Appointments && employee?.Appointments.length > 0 &&
-            <Accordion title="Solicitações">
-              <RequestList appointments={employee?.Appointments}/>
-            </Accordion>
-          }
         </>
       )}
     </FormModal>

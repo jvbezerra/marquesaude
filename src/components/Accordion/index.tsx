@@ -17,11 +17,11 @@ const CustomAccordion = styled((props: AccordionProps) => (
 
 const Accordion: React.FC<Props> = (props) => {
   return (
-    <CustomAccordion disableGutters>
+    <CustomAccordion disableGutters TransitionProps={{ unmountOnExit: true }}>
       <AccordionSummary expandIcon={<Icon>expand_more</Icon>}>
         <Typography>{props.title}</Typography>
       </AccordionSummary>
-      <AccordionDetails>
+      <AccordionDetails sx={{ height: '200px' }}>
         {props.children}
       </AccordionDetails>
     </CustomAccordion>

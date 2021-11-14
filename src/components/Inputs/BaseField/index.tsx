@@ -1,10 +1,10 @@
 import React from 'react'
 import Typography from '@mui/material/Typography'
-import { InputBaseComponentProps } from '@mui/material'
 import InputMask from 'react-input-mask'
 import styled from '@emotion/styled'
 
-export interface FieldProps extends InputBaseComponentProps {
+type InputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'capture'>
+export interface FieldProps extends InputProps {
   mask?: string
   label?: string
   error?: string[] | any
