@@ -15,7 +15,7 @@ declare interface Unit {
 declare interface Citizen {
   id: number,
   susCard: string,
-  cpf?: string,
+  cpf: string,
   phonenumber: string,
   password?: string,
   name: string,

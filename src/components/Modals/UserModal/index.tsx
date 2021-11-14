@@ -4,7 +4,6 @@ import { useSWRConfig } from 'swr'
 import { useSession } from 'next-auth/client'
 
 import FormModal from '../../FormModal'
-import DateInput from '../../Inputs/DateInput'
 import TextInput from '../../Inputs/TextInput'
 import { UserService } from '../../../services'
 
@@ -21,10 +20,11 @@ const validationSchema = yup.object().shape({
     .required("Obrigatório")
     .min(15, "Inválido"),
   cpf: yup.string()
-    .min(14, "Inválido"),
+    .required()
+    .min(11, "Inválido"),
   phonenumber: yup.string()
     .required()
-    .min(15, "Inválido"),
+    .min(11, "Inválido"),
   birthdate: yup.date()
     .required(),
   password: yup.string(),
@@ -42,13 +42,13 @@ const UserModal: React.FC<Props> = (props) => {
   const [ session ] = useSession()
 
   const addUser = async (values: Citizen) => {
-    const { phonenumber, cpf, susCard } = values
+    const { phonenumber, cpf, susCard, ...data } = values
     mutate(`/users/unit/${session!.unit!.id}`, async (users: Citizen[]) => {
       const newUser = await UserService.create({
-        ...values,
+        ...data,
         unitId: session!.unit!.id,
         phonenumber: phonenumber.replace(/[^0-9]/g, ""),
-        cpf: cpf?.replace(/[^0-9]/g, ""),
+        cpf: cpf.replace(/[^0-9]/g, ""),
         susCard: susCard.replace(/( )+/g, ""),
       })
     
@@ -112,10 +112,13 @@ const UserModal: React.FC<Props> = (props) => {
               />
             </Grid>
             <Grid item xs={6}>
-              <DateInput
+              <TextInput
                 label="Data de nascimento"
                 name="birthdate"
                 control={control}
+                mask="99/99/9999"
+                placeholder="12/12/2012"
+                error={errors.birthdate?.message}
               />
             </Grid>
           </Grid>
