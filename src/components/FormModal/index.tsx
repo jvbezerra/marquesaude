@@ -41,7 +41,7 @@ const FormModal: React.FC<Props> = (props) => {
   }
 
   return (
-    <Dialog keepMounted open={isOpen} onClose={() => onClose()}>
+    <Dialog TransitionProps={{ unmountOnExit: true }} open={isOpen} onClose={() => onClose()}>
       <DialogTitle>{props.title}</DialogTitle>
       <DialogContent>
         <form onSubmit={formProps.handleSubmit(switchSubmission)}>

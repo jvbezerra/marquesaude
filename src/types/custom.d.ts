@@ -47,8 +47,10 @@ declare interface EmployeeRole {
 declare interface Appointment {
   id?: number,
   userId: number,
+  user?: Citizen,
   employeeId: number,
-  date?: string | Date,
+  employee?: Employee
+  date: string | Date,
 }
 
 declare interface Hour {
