@@ -1,54 +1,98 @@
 import useSWR from 'swr'
-import { useState } from 'react'
+import dayjs from 'dayjs'
+import isToday from 'dayjs/plugin/isToday'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+import { useEffect } from 'react'
 import { useSession } from 'next-auth/client'
-import CardActions from '@mui/material/CardActions'
-
-import SelectItem from '@mui/material/MenuItem'
-import HeaderBar from '../../../components/HeaderBar'
-import SelectInput from '../../../components/Inputs/SelectInput'
-import Header from '../../../components/PageHeader'
 import { Virtuoso as List } from 'react-virtuoso'
+
+import CardActions from '@mui/material/CardActions'
+import Typography from '@mui/material/Typography'
+import Stack from '@mui/material/Stack'
+import Chip from '@mui/material/Chip'
+
+import HeaderBar from '../../../components/HeaderBar'
+import Header from '../../../components/PageHeader'
 import styles from '../../../styles/Dashboard.module.scss'
 import EmployeeCard from '../../../components/EmployeeArea/EmployeeCard'
-import { appointmentSchema } from './_schema'
-import dayjs from 'dayjs'
 import Loading from '../../../components/Loading'
+import { AppointmentService } from '../../../services'
+
+interface Props {
+  unitId: number,
+  userId: number
+}
+
+const CitizenArea: React.FC<Props> = ({ unitId, userId }) => {
+  dayjs.extend(isToday)
+  dayjs.extend(customParseFormat)
+
+  const { data: employees } = useSWR<Employee[]>(`/employees/unit/${unitId}`)
+  const { data, mutate } = useSWR<{ appointments: Appointment[] }>(`/users/one/${userId}/bookings`)
+
+  const scheduleAppointment = async (hour: string, employeeId: number) => {
+    await AppointmentService.create({
+      employeeId,
+      userId,
+      date: dayjs(`${dayjs().format('DD/MM/YYYY')} ${hour}`, 'DD/MM/YYYY HH:mm').toISOString()
+    })
+  
+    mutate()
+  }
+
+  const cancelAppointment = async (appointmentId: number) => {
+    await AppointmentService.exclude(appointmentId)
+    mutate()
+  }
+
+  return (
+    <>
+      {!employees || !data ? <Loading /> :
+        <List
+          data={employees}
+          style={{ width: '90%' }}
+          itemContent={(_, employee) => {
+            let scheduled: Appointment | undefined
+            if (data?.appointments?.length > 0) {
+              scheduled = data?.appointments?.find(appointment => {
+                return dayjs(appointment.date).isToday() && appointment.employeeId === employee.id
+              })
+            }
+
+            return (
+              <EmployeeCard employee={employee} key={employee.id}>
+                <CardActions>
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Typography variant="subtitle2">Horários hoje:</Typography>
+                    {scheduled && (
+                      <Chip
+                        label={`Marcado hoje às ${dayjs(scheduled?.date).format('HH:mm')}`}
+                        color="primary"
+                        onDelete={() => cancelAppointment(scheduled?.id!)}
+                      />
+                    )}
+                    {!scheduled && employee.hours.map((item: Hour) => (
+                      <Chip
+                        label={item.hour}
+                        clickable
+                        onClick={() => scheduleAppointment(item.hour, employee.id)}
+                        color="primary"
+                        variant="outlined" 
+                      />
+                    ))}
+                  </Stack>
+                </CardActions>
+              </EmployeeCard>
+            )
+          }}
+        />
+      }
+    </>
+  )
+}
 
 const CitizenDashboard: React.FC = () => {
   const [ session ] = useSession()
-  const [filterRole, setFilterRole] = useState(0)
-  const { data: employees, mutate } = useSWR<Employee[]>(`/employees/unit/${session?.unit?.id}`)
-  const { data: rolesOptions } = useSWR<EmployeeRole[]>(`/employees/roles`)
-
-  const sameDay = (dateA: Date, dateB: Date): boolean => {
-    return dateA.getFullYear() === dateB.getFullYear() &&
-           dateA.getMonth() === dateB.getMonth() &&
-           dateA.getDate() === dateB.getDate()
-  }
-
-  const EmployeeItem: React.FC<{ index: number }> = ({ index }) => {
-    const item: Employee = employees![index]
-
-    const employeeAppointment: any = item.Appointments?.filter(appointment => (
-      appointment.userId === session!.user!.id
-      && sameDay(dayjs(employeeAppointment?.date!).toDate(), new Date())
-    ))[0]
-
-    const Option = appointmentSchema[employeeAppointment?.status ?? 'available']
-
-    return (
-      <EmployeeCard employee={item} key={index}>
-        <CardActions>
-          <Option
-            employeeId={item.id}
-            scheduledHour={employeeAppointment?.hour}
-            userId={session!.user!.id}
-            mutate={mutate}
-          />
-        </CardActions>
-      </EmployeeCard>
-    )
-  }
 
   return (
     !session ? <></> :
@@ -56,31 +100,12 @@ const CitizenDashboard: React.FC = () => {
       <HeaderBar/>
       <div className={styles.userContainer}>
         <div style={{ width: '90%' }}>
-          <Header
-            title="Consultas disponíveis"
-            actions={[
-              <div style={{ width: '30vw' }} key="options">
-                <SelectInput
-                  label="Filtrar"
-                  defaultValue={0}
-                  onChange={e => setFilterRole(e.target.value)}
-                >
-                  {rolesOptions && [...rolesOptions, { id: 0, name: 'Todos' }]
-                    .map(role => (
-                      <SelectItem key={role.id} value={role.id}>{role.name}</SelectItem>
-                    ))}
-                </SelectInput>
-              </div>
-            ]}
-          />
+          <Header title="Consultas disponíveis" actions={[]} />
         </div>
-
-        {!employees ? <Loading /> :
-          <List
-            data={employees}
-            itemContent={idx => <EmployeeItem index={idx}/>}
-          />
-        }
+        <CitizenArea
+          unitId={session?.unit?.id!}
+          userId={session?.user?.id!}
+        />
       </div>
     </>
   )

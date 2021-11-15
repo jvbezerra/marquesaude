@@ -48,9 +48,7 @@ declare interface Appointment {
   id?: number,
   userId: number,
   employeeId: number,
-  date?: string,
-  hour?: string,
-  status?: string,
+  date?: string | Date,
 }
 
 declare interface Hour {
