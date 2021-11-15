@@ -73,6 +73,7 @@ const CitizenArea: React.FC<Props> = ({ unitId, userId }) => {
                     )}
                     {!scheduled && employee.hours.map((item: Hour) => (
                       <Chip
+                        key={item.id}
                         label={item.hour}
                         clickable
                         onClick={() => scheduleAppointment(item.hour, employee.id)}
