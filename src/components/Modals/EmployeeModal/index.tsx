@@ -23,7 +23,7 @@ const validationSchema = yup.object().shape({
     .required("Obrigatório"),
   roleId: yup.number()
     .required("Obrigatório"),
-  professional_record: yup.string(),
+  professionalRecord: yup.string(),
   cpf: yup.string()
     .min(14, "Inválido"),
 })
@@ -36,8 +36,10 @@ const EmployeeModal: React.FC<Props> = (props) => {
 
   const addEmployee = async (values: Employee) => {
     mutate(`/employees/unit/${session!.unit!.id}`, async (employees: Employee[]) => {
+      const { hours, ...data } = values
       const newEmployee = await EmployeeService.create({
-        ...values,
+        ...data,
+        hours: { create: hours },
         available: false,
         unitId: session!.unit!.id
       })
@@ -93,9 +95,9 @@ const EmployeeModal: React.FC<Props> = (props) => {
             <Grid item xs={6}>
               <TextInput
                 label="Registro em CR"
-                name="professional_record"
+                name="professionalRecord"
                 placeholder="Insira o número de registro"
-                error={errors.professional_record?.message}
+                error={errors.professionalRecord?.message}
                 control={control}
               />
             </Grid>

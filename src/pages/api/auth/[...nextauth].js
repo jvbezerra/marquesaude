@@ -12,7 +12,7 @@ const credentialHandlers = {
     }
   },
   'user': data => {
-    const { type, Unit: unit, ...user} = data
+    const { type, unit, ...user} = data
     return {
       status: 'success', 
       user,
@@ -57,8 +57,8 @@ export default NextAuth({
   
     async session(session, token) {
       session[token.data.type] = token.data[token.data.type]
-      if (session.type == 'user') session.unit = token.data.unit
       session.type = token.data.type
+      if (session.type == 'user') session.unit = token.data.unit
       
       return session
     },

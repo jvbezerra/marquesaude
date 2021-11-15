@@ -31,12 +31,12 @@ declare interface Employee {
   id: number,
   cpf: string,
   roleId?: number,
-  professional_record?: string,
+  professionalRecord?: string,
   name: string,
   available: boolean,
   unitId?: number,
   appointments?: Appointment[],
-  hours?: Hour[]
+  hours?: Hour[] | any
 }
 
 declare interface EmployeeRole {

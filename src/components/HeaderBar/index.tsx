@@ -22,7 +22,7 @@ const HeaderBar = () => {
       <div className="logo">
         <Image src={logo} width={256} height={104} alt="Marque Saúde" placeholder="blur"/>
       </div>
-      <Typography>Unidade {session!.unit!.name}</Typography>
+      <Typography>Unidade {session?.unit?.name}</Typography>
       <div className={style.options}>
         <IconButton
           aria-label="Configurações"
