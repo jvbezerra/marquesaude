@@ -2,7 +2,6 @@ import useSWR from 'swr'
 import dayjs from 'dayjs'
 import isToday from 'dayjs/plugin/isToday'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
-import { useEffect } from 'react'
 import { useSession } from 'next-auth/client'
 import { Virtuoso as List } from 'react-virtuoso'
 

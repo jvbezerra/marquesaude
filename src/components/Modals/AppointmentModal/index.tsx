@@ -8,9 +8,9 @@ import Grid from '@mui/material/Grid'
 import SelectItem from '@mui/material/MenuItem'
 
 import FormModal from '../../FormModal'
-import TextInput from '../../Inputs/TextInput'
+import TextInput from '../../Inputs/Input'
 import { AppointmentService } from '../../../services'
-import SelectInput from '../../Inputs/SelectInput'
+import SelectInput from '../../Inputs/Select'
 
 interface Props {
   appointment: Appointment | null

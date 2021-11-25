@@ -3,11 +3,11 @@ import { useSession } from 'next-auth/client'
 import * as yup from 'yup'
 
 import FormModal from '../../FormModal'
-import TextInput from '../../Inputs/TextInput'
+import TextInput from '../../Inputs/Input'
 import { EmployeeService } from '../../../services'
 
 import Grid from '@mui/material/Grid'
-import SelectInput from '../../Inputs/SelectInput'
+import SelectInput from '../../Inputs/Select'
 import SelectItem from '@mui/material/MenuItem'
 import Accordion from '../../Accordion'
 import HoursList from './HoursList'

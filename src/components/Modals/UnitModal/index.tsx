@@ -1,7 +1,7 @@
 import Grid from '@mui/material/Grid'
 import * as yup from 'yup'
 import FormModal from '../../FormModal'
-import TextInput from '../../Inputs/TextInput'
+import TextInput from '../../Inputs/Input'
 
 interface Props {
   unit: Unit

@@ -4,7 +4,7 @@ import { useSWRConfig } from 'swr'
 import { useSession } from 'next-auth/client'
 
 import FormModal from '../../FormModal'
-import TextInput from '../../Inputs/TextInput'
+import TextInput from '../../Inputs/Input'
 import { UserService } from '../../../services'
 
 interface Props {
