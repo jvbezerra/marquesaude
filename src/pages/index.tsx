@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup/dist/yup.umd'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
-import { userTypes } from './_schema'
+import { UsersSchema } from '../services/usersSchema'
 import logo from '../../public/logo.png'
 import Button from '../components/Button'
 import TextInput from '../components/Inputs/Input'
@@ -15,6 +15,7 @@ import { Tab, Tabs } from '../components/Tabs'
 import Loading from '../components/Loading'
 
 export default function Login() {
+  const userTypes = Object.values(UsersSchema)
   const [tab, setTab] = useState(0)
   const [loading, setLoading] = useState(false)
   const { handleSubmit, control, formState: { errors } } = useForm<any>({
@@ -28,10 +29,6 @@ export default function Login() {
     if (error) toast.error(error)
   }, [])
 
-  const handleChange = (e: React.SyntheticEvent, newValue: number) => {
-    setTab(newValue)
-  }
-
   const onSubmit = async (values: any) => {
     setLoading(true)
     signIn(
@@ -39,7 +36,7 @@ export default function Login() {
       {
         key: values.key.replace(/( )+/g, ""),
         password: values.password,
-        callbackUrl: `/dashboard/${userTypes[tab].type}`
+        callbackUrl: '/dashboard'
       }
     )
   }
@@ -49,7 +46,7 @@ export default function Login() {
       <form className={style.login} onSubmit={handleSubmit(onSubmit)}>
         <Image src={logo} width={256} height={104} alt="Marque Saúde" placeholder="blur"/>
         <div style={{ width: '85%' }}>
-          <Tabs value={tab} onChange={handleChange}>
+          <Tabs value={tab} onChange={(_, newValue) => setTab(newValue)}>
             {userTypes.map(type => (
               <Tab key={type.label} label={type.label} />
             ))}

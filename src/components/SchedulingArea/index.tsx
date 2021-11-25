@@ -2,7 +2,6 @@ import useSWR from 'swr'
 import dayjs from 'dayjs'
 import isToday from 'dayjs/plugin/isToday'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
-import { useSession } from 'next-auth/client'
 import { Virtuoso as List } from 'react-virtuoso'
 
 import CardActions from '@mui/material/CardActions'
@@ -10,19 +9,16 @@ import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import Chip from '@mui/material/Chip'
 
-import HeaderBar from '../../../components/HeaderBar'
-import Header from '../../../components/PageHeader'
-import styles from '../../../styles/Dashboard.module.scss'
-import EmployeeCard from '../../../components/EmployeeArea/EmployeeCard'
-import Loading from '../../../components/Loading'
-import { AppointmentService } from '../../../services'
+import EmployeeCard from '../EmployeeArea/EmployeeCard'
+import Loading from '../Loading'
+import { AppointmentService } from '../../services'
 
 interface Props {
   unitId: number,
   userId: number
 }
 
-const CitizenArea: React.FC<Props> = ({ unitId, userId }) => {
+const SchedulingArea: React.FC<Props> = ({ unitId, userId }) => {
   dayjs.extend(isToday)
   dayjs.extend(customParseFormat)
 
@@ -91,24 +87,4 @@ const CitizenArea: React.FC<Props> = ({ unitId, userId }) => {
   )
 }
 
-const CitizenDashboard: React.FC = () => {
-  const [ session ] = useSession()
-
-  return (
-    !session ? <></> :
-    <>
-      <HeaderBar/>
-      <div className={styles.userContainer}>
-        <div style={{ width: '90%' }}>
-          <Header title="Consultas disponíveis" actions={[]} />
-        </div>
-        <CitizenArea
-          unitId={session?.unit?.id!}
-          userId={session?.user?.id!}
-        />
-      </div>
-    </>
-  )
-}
-
-export default CitizenDashboard
+export default SchedulingArea

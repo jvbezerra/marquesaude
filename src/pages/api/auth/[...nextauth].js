@@ -1,26 +1,7 @@
 import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
 import api from '../../../services/api'
-
-const credentialHandlers = {
-  'unit': data => {
-    const { type, ...unit} = data
-    return {
-      status: 'success', 
-      unit,
-      type,
-    }
-  },
-  'user': data => {
-    const { type, unit, ...user} = data
-    return {
-      status: 'success', 
-      user,
-      unit,
-      type,
-    }
-  },
-}
+import { UsersSchema } from '../../../services/usersSchema'
 
 export default NextAuth({
   providers: [
@@ -34,7 +15,7 @@ export default NextAuth({
         })
 
         if (data) {
-          return credentialHandlers[data.user.type](data.user)
+          return UsersSchema[data.user.type].credentialHandler(data.user)
         } else {
           return null
         }
