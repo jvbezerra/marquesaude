@@ -8,11 +8,11 @@ import useSWR from 'swr'
 import dynamic from 'next/dynamic'
 
 import { Virtuoso as List } from 'react-virtuoso'
-import Header from '../PageHeader'
-const EmployeeModal = dynamic(() => import('../Modals/EmployeeModal'), { ssr: false })
-import { EmployeeService } from '../../services'
+import Header from '../../../components/PageHeader'
+const EmployeeModal = dynamic(() => import('../../../components/Modals/EmployeeModal'), { ssr: false })
+import { EmployeeService } from '../../../services'
 import EmployeeCard from './EmployeeCard'
-import Loading from '../Loading'
+import Loading from '../../../components/Loading'
 
 const EmployeeArea: React.FC = () => {
   const [ session ] = useSession()

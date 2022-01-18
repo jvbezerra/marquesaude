@@ -7,11 +7,11 @@ import dynamic from 'next/dynamic'
 import dayjs from 'dayjs'
 
 import { Virtuoso as List } from 'react-virtuoso'
-import ListItem from '../ListItem'
-import Header from '../PageHeader'
-import { AppointmentService } from '../../services'
-import Loading from '../Loading'
-const AppointmentModal = dynamic(() => import('../Modals/AppointmentModal'), { ssr: false })
+import ListItem from '../../../components/ListItem'
+import Header from '../../../components/PageHeader'
+import { AppointmentService } from '../../../services'
+import Loading from '../../../components/Loading'
+const AppointmentModal = dynamic(() => import('../../../components/Modals/AppointmentModal'), { ssr: false })
 
 const AppointmentArea: React.FC = () => {
   const [ session ] = useSession()

@@ -15,10 +15,7 @@ const EmployeeCard: React.FC<Props> = ({ employee, children }) => {
     <Card style={{ marginTop: 15 }}>
       <CardHeader
         avatar={
-          <Icon
-            className="material-icons-outlined"
-            color="action"
-          >
+          <Icon className="material-icons-outlined" color="action">
             local_hospital
           </Icon>
         }

@@ -1,6 +1,6 @@
 import Header from '../../components/PageHeader'
 import { useSession } from 'next-auth/client'
-import SchedulingArea from '../../components/SchedulingArea'
+import SchedulingArea from './SchedulingArea'
 import styles from '../../styles/Dashboard.module.scss'
 
 const CitizenDashboard: React.FC = () => {

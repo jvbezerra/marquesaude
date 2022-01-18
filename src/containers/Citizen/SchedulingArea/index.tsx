@@ -9,9 +9,9 @@ import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import Chip from '@mui/material/Chip'
 
-import EmployeeCard from '../EmployeeArea/EmployeeCard'
-import Loading from '../Loading'
-import { AppointmentService } from '../../services'
+import EmployeeCard from '../../Unit/EmployeeArea/EmployeeCard'
+import Loading from '../../../components/Loading'
+import { AppointmentService } from '../../../services'
 
 interface Props {
   unitId: number,

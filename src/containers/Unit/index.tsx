@@ -1,7 +1,7 @@
 import styles from '../../styles/Dashboard.module.scss'
-import AppointmentArea from '../../components/AppointmentArea'
-import EmployeeArea from '../../components/EmployeeArea'
-import UserArea from '../../components/UsersArea'
+import AppointmentArea from './AppointmentArea'
+import EmployeeArea from './EmployeeArea'
+import UserArea from './UsersArea'
 
 const UnitDashboard: React.FC = () => {
   return (
