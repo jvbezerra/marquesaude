@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Appointment {
+  id               Int               @id @default(autoincrement())
+  employeeId       Int
+  userId           Int
+  date             DateTime?         @unique
+
+  employee         Employee          @relation(fields: [employeeId], references: [id])
+  user             User              @relation(fields: [userId], references: [id])
+
+  @@index([employeeId], name: "CPF_appointment")
+  @@index([userId], name: "SUS_card_appointment")
+}
+
+model Employee {
+  id                  Int             @id @default(autoincrement())
+  cpf                 String          @db.VarChar(14) @unique
+  professionalRecord  String?         @db.VarChar(20)
+  vacancies           Int?            @db.Int
+  name                String?         @db.MediumText
+  available           Boolean         @db.Bit(1)
+  roleId              Int?
+  unitId              Int?
+
+  unit                Unit?           @relation(fields: [unitId], references: [id])
+  role                EmployeeRoles?  @relation(fields: [roleId], references: [id])
+  appointments        Appointment[]
+  hours               EmployeeHours[]
+}
+
+model EmployeeHours {
+  id             Int            @id @default(autoincrement())
+  employeeId     Int
+  hour           String         @db.VarChar(30)
+
+  employee       Employee       @relation(fields: [employeeId], references: [id])
+}
+
+model EmployeeRoles {
+  id           Int           @id @default(autoincrement())
+  name         String        @db.VarChar(30)
+
+  employees    Employee[]
+}
+
+model Unit {
+  id            Int           @id @default(autoincrement())
+  name          String?       @db.VarChar(30)
+  cnes          String?       @db.Char(14) @unique
+  password      String?       @db.VarChar(10)
+  cep           Int?
+  neighborhood  String?       @db.Text
+  street        String?       @db.Text
+  city          String?       @db.Text
+  phonenumber   String?       @db.VarChar(14)
+
+  users         User[]
+  employees     Employee[]
+}
+
+model User {
+  id            Int           @id @default(autoincrement())
+  susCard       String        @db.Char(15) @unique
+  cpf           String?       @db.Char(15) @unique
+  phonenumber   String?       @db.VarChar(14)
+  password      String?       @db.VarChar(12)
+  name          String?       @db.Text
+  birthdate     String?       @db.VarChar(10)
+  city          String?       @db.Text
+  street        String?       @db.Text
+  neighborhood  String?       @db.Text
+  unitId        Int?
+
+  unit          Unit?         @relation(fields: [unitId], references: [id])
+  appointments  Appointment[]
+}
