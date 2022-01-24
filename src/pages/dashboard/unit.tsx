@@ -43,7 +43,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const appointments = (await prisma.appointment.findMany({
     include: { employee: true, user: true },
     where: { employee: { unitId } }
-  })).map(entity => {
+  })).map((entity: Appointment & { date: Date }) => {
     entity.date = entity.date?.toJSON() as any
     return entity
   })
