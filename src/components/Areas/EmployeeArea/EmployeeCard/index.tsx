@@ -1,15 +1,14 @@
-import useSWR from 'swr'
-
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import Icon from '@mui/material/Icon'
+import useSWR from 'swr'
 
 interface Props {
   employee: Employee,
 }
 
 const EmployeeCard: React.FC<Props> = ({ employee, children }) => {
-  const { data: roles } = useSWR<EmployeeRole[]>(`/employees/roles`)
+  const { data: roles } = useSWR<EmployeeRole[]>('/roles')
 
   return (
     <Card style={{ marginTop: 15 }}>

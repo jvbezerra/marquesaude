@@ -4,19 +4,20 @@ import IconButton from '@mui/material/IconButton'
 import CardActions from '@mui/material/CardActions'
 import Switch from '@mui/material/Switch'
 import { useSession } from 'next-auth/client'
-import useSWR from 'swr'
 import dynamic from 'next/dynamic'
+import useSWR from 'swr'
 
 import { Virtuoso as List } from 'react-virtuoso'
-import Header from '../../../components/PageHeader'
-const EmployeeModal = dynamic(() => import('../../../components/Modals/EmployeeModal'), { ssr: false })
-import { EmployeeService } from '../../../services'
+import Header from '../../PageHeader'
+const EmployeeModal = dynamic(() => import('./EmployeeModal'), { ssr: false })
 import EmployeeCard from './EmployeeCard'
-import Loading from '../../../components/Loading'
+import Loading from '../../Loading'
+import useAPI from '../../../hooks/useAPI'
 
-const EmployeeArea: React.FC = () => {
+const EmployeeArea: React.FC<{ employees: Employee[] }> = ({ employees: fallbackData }) => {
   const [ session ] = useSession()
-  const { data: employees, mutate } = useSWR(`/employees/unit/${session!.unit!.id}`)
+  const { data: employees, mutate } = useSWR<Employee[]>(`/employees?id=${session?.unit?.id}`, { fallbackData })
+  const EmployeeService = useAPI<Employee>('employees')
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null)
@@ -89,6 +90,7 @@ const EmployeeArea: React.FC = () => {
           employee={selectedEmployee}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
+          mutate={mutate}
         />
       }
     </>

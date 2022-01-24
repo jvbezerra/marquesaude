@@ -4,9 +4,9 @@ import { Virtuoso as List } from 'react-virtuoso'
 import Icon from '@mui/material/Icon'
 import IconButton from '@mui/material/IconButton'
 import Grid from '@mui/material/Grid'
-import { StyledInput as Input } from '../../../Inputs/Input'
-import ListItem from '../../../ListItem'
-import Button from '../../../Button'
+import { StyledInput as Input } from '../../../../Inputs/Input'
+import ListItem from '../../../../ListItem'
+import Button from '../../../../Button'
 
 interface Props {
   employeeHours: Hour[],

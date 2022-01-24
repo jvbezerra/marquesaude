@@ -1,16 +1,17 @@
 import Grid from '@mui/material/Grid'
 import * as yup from 'yup'
-import { useSWRConfig } from 'swr'
+import { KeyedMutator } from 'swr'
 import { useSession } from 'next-auth/client'
 
-import FormModal from '../../FormModal'
-import TextInput from '../../Inputs/Input'
-import { UserService } from '../../../services'
+import FormModal from '../../../FormModal'
+import TextInput from '../../../Inputs/Input'
+import useAPI from '../../../../hooks/useAPI'
 
 interface Props {
   user: Citizen | null
   isOpen: boolean
   onClose: Function
+  mutate?: KeyedMutator<Citizen[]>
 }
 
 const validationSchema = yup.object().shape({
@@ -36,14 +37,13 @@ const validationSchema = yup.object().shape({
     .required("Obrigatório"),
 })
 
-const UserModal: React.FC<Props> = (props) => {
-  const { user, isOpen, onClose } = props
-  const { mutate } = useSWRConfig()
+const UserModal: React.FC<Props> = ({ user, mutate, isOpen, onClose }) => {
   const [ session ] = useSession()
+  const UserService = useAPI<Citizen>('users')
 
   const addUser = async (values: Citizen) => {
     const { phonenumber, cpf, susCard, ...data } = values
-    mutate(`/users/unit/${session!.unit!.id}`, async (users: Citizen[]) => {
+    mutate!(async (users: Citizen[] = []) => {
       const newUser = await UserService.create({
         ...data,
         unitId: session!.unit!.id,
@@ -57,7 +57,7 @@ const UserModal: React.FC<Props> = (props) => {
   }
 
   const updateUser = async (values: Partial<Citizen>) => {
-    mutate(`/users/unit/${session!.unit!.id}`, async (users: Citizen[]) => {
+    mutate!(async (users: Citizen[] = []) => {
       const updatedUser = await UserService.edit(user?.id!, values)
 
       const filteredUsers = users.filter(item => item.id !== user?.id!)

@@ -2,20 +2,21 @@ import { useState } from 'react'
 import Icon from '@mui/material/Icon'
 import IconButton from '@mui/material/IconButton'
 import { useSession } from 'next-auth/client'
-import useSWR from 'swr'
 import dynamic from 'next/dynamic'
 import dayjs from 'dayjs'
+import useSWR from 'swr'
 
 import { Virtuoso as List } from 'react-virtuoso'
-import ListItem from '../../../components/ListItem'
-import Header from '../../../components/PageHeader'
-import { AppointmentService } from '../../../services'
-import Loading from '../../../components/Loading'
-const AppointmentModal = dynamic(() => import('../../../components/Modals/AppointmentModal'), { ssr: false })
+import ListItem from '../../ListItem'
+import Header from '../../PageHeader'
+import Loading from '../../Loading'
+import useAPI from '../../../hooks/useAPI'
+const AppointmentModal = dynamic(() => import('./AppointmentModal'), { ssr: false })
 
-const AppointmentArea: React.FC = () => {
+const AppointmentArea: React.FC<{ appointments: Appointment[] }> = ({ appointments: fallbackData }) => {
   const [ session ] = useSession()
-  const { data: appointments, mutate } = useSWR<Appointment[]>(`/appointments/unit/${session!.unit!.id}`)
+  const { data: appointments, mutate } = useSWR<Appointment[]>(`/appointments?id=${session?.unit?.id}`, { fallbackData })
+  const AppointmentService = useAPI<Appointment>('appointments')
 
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false)
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null)
@@ -82,6 +83,7 @@ const AppointmentArea: React.FC = () => {
           appointment={selectedAppointment}
           isOpen={isAppointmentModalOpen}
           onClose={() => setIsAppointmentModalOpen(false)}
+          mutate={mutate}
         />
       }
     </>

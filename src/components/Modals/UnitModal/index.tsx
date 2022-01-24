@@ -27,20 +27,14 @@ const validationSchema = yup.object().shape({
     .required("Obrigatório"),
 })
 
-const UnitModal: React.FC<Props> = (props) => {
-  const { unit, isOpen, onClose } = props
-
-  const editUser = (values: Partial<Unit>) => {
-    // edit unit service function
-  }
-
+const UnitModal: React.FC<Props> = ({ unit, isOpen, onClose }) => {
   return (
     <FormModal
       title="Unidade"
       isOpen={isOpen}
       onClose={onClose}
       onAdd={() => {}}
-      onEdit={(values: Unit) => editUser(values)}
+      onEdit={(values: Unit) => {}}
       validationSchema={validationSchema}
       defaultValues={unit}
     >

@@ -1,5 +1,4 @@
-import * as yup from 'yup'
-import useSWR, { useSWRConfig } from 'swr'
+import useSWR, { KeyedMutator } from 'swr'
 import { useSession } from 'next-auth/client'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
@@ -7,30 +6,30 @@ import customParseFormat from 'dayjs/plugin/customParseFormat'
 import Grid from '@mui/material/Grid'
 import SelectItem from '@mui/material/MenuItem'
 
-import FormModal from '../../FormModal'
-import TextInput from '../../Inputs/Input'
-import { AppointmentService } from '../../../services'
-import SelectInput from '../../Inputs/Select'
+import FormModal from '../../../FormModal'
+import TextInput from '../../../Inputs/Input'
+import SelectInput from '../../../Inputs/Select'
+import useAPI from '../../../../hooks/useAPI'
 
 interface Props {
   appointment: Appointment | null
   isOpen: boolean
   onClose: Function
+  mutate: KeyedMutator<Appointment[]>
 }
 
 dayjs.extend(customParseFormat)
 
-const AppointmentModal: React.FC<Props> = (props) => {
-  const { appointment, isOpen, onClose } = props
-  const { mutate } = useSWRConfig()
+const AppointmentModal: React.FC<Props> = ({ appointment, mutate, isOpen, onClose }) => {
   const [ session ] = useSession()
 
-  const { data: employees } = useSWR<Employee[]>(`/employees/unit/${session!.unit!.id}`)
-  const { data: users } = useSWR<Citizen[]>(`/users/unit/${session!.unit!.id}`)
+  const { data: employees } = useSWR<Employee[]>(`/employees?id=${session?.unit?.id}`)
+  const { data: users } = useSWR<Citizen[]>(`/users?id=${session?.unit?.id}`)
+  const AppointmentService = useAPI<Appointment>('appointments')
 
   const addAppointment = async (values: any) => {
     const { date, hour, ...data } = values
-    mutate(`/appointments/unit/${session!.unit!.id}`, async (appointments: Appointment[]) => {
+    mutate(async (appointments: Appointment[] = []) => {
       const newAppointment = await AppointmentService.create({
         ...data,
         date: dayjs(`${dayjs(date).format('DD/MM/YYYY')} ${hour}`, 'DD/MM/YYYY HH:mm').toISOString()
@@ -42,14 +41,14 @@ const AppointmentModal: React.FC<Props> = (props) => {
 
   const updateAppointment = async (values: any) => {
     const { date, hour, ...data } = values
-    mutate(`/appointments/unit/${session!.unit!.id}`, async (appointments: Appointment[]) => {
-      const updatedUser = await AppointmentService.edit(appointment?.id!, {
+    mutate(async (appointments: Appointment[] = []) => {
+      const updatedAppointment = await AppointmentService.edit(appointment?.id!, {
         ...data,
         date: dayjs(`${dayjs(date).format('DD/MM/YYYY')} ${hour}`, 'DD/MM/YYYY HH:mm').toISOString()
       })
 
       const filteredAppointments = appointments.filter(item => item.id !== appointment?.id!)
-      return [...filteredAppointments, updatedUser]
+      return [...filteredAppointments, updatedAppointment]
     }).then(() => onClose())
   }
 

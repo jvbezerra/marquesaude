@@ -1,21 +1,22 @@
-import useSWR, { useSWRConfig } from 'swr'
+import useSWR, { KeyedMutator } from 'swr'
 import { useSession } from 'next-auth/client'
 import * as yup from 'yup'
 
-import FormModal from '../../FormModal'
-import TextInput from '../../Inputs/Input'
-import { EmployeeService } from '../../../services'
+import FormModal from '../../../FormModal'
+import TextInput from '../../../Inputs/Input'
 
 import Grid from '@mui/material/Grid'
-import SelectInput from '../../Inputs/Select'
+import SelectInput from '../../../Inputs/Select'
 import SelectItem from '@mui/material/MenuItem'
-import Accordion from '../../Accordion'
+import Accordion from '../../../Accordion'
 import HoursList from './HoursList'
+import useAPI from '../../../../hooks/useAPI'
 
 interface Props {
   employee: Employee | null
   isOpen: boolean
   onClose: Function
+  mutate: KeyedMutator<Employee[]>
 }
 
 const validationSchema = yup.object().shape({
@@ -28,14 +29,13 @@ const validationSchema = yup.object().shape({
     .min(14, "Inválido"),
 })
 
-const EmployeeModal: React.FC<Props> = (props) => {
-  const { employee, isOpen, onClose } = props
-  const { mutate } = useSWRConfig()
+const EmployeeModal: React.FC<Props> = ({ employee, mutate, isOpen, onClose }) => {
   const [ session ] = useSession()
-  const { data: rolesOptions } = useSWR<EmployeeRole[]>(`/employees/roles`)
+  const { data: rolesOptions } = useSWR<EmployeeRole[]>('/roles')
+  const EmployeeService = useAPI<Employee>('employees')
 
   const addEmployee = async (values: Employee) => {
-    mutate(`/employees/unit/${session!.unit!.id}`, async (employees: Employee[]) => {
+    mutate(async (employees: Employee[] = []) => {
       const { hours, ...data } = values
       const newEmployee = await EmployeeService.create({
         ...data,
@@ -49,8 +49,8 @@ const EmployeeModal: React.FC<Props> = (props) => {
   }
 
   const updateEmployee = (values: Partial<Employee>) => {
-    mutate(`/employees/unit/${session!.unit!.id}`, async (employees: Employee[]) => {
-      const updatedEmployee = EmployeeService.edit(employee?.id!, values)
+    mutate(async (employees: Employee[] = []) => {
+      const updatedEmployee = await EmployeeService.edit(employee?.id!, values)
 
       const filteredEmployees = employees.filter(item => item.id !== employee?.id!)
       return [...filteredEmployees, updatedEmployee]

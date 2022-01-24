@@ -1,4 +1,3 @@
-import useSWR from 'swr'
 import dayjs from 'dayjs'
 import isToday from 'dayjs/plugin/isToday'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
@@ -9,9 +8,10 @@ import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import Chip from '@mui/material/Chip'
 
-import EmployeeCard from '../../Unit/EmployeeArea/EmployeeCard'
-import Loading from '../../../components/Loading'
-import { AppointmentService } from '../../../services'
+import EmployeeCard from '../EmployeeArea/EmployeeCard'
+import Loading from '../../Loading'
+import useAPI from '../../../hooks/useAPI'
+import useSWR from 'swr'
 
 interface Props {
   unitId: number,
@@ -22,8 +22,9 @@ const SchedulingArea: React.FC<Props> = ({ unitId, userId }) => {
   dayjs.extend(isToday)
   dayjs.extend(customParseFormat)
 
-  const { data: employees } = useSWR<Employee[]>(`/employees/unit/${unitId}`)
-  const { data, mutate } = useSWR<{ appointments: Appointment[] }>(`/users/one/${userId}/bookings`)
+  const { data: employees } = useSWR<Employee[]>(`/employees?id=${unitId}`)
+  const { data, mutate } = useSWR<{ appointments: Appointment[] }>(`/bookings?id=${unitId}`)
+  const AppointmentService = useAPI<Appointment>('appointments')
 
   const scheduleAppointment = async (hour: string, employeeId: number) => {
     await AppointmentService.create({
