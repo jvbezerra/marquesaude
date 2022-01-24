@@ -1,38 +1,59 @@
 import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
-import api from '../../../services/api'
-import { UsersSchema } from '../../../services/usersSchema'
+import prisma from '../../../lib/prisma'
+import { UserTypes } from '../../../lib/usersSchema'
+
+const UserAuthenticate = {
+  [UserTypes.Unit]: async (key, password) => {
+    const unit = await prisma.unit.findUnique({
+      where: { cnes: key }
+    })
+
+    if (unit && unit.password === password) {
+      const { password, ...result } = unit
+      return {
+        status: 'success', 
+        unit: result,
+        type: 'unit',
+      }
+    }
+
+    return null
+  },
+  [UserTypes.Citizen]: async (key, password) => {
+    const user = await prisma.user.findUnique({
+      where: { susCard: key },
+      include: { unit: true }
+    })
+
+    if (user && user.password === password) {
+      const { password, unit, ...result } = user
+      return {
+        status: 'success', 
+        user: result,
+        unit,
+        type: 'user',
+      }
+    }
+
+    return null
+  }
+}
 
 export default NextAuth({
   providers: [
     Providers.Credentials({
-      async authorize(credentials) {
-        const { data } = await api.get('/auth/signin', {
-          auth: {
-            username: credentials.key,
-            password: credentials.password,
-          }
-        })
-
-        if (data) {
-          return UsersSchema[data.user.type].credentialHandler(data.user)
-        } else {
-          return null
-        }
-      },
+      authorize: async ({ key, type, password }) => UserAuthenticate[type](key, password),
       credentials: {
-        key: { label: "Key", type: "text " },
-        password: {  label: "Senha", type: "password" }
+        key: { label: "key", type: "text " },
+        type: { label: "type", type: "text " },
+        password: {  label: "password", type: "password" }
       },
     }),
   ],
   callbacks: {
     async jwt(token, data) {
-      if (data) {
-        //token.accessToken = user.token
-        token.data = data
-      }
-  
+      if (data) token.data = data
       return token
     },
   

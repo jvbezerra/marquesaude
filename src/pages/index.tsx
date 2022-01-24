@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup/dist/yup.umd'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
-import { UsersSchema } from '../services/usersSchema'
+import { UsersSchema } from '../lib/usersSchema'
 import logo from '../../public/logo.png'
 import Button from '../components/Button'
 import TextInput from '../components/Inputs/Input'
@@ -14,12 +14,15 @@ import style from '../styles/Login.module.scss'
 import { Tab, Tabs } from '../components/Tabs'
 import Loading from '../components/Loading'
 
+type FormProps = { key: string, password: string }
+
 export default function Login() {
-  const userTypes = Object.values(UsersSchema)
-  const [tab, setTab] = useState(0)
+  const [type, setType] = useState('citizen')
+  const selectedType = UsersSchema[type]
   const [loading, setLoading] = useState(false)
-  const { handleSubmit, control, formState: { errors } } = useForm<any>({
-    resolver: yupResolver(userTypes[tab].validationSchema)
+  const { handleSubmit, control, formState: { errors } } = useForm<FormProps>({
+    resolver: yupResolver(selectedType.validationSchema),
+    defaultValues: { key: '', password: '' }
   })
 
   useEffect(() => {
@@ -29,15 +32,11 @@ export default function Login() {
     if (error) toast.error(error)
   }, [])
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async ({ key, password }: FormProps) => {
     setLoading(true)
     signIn(
       'credentials',
-      {
-        key: values.key.replace(/( )+/g, ""),
-        password: values.password,
-        callbackUrl: '/dashboard'
-      }
+      { key: key.replace(/\s/g,''), type, password, callbackUrl: '/dashboard' }
     )
   }
 
@@ -46,16 +45,16 @@ export default function Login() {
       <form className={style.login} onSubmit={handleSubmit(onSubmit)}>
         <Image src={logo} width={256} height={104} alt="Marque Saúde" placeholder="blur"/>
         <div style={{ width: '85%' }}>
-          <Tabs value={tab} onChange={(_, newValue) => setTab(newValue)}>
-            {userTypes.map(type => (
-              <Tab key={type.label} label={type.label} />
+          <Tabs value={type} onChange={(_, newValue) => setType(newValue)}>
+            {Object.entries(UsersSchema).map(([key, { label }]) => (
+              <Tab key={key} value={key} label={label} />
             ))}
           </Tabs>
           <TextInput
             name="key"
-            label={userTypes[tab].key}
-            placeholder={userTypes[tab].placeholder}
-            mask={userTypes[tab].mask}
+            label={selectedType.key}
+            placeholder={selectedType.placeholder}
+            mask={selectedType.mask}
             control={control}
             error={errors.key?.message}
           />
