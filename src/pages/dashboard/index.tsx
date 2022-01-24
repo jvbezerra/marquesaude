@@ -9,4 +9,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return response
 }
 
-export default () => <></>
+const shadowDashboard = () => <></>
+export default shadowDashboard
