@@ -3,8 +3,8 @@ import * as yup from 'yup'
 import { KeyedMutator } from 'swr'
 import { useSession } from 'next-auth/client'
 
-import FormModal from '../../../FormModal'
-import TextInput from '../../../Inputs/Input'
+import FormModal from '../../common/FormModal'
+import TextInput from '../../common/Input'
 import useAPI from '../../../../hooks/useAPI'
 
 interface Props {

@@ -2,15 +2,15 @@ import useSWR, { KeyedMutator } from 'swr'
 import { useSession } from 'next-auth/client'
 import * as yup from 'yup'
 
-import FormModal from '../../../FormModal'
-import TextInput from '../../../Inputs/Input'
+import FormModal from '../../../common/FormModal'
+import TextInput from '../../../common/Input'
 
 import Grid from '@mui/material/Grid'
-import SelectInput from '../../../Inputs/Select'
+import SelectInput from '../../../common/Select'
 import SelectItem from '@mui/material/MenuItem'
-import Accordion from '../../../Accordion'
+import Accordion from '../../../common/Accordion'
 import HoursList from './HoursList'
-import useAPI from '../../../../hooks/useAPI'
+import useAPI from '../../../../../hooks/useAPI'
 
 interface Props {
   employee: Employee | null

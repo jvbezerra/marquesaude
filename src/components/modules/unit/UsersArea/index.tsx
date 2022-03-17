@@ -6,10 +6,10 @@ import dynamic from 'next/dynamic'
 import useSWR from 'swr'
 
 import { Virtuoso as List } from 'react-virtuoso'
-import ListItem from '../../ListItem'
-import Header from '../../PageHeader'
-import Loading from '../../Loading'
-import useAPI from '../../../hooks/useAPI'
+import ListItem from '../../common/ListItem'
+import Header from '../../common/AreaBar'
+import Loading from '../../common/Loading'
+import useAPI from '../../../../hooks/useAPI'
 const UserModal = dynamic(() => import('./UserModal'), { ssr: false })
 
 const UserArea: React.FC<{ users: Citizen[] }> = ({ users: fallbackData }) => {

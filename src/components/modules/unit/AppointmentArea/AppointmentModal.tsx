@@ -6,9 +6,9 @@ import customParseFormat from 'dayjs/plugin/customParseFormat'
 import Grid from '@mui/material/Grid'
 import SelectItem from '@mui/material/MenuItem'
 
-import FormModal from '../../../FormModal'
-import TextInput from '../../../Inputs/Input'
-import SelectInput from '../../../Inputs/Select'
+import FormModal from '../../common/FormModal'
+import TextInput from '../../common/Input'
+import SelectInput from '../../common/Select'
 import useAPI from '../../../../hooks/useAPI'
 
 interface Props {

@@ -1,13 +1,12 @@
-import axios from 'axios'
 import { GetServerSideProps } from 'next'
 import { getSession } from 'next-auth/client'
 import prisma from '../../lib/prisma'
 
 import styles from '../../styles/Dashboard.module.scss'
-import AppointmentArea from '../../components/Areas/AppointmentArea'
-import EmployeeArea from '../../components/Areas/EmployeeArea'
-import UserArea from '../../components/Areas/UsersArea'
-import HeaderBar from '../../components/HeaderBar'
+import AppointmentArea from '../../components/modules/unit/AppointmentArea'
+import EmployeeArea from '../../components/modules/unit/EmployeeArea'
+import UserArea from '../../components/modules/unit/UsersArea'
+import HeaderBar from '../../components/modules/common/HeaderBar'
 
 interface Props {
   appointments: Appointment[]

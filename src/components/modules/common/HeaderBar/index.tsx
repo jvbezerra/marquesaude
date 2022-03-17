@@ -6,11 +6,11 @@ import Typography from '@mui/material/Typography'
 import dynamic from 'next/dynamic'
 import { signOut, useSession } from 'next-auth/client'
 
-import logo from '../../../public/logo.png'
-import style from '../../styles/Header.module.scss'
-const UserModal = dynamic(() => import('../Areas/UsersArea/UserModal'), { ssr: false })
-const UnitModal = dynamic(() => import('../Modals/UnitModal'), { ssr: false })
-const HelpModal = dynamic(() => import('../Modals/HelpModal'), { ssr: false })
+import logo from '../../../../../public/logo.png'
+import style from '../../../../styles/Header.module.scss'
+const UserModal = dynamic(() => import('../../unit/UsersArea/UserModal'), { ssr: false })
+const UnitModal = dynamic(() => import('../../unit/UnitModal'), { ssr: false })
+const HelpModal = dynamic(() => import('../../unit/HelpModal'), { ssr: false })
 
 const HeaderBar = () => {
   const [ session ] = useSession()

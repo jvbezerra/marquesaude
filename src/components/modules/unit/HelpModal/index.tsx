@@ -1,6 +1,6 @@
 import Dialog from '@mui/material/Dialog'
 import Image from 'next/image'
-import HelpImage from '../../../../public/ms-help.jpg'
+import HelpImage from '../../../../../public/ms-help.jpg'
 
 interface Props {
   isOpen: boolean

@@ -51,23 +51,23 @@ const FormModal: React.FC<Props> = (props) => {
             {props.children(formProps)}
           </fieldset>
 
-          {isViewing &&
-            <Button
-              onClick={() => setIsViewing(false)}
-              secondary
-              type="button"
-              style={{ width: '50%', marginTop: 15 }}
-            >
-              {loading ? <Loading size={25}/> : 'Editar'}
-            </Button>
-          }
-          {!isViewing &&
-            <Button
-              type="submit"
-              style={{ width: '50%', marginTop: 15 }}
-            >
-              {loading ? <Loading color="inherit" size={25}/> : 'Confirmar'}
-            </Button>
+          {isViewing
+            ?
+              <Button
+                onClick={() => setIsViewing(false)}
+                secondary
+                type="button"
+                style={{ width: '50%', marginTop: 15 }}
+              >
+                {loading ? <Loading size={25}/> : 'Editar'}
+              </Button>
+            :
+              <Button
+                type="submit"
+                style={{ width: '50%', marginTop: 15 }}
+              >
+                {loading ? <Loading color="inherit" size={25}/> : 'Confirmar'}
+              </Button>
           }
         </form>
       </DialogContent>

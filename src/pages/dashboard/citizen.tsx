@@ -1,8 +1,8 @@
-import Header from '../../components/PageHeader'
+import Header from '../../components/modules/common/AreaBar'
 import { useSession } from 'next-auth/client'
-import SchedulingArea from '../../components/Areas/SchedulingArea'
+import SchedulingArea from '../../components/modules/citizen/SchedulingArea'
 import styles from '../../styles/Dashboard.module.scss'
-import HeaderBar from '../../components/HeaderBar'
+import HeaderBar from '../../components/modules/common/HeaderBar'
 
 const CitizenDashboard: React.FC = () => {
   const [ session ] = useSession()

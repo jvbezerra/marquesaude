@@ -7,10 +7,10 @@ import dayjs from 'dayjs'
 import useSWR from 'swr'
 
 import { Virtuoso as List } from 'react-virtuoso'
-import ListItem from '../../ListItem'
-import Header from '../../PageHeader'
-import Loading from '../../Loading'
-import useAPI from '../../../hooks/useAPI'
+import ListItem from '../../common/ListItem'
+import Header from '../../common/AreaBar'
+import Loading from '../../common/Loading'
+import useAPI from '../../../../hooks/useAPI'
 const AppointmentModal = dynamic(() => import('./AppointmentModal'), { ssr: false })
 
 const AppointmentArea: React.FC<{ appointments: Appointment[] }> = ({ appointments: fallbackData }) => {

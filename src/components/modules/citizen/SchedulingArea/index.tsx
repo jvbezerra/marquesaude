@@ -8,9 +8,9 @@ import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import Chip from '@mui/material/Chip'
 
-import EmployeeCard from '../EmployeeArea/EmployeeCard'
-import Loading from '../../Loading'
-import useAPI from '../../../hooks/useAPI'
+import EmployeeCard from '../../common/EmployeeCard'
+import Loading from '../../common/Loading'
+import useAPI from '../../../../hooks/useAPI'
 import useSWR from 'swr'
 
 interface Props {

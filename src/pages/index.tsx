@@ -7,11 +7,11 @@ import { toast } from 'react-toastify'
 
 import { UsersSchema } from '../lib/usersSchema'
 import logo from '../../public/logo.png'
-import Button from '../components/Button'
-import TextInput from '../components/Inputs/Input'
+import Button from '../components/modules/common/Button'
+import TextInput from '../components/modules/common/Input'
 import style from '../styles/Login.module.scss'
-import { Tab, Tabs } from '../components/Tabs'
-import Loading from '../components/Loading'
+import { Tab, Tabs } from '../components/modules/common/Tabs'
+import Loading from '../components/modules/common/Loading'
 
 type FormProps = { key: string, password: string }
 

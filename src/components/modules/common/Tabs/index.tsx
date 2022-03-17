@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles'
 import MuiTabs, { TabsProps } from '@mui/material/Tabs'
 import MuiTab, { TabProps } from '@mui/material/Tab'
-import colors from '../../styles/colors';
+import colors from '../../../../styles/colors';
 
 export const Tabs = styled((props: TabsProps) => (
   <MuiTabs
